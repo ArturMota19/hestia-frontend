@@ -1,0 +1,40 @@
+@use "../../styles/mixins" as *;
+
+.button{
+  @include font-bold-5;
+  width: 100%;
+  border-radius: 8px;
+  outline: none;
+  border: none;
+  cursor: pointer;
+  transition: 1s;
+}
+
+.primary{
+  background-color: var(--primary-color);
+  color: var(--tertiary-color);
+  &:hover{
+    background-color: var(--primary-hover-color);
+  }
+}
+.secondary{
+  background-color: var(--secondary-color);
+  color: var(--primary-color);
+  &:hover{
+    background-color: var(--secondary-hover-color);
+  }
+}
+.tertiary{
+  background-color: var(--tertiary-color);
+  color: var(--secondary-color);
+  &:hover{
+    background-color: var(--tertiary-hover-color);
+  }
+}
+.quaternary{
+  background-color: var(--quaternary-color);
+  color: var(--primary-color);
+  &:hover{
+    background-color: var(--quaternary-hover-color);
+  }  
+}

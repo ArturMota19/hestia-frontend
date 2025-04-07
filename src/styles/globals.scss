@@ -48,10 +48,14 @@
   /*Colors*/
   --primary-color: #006EE4;
   --secondary-color: #333333;
-  --tertirary-color: #F5F7FA;
+  --tertiary-color: #F5F7FA;
   --quaternary-color: #80D8FF;
   --quintenary-color: #B0BEC5;
   --primary-hover-color: #002138;
+  --secondary-hover-color: #1F1F1F;
+  --tertiary-hover-color: #9c9c9c;
+  --quaternary-hover-color: #78afb6;
+  --quintenary-hover-color: #CFD8DC;
 
   /*Widths and Sizes*/
   --padding-wrap: 4rem 0rem;
@@ -65,8 +69,6 @@
   }
 
 }
-
-
 
 * {
   box-sizing: border-box;
