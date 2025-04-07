@@ -1,11 +1,19 @@
-import s from './app.module.scss'
+// Components
+import Dashboard from "./pages/Auth/Dashboard/Dashboard";
+// Imports
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+
+// Styles
 
 function App() {
-
   return (
-    <main className={s.text}>
-      <h1>Texto Para Teste - Design System</h1>
-    </main>
+    <BrowserRouter>
+          <Routes>
+            {/* Dashboard Pages */}
+            <Route path="/" element={<Dashboard />} />
+            {/* Dashboard */}
+          </Routes>
+      </BrowserRouter>
   )
 }
 
