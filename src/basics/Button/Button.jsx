@@ -4,7 +4,6 @@
 import s from "./Button.module.scss";
 
 export default function Button({text, backgroundColor, height}) {
-  console.log(backgroundColor);
   return (
     <button 
       style={{height: height}} 

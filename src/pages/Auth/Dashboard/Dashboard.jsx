@@ -6,14 +6,13 @@ import sunIcon from "../../../assets/sun-icon.svg"
 
 //Styles
 import s from "./Dashboard.module.scss";
+import ThemeToggleButton from "../../../basics/ToggleTheme/ToggleTheme";
 
 export default function Dashboard() {
   return (
     <main className={s.wrapperDashboard}>
       {/* DO HERE THE DARK MODE */}
-      <div className={s.sunIconWrapper}>
-        <img src={sunIcon} alt={"Sun Icon"}/>
-      </div>
+      <ThemeToggleButton/>
       <section className={s.hestiaInfoWrapper}>
         <div className={s.titleWrapper}>
           <h1>HESTIA</h1>

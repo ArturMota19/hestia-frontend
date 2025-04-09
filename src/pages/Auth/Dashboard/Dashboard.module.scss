@@ -21,13 +21,16 @@
         align-items: center;
         justify-content: center;
         gap: 16px;
-        color: var(--tertiary-color);
 
         h1{
             @include font-bold-12;
+            background: var(--title-color);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
         p{
             @include font-medium-6;
+            color: var(--tertiary-color);
         }
     }
 
@@ -53,32 +56,6 @@
             width: 20%;
         }
         
-    }
-
-    .sunIconWrapper{
-        width: 100%;
-        height: 100%;
-        position: absolute;
-        top: 0px;
-        left: 0px;
-        pointer-events: none;
-        display: flex;
-        align-items: start;
-        justify-content: end;
-        animation: float 3s ease-in-out infinite;
-
-        @keyframes float {
-            0%, 100% {
-                transform: translateY(0);
-            }
-            50% {
-                transform: translateY(-10px);
-            }
-        }
-
-        img{
-            width: 12%;
-        }
     }
 
 }
