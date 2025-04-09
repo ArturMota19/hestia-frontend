@@ -30,7 +30,7 @@ export default function Login() {
     },
   });
 
-
+  // TO DO: ADD WRAPPER MAX WIDTH AND HEIGHT
 
   return (
     <main className={s.wrapperLogin}>
