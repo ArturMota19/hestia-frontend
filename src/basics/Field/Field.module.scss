@@ -34,7 +34,7 @@
     border-radius: 9px;
     background-color: var(--tertiary-color);
 
-    color: var(--text-field-color);
+    color: var(--text-field-color) !important;
     
     outline: none;
     box-shadow: none !important;
@@ -58,7 +58,7 @@
   .fieldError {
     @extend .field;
 
-    border-color: var(--text-field-error-color);
+    border-color: var(--text-field-error-color) !important;
 
     color: var(--text-field-error-color);
 
