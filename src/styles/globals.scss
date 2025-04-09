@@ -70,6 +70,8 @@
   --quaternary-hover-color: #78afb6;
   --quintenary-hover-color: #CFD8DC;
   --title-color: var(--tertiary-color);
+  --text-field-color: #333333;
+  --text-field-error-color: #810303;
 }
 
 /* Dark Theme */
@@ -85,6 +87,8 @@
   --quaternary-hover-color: #78afb6;
   --quintenary-hover-color: #CFD8DC;
   --title-color: linear-gradient(90deg, #006EE4 0%, #80D8FF 100%);
+  --text-field-color: #333333;
+  --text-field-error-color: #c90404;
 }
 
 

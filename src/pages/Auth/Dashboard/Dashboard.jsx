@@ -2,15 +2,16 @@
 import Button from "../../../basics/Button/Button";
 // Images
 import houseIcon from "../../../assets/house-icon.svg"
-import sunIcon from "../../../assets/sun-icon.svg"
 
 // Imports
 import { Helmet } from "react-helmet";
+import { useNavigate } from "react-router-dom";
 //Styles
 import s from "./Dashboard.module.scss";
 import ThemeToggleButton from "../../../basics/ToggleTheme/ToggleTheme";
 
 export default function Dashboard() {
+  const navigate = useNavigate()
   return (
     <main className={s.wrapperDashboard}>
       <ThemeToggleButton/>
@@ -27,11 +28,13 @@ export default function Dashboard() {
           <Button 
             text={"Registrar-se"} 
             backgroundColor={""} 
-            height={64}/>
+            height={64}
+            doFunction={() => navigate("/register")}/>
             <Button 
             text={"Logar-se"} 
             backgroundColor={"tertiary"} 
-            height={64}/>
+            height={64}
+            doFunction={() => navigate("/login")}/>
         </div>
       </section>
       <div className={s.houseIconWrapper} >
