@@ -5,6 +5,7 @@ import Login from "./pages/Auth/Login/Login";
 // Imports
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Register from "./pages/Auth/Register/Register";
+import Home from "./pages/Home/Home";
 
 // Styles
 
@@ -19,7 +20,8 @@ function App() {
             <Route path="/" element={<Dashboard />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-            {/* XXX Pages */}
+            {/* Protected Page */}
+            <Route path="/home" element={<Home />} />
           </Routes>
       </BrowserRouter>
     </ScreenGuard>
