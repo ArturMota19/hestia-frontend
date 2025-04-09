@@ -4,6 +4,8 @@ import Button from "../../../basics/Button/Button";
 import houseIcon from "../../../assets/house-icon.svg"
 import sunIcon from "../../../assets/sun-icon.svg"
 
+// Imports
+import { Helmet } from "react-helmet";
 //Styles
 import s from "./Dashboard.module.scss";
 import ThemeToggleButton from "../../../basics/ToggleTheme/ToggleTheme";
@@ -11,8 +13,11 @@ import ThemeToggleButton from "../../../basics/ToggleTheme/ToggleTheme";
 export default function Dashboard() {
   return (
     <main className={s.wrapperDashboard}>
-      {/* DO HERE THE DARK MODE */}
       <ThemeToggleButton/>
+      <Helmet>
+          <meta charSet="utf-8" />
+          <title>HESTIA | Dashboard</title>
+      </Helmet>
       <section className={s.hestiaInfoWrapper}>
         <div className={s.titleWrapper}>
           <h1>HESTIA</h1>
