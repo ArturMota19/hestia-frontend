@@ -87,6 +87,7 @@ export default function Register() {
             backgroundColor="tertiary"
             doFunction={formik.handleSubmit}
           />
+          <a className={s.linkForget} href="/login">{t('doLogin')}</a>
         </div>
       </section>
       <div className={s.houseIconWrapper} >

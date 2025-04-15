@@ -9,6 +9,17 @@
     align-items: center;
     background-color: var(--primary-color);
 
+    .linkForget{
+        @include font-regular-3;
+        color: var(--tertiary-color);
+        text-decoration: underline;
+        cursor: pointer;
+        transition: 0.5s;
+        &:hover{
+            color: var(--tertiary-hover-color);
+        }
+    }
+
     .hestiaInfoWrapper{
         width: 100%;
         height: 100%;

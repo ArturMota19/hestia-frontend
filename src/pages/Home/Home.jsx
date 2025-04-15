@@ -6,53 +6,77 @@ import houseIcon from "../../assets/icons/house-icon.svg";
 import createParamsIcon from "../../assets/icons/dashboard/create-params.svg";
 import createPresetsIcon from "../../assets/icons/dashboard/create-presets.svg";
 import createRoutinesIcon from "../../assets/icons/dashboard/create-routines.svg";
-import seeParamsIcon from "../../assets/icons/dashboard/see-params.svg";
-import seePresetsIcon from "../../assets/icons/dashboard/see-presets.svg";
-import seeRoutinesIcon from "../../assets/icons/dashboard/see-routines.svg";
+import viewParamsIcon from "../../assets/icons/dashboard/see-params.svg";
+import viewPresetsIcon from "../../assets/icons/dashboard/see-presets.svg";
+import viewRoutinesIcon from "../../assets/icons/dashboard/see-routines.svg";
 // Imports
 import { Helmet } from "react-helmet";
 import { useNavigate } from "react-router-dom";
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 //Styles
 import s from "./Home.module.scss";
 import LanguageToggleButton from "../../basics/LanguageToggleButton/LanguageToggleButton";
 
 export default function Home() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const { t, i18n } = useTranslation();
 
-  const ItemGrid = ({icon, url, text}) => {
+  const ItemGrid = ({ icon, url, text }) => {
     return (
       <a href={url ?? "/"} className={s.item}>
-        <img src={icon}/>
+        <img src={icon} />
         <p>{text}</p>
       </a>
-    )
-  }
+    );
+  };
 
   return (
     <main className={s.wrapperHome}>
-      <ThemeToggleButton/>
+      <ThemeToggleButton />
       <div className={"languageToggleButtonWrapper"}>
-        <LanguageToggleButton/>
+        <LanguageToggleButton />
       </div>
       <Helmet>
-          <meta charSet="utf-8" />
-          <title>HESTIA | Home</title>
+        <meta charSet="utf-8" />
+        <title>HESTIA | Home</title>
       </Helmet>
       <section className={s.hestiaInfoWrapper}>
         <h1>HESTIA</h1>
         <div className={s.gridItems}>
-          <ItemGrid icon={createParamsIcon} url="/create-params" text={t('createParams')} />
-          <ItemGrid icon={seeParamsIcon} url="/see-params" text={t('seeParams')} />
-          <ItemGrid icon={createPresetsIcon} url="/create-presets" text={t('createPresets')}  />
-          <ItemGrid icon={seePresetsIcon} url="/see-presets" text={t('seePresets')}  />
-          <ItemGrid icon={createRoutinesIcon} url="/create-routines" text={t('createRoutines')}  />
-          <ItemGrid icon={seeRoutinesIcon} url="/see-routines" text={t('seeRoutines')}  />
+          <ItemGrid
+            icon={createParamsIcon}
+            url="/create-params"
+            text={t("createParams")}
+          />
+          <ItemGrid
+            icon={viewParamsIcon}
+            url="/see-params"
+            text={t("viewParams")}
+          />
+          <ItemGrid
+            icon={createPresetsIcon}
+            url="/create-presets"
+            text={t("createPresets")}
+          />
+          <ItemGrid
+            icon={viewPresetsIcon}
+            url="/see-presets"
+            text={t("viewPresets")}
+          />
+          <ItemGrid
+            icon={createRoutinesIcon}
+            url="/create-routines"
+            text={t("createRoutines")}
+          />
+          <ItemGrid
+            icon={viewRoutinesIcon}
+            url="/see-routines"
+            text={t("viewRoutines")}
+          />
         </div>
       </section>
-      <div className={s.houseIconWrapper} >
-        <img src={houseIcon} alt="House Icon"/>
+      <div className={s.houseIconWrapper}>
+        <img src={houseIcon} alt="House Icon" />
       </div>
     </main>
   );
