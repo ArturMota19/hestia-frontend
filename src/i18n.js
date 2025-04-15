@@ -40,7 +40,9 @@ const resources = {
       viewPresets: "Visualizar Presets",
       createRoutines: "Criar Rotinas",
       viewRoutines: "Visualizar Rotinas",
-      // Add more translations here
+      // Screen Guard
+      mobileOnly: "O acesso a este site não está disponível para aparelhos móveis.",
+      mobileOnlyDesc: "Por favor, use um dispositivo com uma tela maior.",
     },
   },
   en: {
@@ -79,7 +81,9 @@ const resources = {
       viewPresets: "View Presets",
       createRoutines: "Create Routines",
       viewRoutines: "View Routines",
-      // Add more translations here
+      // Screen Guard
+      mobileOnly: "Access to this site is not available for mobile devices.",
+      mobileOnlyDesc: "Please use a device with a larger screen.",
     },
   },
 };
