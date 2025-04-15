@@ -1,5 +1,9 @@
 // Components
 import Button from "../../../basics/Button/Button";
+import PasswordField from "../../../basics/PasswordField/PasswordField";
+import LanguageToggleButton from "../../../basics/LanguageToggleButton/LanguageToggleButton";
+import ThemeToggleButton from "../../../basics/ToggleTheme/ToggleTheme";
+import Field from "../../../basics/Field/Field";
 // Images
 import houseIcon from "../../../assets/icons/house-icon.svg";
 
@@ -8,21 +12,20 @@ import { Helmet } from "react-helmet";
 import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import { useFormik } from "formik";
+import { useTranslation } from "react-i18next";
 //Styles
 import s from "./Register.module.scss";
-import ThemeToggleButton from "../../../basics/ToggleTheme/ToggleTheme";
-import Field from "../../../basics/Field/Field";
-import PasswordField from "../../../basics/PasswordField/PasswordField";
 
 export default function Register() {
   const navigate = useNavigate()
+  const { t, i18n } = useTranslation();
   const validationSchema = Yup.object().shape({
-    email: Yup.string().required("Campo Obrigatório").email("Email inválido"),
-    password: Yup.string().required("Campo Obrigatório"),
+    email: Yup.string().required(t('requiredField')).email(t('invalidEmail')),
+    password: Yup.string().required(t('requiredField')),
     confirmpassword: Yup.string()
-      .required("Campo Obrigatório")
-      .oneOf([Yup.ref("password"), null], "As senhas não coincidem"),
-    name: Yup.string().required("Campo Obrigatório"),
+      .required(t('requiredField'))
+      .oneOf([Yup.ref("password"), null], t("passwordMismatch")),
+    name: Yup.string().required(t('requiredField')),
   });
   const formik = useFormik({
     initialValues: {
@@ -37,11 +40,12 @@ export default function Register() {
     },
   });
 
-  // TO DO: ADD WRAPPER MAX WIDTH AND HEIGHT
-
   return (
     <main className={s.wrapperRegister}>
       <ThemeToggleButton/>
+      <div className={"languageToggleButtonWrapper"}>
+        <LanguageToggleButton/>
+      </div>
       <Helmet>
           <meta charSet="utf-8" />
           <title>HESTIA | Register</title>
@@ -51,26 +55,20 @@ export default function Register() {
           <h1>HESTIA</h1>
         </div>
         <div className={s.inputsWrapper}>
-          <h2>Registrar-se</h2>
+          <h2>{t('register')}</h2>
           <Field
             type="text"
             fieldName="name"
-            label="Nome"
-            placeholder="Nome"
             formik={formik}
           />
           <Field
             type="text"
             fieldName="email"
-            label="Email"
-            placeholder="Email"
             formik={formik}
           />
           <PasswordField
             id="password"
             fieldName="password"
-            label="Senha"
-            placeholder="Senha"
             formik={formik}
             toggleMask={true}
             passwordPanel={true}
@@ -79,14 +77,12 @@ export default function Register() {
           <PasswordField
             id="confirmpassword"
             fieldName="confirmpassword"
-            label="Confirmar Senha"
-            placeholder="Confirmar Senha"
             formik={formik}
             toggleMask={true}
             readOnly={false}
           />
           <Button
-            text="Criar Conta"
+            text={t('createAccount')}
             height="48px"
             backgroundColor="tertiary"
             doFunction={formik.handleSubmit}

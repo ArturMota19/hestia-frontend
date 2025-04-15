@@ -11,10 +11,12 @@
   },
   "dependencies": {
     "formik": "^2.4.6",
+    "i18next": "^25.0.0",
     "primereact": "^10.9.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-helmet": "^6.1.0",
+    "react-i18next": "^15.4.1",
     "react-router-dom": "^7.5.0",
     "yup": "^1.6.1"
   },

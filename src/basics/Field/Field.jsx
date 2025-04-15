@@ -1,27 +1,26 @@
 // Components
 // Images
 // Imports
+import { useTranslation } from 'react-i18next';
 // Styles
 import s from './Field.module.scss'
 
 export default function Field({
   type = "text",
   fieldName,
-  label,
-  labelColor = "",
-  isCurrencyInput = false,
   readOnly = false,
-  placeholder = "Digite...",
   formik,
   value = "",
 }) {
+
+  const { t } = useTranslation();
 
   return (
     <main className={s.inputWrapper}>
       <p
         className={s.label}
       >
-        {label}
+        {t(fieldName)}
       </p>
       <input
         type={type}
@@ -30,7 +29,7 @@ export default function Field({
         onBlur={formik.handleBlur}
         value={value || (formik?.values[fieldName] || "")}
         readOnly={readOnly}
-        placeholder={placeholder}
+        placeholder={t(`${fieldName}Placeholder`)}
         className={
           formik.errors[fieldName] && formik.touched[fieldName]
             ? s.fieldError

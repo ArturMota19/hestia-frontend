@@ -12,13 +12,14 @@ import seeRoutinesIcon from "../../assets/icons/dashboard/see-routines.svg";
 // Imports
 import { Helmet } from "react-helmet";
 import { useNavigate } from "react-router-dom";
-import * as Yup from "yup";
-import { useFormik } from "formik";
+import { useTranslation } from 'react-i18next';
 //Styles
 import s from "./Home.module.scss";
+import LanguageToggleButton from "../../basics/LanguageToggleButton/LanguageToggleButton";
 
 export default function Home() {
   const navigate = useNavigate()
+  const { t, i18n } = useTranslation();
 
   const ItemGrid = ({icon, url, text}) => {
     return (
@@ -32,6 +33,9 @@ export default function Home() {
   return (
     <main className={s.wrapperHome}>
       <ThemeToggleButton/>
+      <div className={"languageToggleButtonWrapper"}>
+        <LanguageToggleButton/>
+      </div>
       <Helmet>
           <meta charSet="utf-8" />
           <title>HESTIA | Home</title>
@@ -39,7 +43,7 @@ export default function Home() {
       <section className={s.hestiaInfoWrapper}>
         <h1>HESTIA</h1>
         <div className={s.gridItems}>
-          <ItemGrid icon={createParamsIcon} url="/create-params" text="Criar Parâmetros" />
+          <ItemGrid icon={createParamsIcon} url="/create-params" text={t('createParams')} />
           <ItemGrid icon={seeParamsIcon} url="/see-params" text="Visualizar Parâmetros" />
           <ItemGrid icon={createPresetsIcon} url="/create-presets" text="Criar Presets" />
           <ItemGrid icon={seePresetsIcon} url="/see-presets" text="Visualizar Presets" />

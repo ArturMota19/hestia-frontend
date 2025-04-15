@@ -2,21 +2,22 @@
 // Images
 // Imports
 import { Password } from "primereact/password";
+import { useTranslation } from "react-i18next";
 // Styles
 import s from './PasswordField.module.scss'
+
 
 export default function PasswordField({
   id,
   fieldName,
-  label,
   redirectLink = "",
   toggleMask,
   passwordPanel,
   readOnly,
-  placeholder,
   formik,
   currentTheme,
 }) {
+  const { t } = useTranslation();
   // Component Variables
   const header = <div className={s.header}>Escolha uma senha</div>;
   const PasswordRequirements = ({
@@ -38,7 +39,7 @@ export default function PasswordField({
   return (
     <main className={s.inputWrapper} aria-hidden="false">
       <div className={s.labelWrapper}>
-        <p className={s.label}>{label}</p>
+        <p className={s.label}>{t(fieldName)}</p>
         {redirectLink && (
           <>
             <p className={s.redirectLabel}>Esqueceu a <a href={redirectLink}>senha?</a></p>
@@ -53,7 +54,7 @@ export default function PasswordField({
         value={formik.values[fieldName]}
         readOnly={readOnly}
         toggleMask={toggleMask}
-        placeholder={placeholder || ""}
+        placeholder={t(`${fieldName}Placeholder`) || ""}
         feedback={passwordPanel}
         weakLabel="Fraca"
         mediumLabel="Média"
