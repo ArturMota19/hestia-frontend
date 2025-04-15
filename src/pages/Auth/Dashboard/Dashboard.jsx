@@ -1,7 +1,7 @@
 // Components
 import Button from "../../../basics/Button/Button";
 // Images
-import houseIcon from "../../../assets/house-icon.svg"
+import houseIcon from "../../../assets/icons/house-icon.svg";
 
 // Imports
 import { Helmet } from "react-helmet";

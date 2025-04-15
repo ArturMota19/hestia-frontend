@@ -1,8 +1,8 @@
 // Components
 
 // Images
-import sunIcon from "../../assets/sun-icon.svg";
-import moonIcon from "../../assets/moon-icon.svg";
+import sunIcon from "../../assets/icons/sun-icon.svg";
+import moonIcon from "../../assets/icons/moon-icon.svg";
 // Imports
 import { useEffect, useState } from "react";
 // Styles
