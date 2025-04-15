@@ -55,7 +55,7 @@ export default function Home() {
           />
           <ItemGrid
             icon={createPresetsIcon}
-            url="/create-presets"
+            url="/create-preset"
             text={t("createPresets")}
           />
           <ItemGrid
