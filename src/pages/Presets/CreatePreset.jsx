@@ -23,7 +23,6 @@ export default function CreatePreset() {
 
   return (
     <main className={s.wrapperCreatePreset}>
-      <Loading/>
       <Helmet>
         <meta charSet="utf-8" />
         <title>HESTIA | Create Preset</title>
