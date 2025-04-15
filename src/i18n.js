@@ -68,13 +68,13 @@ const resources = {
       requiredField: 'Required field',
       invalidEmail: 'Invalid email',
       passwordMismatch: 'Passwords do not match',
-      //Homp
+      //Home
       createParams: 'Create Parameters',
-      seeParams: 'See Parameters',
+      seeParams: 'View Parameters',
       createPresets: 'Create Presets',
-      seePresets: 'See Presets',
+      seePresets: 'View Presets',
       createRoutines: 'Create Routines',
-      seeRoutines: 'See Routines',
+      seeRoutines: 'View Routines',
       // Add more translations here
     }
   },

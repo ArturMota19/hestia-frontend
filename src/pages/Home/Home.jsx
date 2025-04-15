@@ -44,11 +44,11 @@ export default function Home() {
         <h1>HESTIA</h1>
         <div className={s.gridItems}>
           <ItemGrid icon={createParamsIcon} url="/create-params" text={t('createParams')} />
-          <ItemGrid icon={seeParamsIcon} url="/see-params" text="Visualizar Parâmetros" />
-          <ItemGrid icon={createPresetsIcon} url="/create-presets" text="Criar Presets" />
-          <ItemGrid icon={seePresetsIcon} url="/see-presets" text="Visualizar Presets" />
-          <ItemGrid icon={createRoutinesIcon} url="/create-routines" text="Criar Rotinas" />
-          <ItemGrid icon={seeRoutinesIcon} url="/see-routines" text="Visualizar Rotinas" />
+          <ItemGrid icon={seeParamsIcon} url="/see-params" text={t('seeParams')} />
+          <ItemGrid icon={createPresetsIcon} url="/create-presets" text={t('createPresets')}  />
+          <ItemGrid icon={seePresetsIcon} url="/see-presets" text={t('seePresets')}  />
+          <ItemGrid icon={createRoutinesIcon} url="/create-routines" text={t('createRoutines')}  />
+          <ItemGrid icon={seeRoutinesIcon} url="/see-routines" text={t('seeRoutines')}  />
         </div>
       </section>
       <div className={s.houseIconWrapper} >
