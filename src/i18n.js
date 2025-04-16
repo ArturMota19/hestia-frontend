@@ -67,6 +67,9 @@ const resources = {
       roomCapacityPlaceholder: "Digite a capacidade do cômodo",
       addRoom: "Adicionar Cômodo",
       removeRoom: "Remover Cômodo",
+      graph: "Grafo dos Cômodos",
+      addGraph: "Adicionar Grafo",
+      removeGraph: "Remover Grafo",
     },
   },
   en: {
@@ -128,6 +131,9 @@ const resources = {
       roomCapacityPlaceholder: "Enter the room capacity",
       addRoom: "Add Room",
       removeRoom: "Remove Room",
+      addGraph: "Add Graph",
+      removeGraph: "Remove Graph",
+      graph: "Graph of Rooms",
       
     },
   },

@@ -4,6 +4,7 @@ import ScreenGuard from "./basics/ScreenGuard/ScreenGuard";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Suspense, lazy } from 'react'
 import Loading from "./basics/Loading/Loading";
+import { Toaster } from "react-hot-toast";
 // Styles
 
 
@@ -18,6 +19,7 @@ function App() {
 
   return (
     <ScreenGuard>
+      <Toaster />
       <BrowserRouter>
         <Suspense fallback={<Loading/>}>
           <Routes>
