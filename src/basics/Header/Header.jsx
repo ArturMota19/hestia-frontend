@@ -12,7 +12,7 @@ export default function Header() {
   return (
     <header className={s.headerWrapper}>
       <LanguageToggleButton/>
-      <h4>HESTIA</h4>
+      <a href='/home'>HESTIA</a>
       <ThemeToggleButton isHeader={true}/>
     </header>
   );

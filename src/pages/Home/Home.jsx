@@ -32,7 +32,7 @@ export default function Home() {
 
   return (
     <main className={s.wrapperHome}>
-      <ThemeToggleButton />
+      <ThemeToggleButton isHeader={false}/>
       <div className={"languageToggleButtonWrapper"}>
         <LanguageToggleButton />
       </div>

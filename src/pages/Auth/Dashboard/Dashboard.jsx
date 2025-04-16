@@ -18,7 +18,7 @@ export default function Dashboard() {
   const { t, i18n } = useTranslation();
   return (
     <main className={s.wrapperDashboard}>
-      <ThemeToggleButton/>
+      <ThemeToggleButton isHeader={false}/>
       <div className={"languageToggleButtonWrapper"}>
         <LanguageToggleButton/>
       </div>

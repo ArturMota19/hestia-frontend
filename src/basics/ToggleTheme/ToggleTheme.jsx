@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 // Styles
 import s from "./ToggleTheme.module.scss";
 
-export default function ThemeToggleButton(isHeader=false) {
+export default function ThemeToggleButton({isHeader}) {
   const [theme, setTheme] = useState("light");
 
   useEffect(() => {

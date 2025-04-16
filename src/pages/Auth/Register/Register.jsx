@@ -42,7 +42,7 @@ export default function Register() {
 
   return (
     <main className={s.wrapperRegister}>
-      <ThemeToggleButton/>
+      <ThemeToggleButton isHeader={false}/>
       <div className={"languageToggleButtonWrapper"}>
         <LanguageToggleButton/>
       </div>

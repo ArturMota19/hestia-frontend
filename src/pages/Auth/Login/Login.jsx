@@ -37,7 +37,7 @@ export default function Login() {
 
   return (
     <main className={s.wrapperLogin}>
-      <ThemeToggleButton/>
+      <ThemeToggleButton isHeader={false}/>
       <div className={"languageToggleButtonWrapper"}>
         <LanguageToggleButton/>
       </div>
