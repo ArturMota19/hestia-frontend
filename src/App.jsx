@@ -15,7 +15,8 @@ function App() {
   const Login = lazy(() => import('./pages/Auth/Login/Login'));
   const Register = lazy(() => import('./pages/Auth/Register/Register'));
   const Home = lazy(() => import('./pages/Home/Home'));
-  const CreatePreset = lazy(() => import('./pages/Presets/CreatePreset'));
+  const CreatePreset = lazy(() => import('./pages/Presets/CreatePreset/CreatePreset'));
+  const ViewPreset = lazy(() => import('./pages/Presets/ViewPreset/ViewPreset'));
 
   return (
     <ScreenGuard>
@@ -29,7 +30,9 @@ function App() {
             <Route path="/register" element={<Register />} />
             {/* Protected Pages */}
             <Route path="/home" element={<Home />} />
-            <Route path="/create-preset" element={<CreatePreset />} />
+            {/* Presets Routes */}
+              <Route path="/create-preset" element={<CreatePreset />} />
+              <Route path="/view-presets" element={<ViewPreset />} />
           </Routes>
         </Suspense>
       </BrowserRouter>

@@ -1,0 +1,14 @@
+.wrapperViewComponent{
+  width: 100%;
+  background-color: red;
+  border-radius: 16px;
+  padding: 16px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  img{
+    width: 256px;
+  }
+}

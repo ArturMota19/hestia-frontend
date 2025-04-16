@@ -50,7 +50,7 @@ export default function Home() {
           />
           <ItemGrid
             icon={viewParamsIcon}
-            url="/see-params"
+            url="/view-params"
             text={t("viewParams")}
           />
           <ItemGrid
@@ -60,7 +60,7 @@ export default function Home() {
           />
           <ItemGrid
             icon={viewPresetsIcon}
-            url="/see-presets"
+            url="/view-presets"
             text={t("viewPresets")}
           />
           <ItemGrid
@@ -70,7 +70,7 @@ export default function Home() {
           />
           <ItemGrid
             icon={viewRoutinesIcon}
-            url="/see-routines"
+            url="/view-routines"
             text={t("viewRoutines")}
           />
         </div>

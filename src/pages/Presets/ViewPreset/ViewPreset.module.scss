@@ -1,0 +1,33 @@
+@use '../../../styles/mixins' as *;
+
+.wrapperViewPreset{
+    margin-bottom: 10rem;
+    width: 100% !important;
+    height: auto;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--tertiary-color);
+
+    .hestiaInfoWrapper{
+        width: var(--page-wrapper);
+        padding: var(--padding-wrap);
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+
+        h1{
+            @include font-bold-8;
+            color: var(--primary-color);
+        }
+        .gridWrapper{
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-top: 16px;
+        }
+    }
+}
