@@ -13,16 +13,28 @@ export default function Field({
   value = "",
   isLogged = false,
 }) {
-
   const { t } = useTranslation();
 
+  if(!formik && readOnly){
+    return(
+      <input
+        type={type}
+        name={fieldName}
+        disabled={true}
+        value={value}
+        readOnly={readOnly}
+        className={s.field}
+      />
+    )
+  }
+
   return (
-    <main className={s.inputWrapper}>
-      <p
+    <div className={s.inputWrapper}>
+      <label
         className={isLogged ? `${s.label} ${s.internColors}` : `${s.label} ${s.notInternColors}`}
       >
         {t(fieldName)}
-      </p>
+      </label>
       <input
         type={type}
         name={fieldName}
@@ -40,6 +52,6 @@ export default function Field({
       {formik.touched[fieldName] && formik.errors[fieldName] && (
         <p className={s.textError}>{formik.errors[fieldName]}</p>
       )}
-    </main>
+    </div>
   );
 }
