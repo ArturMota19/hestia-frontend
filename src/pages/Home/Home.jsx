@@ -32,7 +32,7 @@ export default function Home() {
 
   return (
     <main className={s.wrapperHome}>
-      <ThemeToggleButton />
+      <ThemeToggleButton isHeader={false}/>
       <div className={"languageToggleButtonWrapper"}>
         <LanguageToggleButton />
       </div>
@@ -50,17 +50,17 @@ export default function Home() {
           />
           <ItemGrid
             icon={viewParamsIcon}
-            url="/see-params"
+            url="/view-params"
             text={t("viewParams")}
           />
           <ItemGrid
             icon={createPresetsIcon}
-            url="/create-presets"
+            url="/create-preset"
             text={t("createPresets")}
           />
           <ItemGrid
             icon={viewPresetsIcon}
-            url="/see-presets"
+            url="/view-presets"
             text={t("viewPresets")}
           />
           <ItemGrid
@@ -70,7 +70,7 @@ export default function Home() {
           />
           <ItemGrid
             icon={viewRoutinesIcon}
-            url="/see-routines"
+            url="/view-routines"
             text={t("viewRoutines")}
           />
         </div>

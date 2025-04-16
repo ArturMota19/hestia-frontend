@@ -37,7 +37,7 @@ export default function Login() {
 
   return (
     <main className={s.wrapperLogin}>
-      <ThemeToggleButton/>
+      <ThemeToggleButton isHeader={false}/>
       <div className={"languageToggleButtonWrapper"}>
         <LanguageToggleButton/>
       </div>
@@ -49,7 +49,7 @@ export default function Login() {
         <div className={s.titleWrapper}>
           <h1>HESTIA</h1>
         </div>
-        <div className={s.inputsWrapper}>
+        <form onSubmit={formik.handleSubmit} className={s.inputsWrapper}>
           <h2>{t('login')}</h2>
           <Field
             type="text"
@@ -70,7 +70,7 @@ export default function Login() {
             doFunction={formik.handleSubmit}
           />
           <a className={s.linkForget} href="/register">{t('doRegister')}</a>
-        </div>
+        </form>
       </section>
       <div className={s.houseIconWrapper} >
         <img src={houseIcon} alt="House Icon"/>

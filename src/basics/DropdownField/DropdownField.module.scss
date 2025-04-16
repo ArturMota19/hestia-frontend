@@ -1,0 +1,96 @@
+@use "../../styles/mixins" as *;
+
+.inputWrapper {
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+
+  .label {
+    @include font-regular-4;
+    color: var(--secondary-color);
+    width: 100%;
+
+    text-indent: 0.5rem;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    
+    transition: 0.75s;
+  }
+
+  .field{
+      @include font-regular-3;
+
+      padding: 0.5rem;
+      width: 100%;
+      height: 48px;
+      box-sizing: border-box;
+
+      border: 2px solid var(--secondary-color) !important;
+      border-radius: 9px;
+      background-color: var(--tertiary-color);
+
+      color: var(--text-field-color) !important;
+      
+      outline: none;
+      box-shadow: none !important;
+      transition: 0.75s;
+
+      ::placeholder {
+        color: var(--text-field-color);
+      }
+
+      ::-moz-placeholder {
+        color: var(--text-field-color);
+        opacity: 0.5;
+      }
+
+      :focus {
+        background-color: var(--white-color);
+        outline: none;
+      }
+    }
+    .fieldError {
+      @extend .field;
+
+      border-color: var(--text-field-error-color) !important;
+
+      color: var(--text-field-error-color);
+
+      ::placeholder {
+        color: var(--text-field-error-color);
+      }
+
+      ::-moz-placeholder {
+        color: var(--text-field-error-color);
+        opacity: 0.5;
+      }
+    }
+
+    .textError {
+      @include font-regular-2;
+
+      width: 100%;
+
+      text-indent: 0.5rem;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+
+      color: var(--text-field-error-color);
+
+      transition: 0.75s;
+    }
+}
+.panelDropdown {
+  margin-top: -8px;
+  @include font-regular-3;
+  padding: 8px;
+  border-top: none !important;
+  background-color: var(--primary-color);
+  color: var(--tertiary-color);
+  border-radius: 0 0 .35rem .35rem !important;
+}
+

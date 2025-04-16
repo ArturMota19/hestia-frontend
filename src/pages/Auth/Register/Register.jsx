@@ -42,7 +42,7 @@ export default function Register() {
 
   return (
     <main className={s.wrapperRegister}>
-      <ThemeToggleButton/>
+      <ThemeToggleButton isHeader={false}/>
       <div className={"languageToggleButtonWrapper"}>
         <LanguageToggleButton/>
       </div>
@@ -54,7 +54,7 @@ export default function Register() {
         <div className={s.titleWrapper}>
           <h1>HESTIA</h1>
         </div>
-        <div className={s.inputsWrapper}>
+        <form onSubmit={formik.handleSubmit} className={s.inputsWrapper}>
           <h2>{t('register')}</h2>
           <Field
             type="text"
@@ -88,7 +88,7 @@ export default function Register() {
             doFunction={formik.handleSubmit}
           />
           <a className={s.linkForget} href="/login">{t('doLogin')}</a>
-        </div>
+        </form>
       </section>
       <div className={s.houseIconWrapper} >
         <img src={houseIcon} alt="House Icon"/>

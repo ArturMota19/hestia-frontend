@@ -2,6 +2,10 @@ import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 
 // Translations
+const initialLanguage = localStorage.getItem('i18nextLng') || 'pt';
+if (!initialLanguage) {
+  localStorage.setItem('i18nextLng', 'pt');
+}
 
 const resources = {
   pt: {
@@ -19,6 +23,8 @@ const resources = {
       entry: "Entrar",
       doRegister: "Não tem uma conta? Clique aqui para Registrar-se.",
       doLogin: "Já tem uma conta? Clique aqui para Entrar.",
+      next: "Próximo",
+      prev: "Anterior",
       // Inputs Labels
       email: "Email",
       password: "Senha",
@@ -29,6 +35,7 @@ const resources = {
       passwordPlaceholder: "Digite sua senha",
       namePlaceholder: "Digite seu nome",
       confirmpasswordPlaceholder: "Confirme sua senha",
+      select: "Selecione",
       // Inputs Errors
       requiredField: "Campo obrigatório",
       invalidEmail: "Email inválido",
@@ -40,7 +47,33 @@ const resources = {
       viewPresets: "Visualizar Presets",
       createRoutines: "Criar Rotinas",
       viewRoutines: "Visualizar Rotinas",
-      // Add more translations here
+      // Screen Guard
+      mobileOnly: "O acesso a este site não está disponível para aparelhos móveis.",
+      mobileOnlyDesc: "Por favor, use um dispositivo com uma tela maior.",
+      // Create Preset Page
+      createHousePreset: "Criar Preset da Casa",
+      rooms: "Cômodos",
+      presetName: "Nome do Preset",
+      presetNamePlaceholder: "Digite o nome do preset",
+      roomName: "Nome do Cômodo",
+      roomNamePlaceholder: "Digite o nome do quarto",
+      room1: "Cômodo 1",
+      room2: "Cômodo 2",
+      distance: "Distância",
+      distancePlaceholder: "Digite a distância",
+      atuator: "Atuador",
+      atuatorPlaceholder: "Selecione o atuador",
+      atuators: "Atuadores",
+      atuatorsPlaceholder: "Selecione os atuadores",
+      roomCapacity: "Capacidade do Cômodo",
+      roomCapacityPlaceholder: "Digite a capacidade do cômodo",
+      addRoom: "Adicionar Cômodo",
+      removeRoom: "Remover Cômodo",
+      graph: "Grafo dos Cômodos",
+      addGraph: "Adicionar Grafo",
+      removeGraph: "Remover Grafo",
+      // View Preset Page
+      viewHousePreset: "Visualização de Presets",
     },
   },
   en: {
@@ -58,6 +91,8 @@ const resources = {
       entry: "Sign In",
       doRegister: "Don't have an account? Click here to Register.",
       doLogin: "Already have an account? Click here to Sign In.",
+      next: "Next",
+      prev: "Previous",
       // Inputs Labels
       email: "Email",
       password: "Password",
@@ -68,6 +103,7 @@ const resources = {
       passwordPlaceholder: "Enter your password",
       namePlaceholder: "Enter your name",
       confirmpasswordPlaceholder: "Confirm your password",
+      select: "Select",
       // Inputs Errors
       requiredField: "Required field",
       invalidEmail: "Invalid email",
@@ -79,16 +115,50 @@ const resources = {
       viewPresets: "View Presets",
       createRoutines: "Create Routines",
       viewRoutines: "View Routines",
-      // Add more translations here
+      // Screen Guard
+      mobileOnly: "Access to this site is not available for mobile devices.",
+      mobileOnlyDesc: "Please use a device with a larger screen.",
+      // Create Preset Page
+      createHousePreset: "Create House Preset",
+      rooms: "Rooms",
+      presetName: "Preset Name",
+      presetNamePlaceholder: "Enter the preset name",
+      roomName: "Room Name",
+      roomNamePlaceholder: "Enter the room name",
+      room1: "Room 1",
+      room2: "Room 2",
+      distance: "Distance",
+      distancePlaceholder: "Enter the distance",
+      atuator: "Actuator",
+      atuatorPlaceholder: "Select the actuator",
+      atuators: "Actuators",
+      atuatorsPlaceholder: "Select the actuators",
+      roomCapacity: "Room Capacity",
+      roomCapacityPlaceholder: "Enter the room capacity",
+      addRoom: "Add Room",
+      removeRoom: "Remove Room",
+      addGraph: "Add Graph",
+      removeGraph: "Remove Graph",
+      graph: "Graph of Rooms",
+      // View Preset Page
+      viewHousePreset: "View Presets",
+      
     },
   },
 };
 
 i18n.use(initReactI18next).init({
   resources,
-  lng: 'pt',
+  lng: initialLanguage,
   fallbackLng: 'pt',
   interpolation: {
-    escapeValue: false // React already does escaping
-  }
+    escapeValue: false, // React already does escaping
+  },
 });
+
+// Save the current language to localStorage whenever it changes
+i18n.on('languageChanged', (lng) => {
+  localStorage.setItem('i18nextLng', lng);
+});
+
+export default i18n;
