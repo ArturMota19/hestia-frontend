@@ -1,3 +1,5 @@
+@use "../styles/mixins" as *;
+
 :root {
   
   /* Fonts */
@@ -72,6 +74,7 @@
   --title-color: var(--tertiary-color);
   --text-field-color: #333333;
   --text-field-error-color: #810303;
+  --text-field-error-color-hover: #c90404;
 }
 
 /* Dark Theme */
@@ -89,6 +92,7 @@
   --title-color: linear-gradient(90deg, #006EE4 0%, #80D8FF 100%);
   --text-field-color: #333333;
   --text-field-error-color: #c90404;
+  --text-field-error-color-hover: #810303;
 }
 
 
@@ -128,5 +132,27 @@ a {
   transition: .5s;
   &:hover{
       transform: scale(1.025);
+  }
+}
+
+// Panel multi select
+.p-multiselect-panel{
+  background-color: var(--primary-color);
+  padding: 8px;
+  border-radius: 8px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  z-index: 9999;
+
+  .p-checkbox {
+    display: flex;
+    gap: .25rem;
+  }
+
+  li{
+    @include font-regular-3;
+    color: var(--tertiary-color);
+    display: flex;
+    align-items: center;
+    gap: 4px;
   }
 }

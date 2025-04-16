@@ -17,14 +17,21 @@ export default function Field({
 
   if(!formik && readOnly){
     return(
-      <input
-        type={type}
-        name={fieldName}
-        disabled={true}
-        value={value}
-        readOnly={readOnly}
-        className={s.field}
-      />
+      <div className={s.inputWrapper}>
+        <label
+          className={isLogged ? `${s.label} ${s.internColors}` : `${s.label} ${s.notInternColors}`}
+        >
+          {t(fieldName)}
+        </label>
+        <input
+          type={type}
+          name={fieldName}
+          disabled={true}
+          value={value}
+          readOnly={readOnly}
+          className={s.field}
+        />
+      </div>
     )
   }
 

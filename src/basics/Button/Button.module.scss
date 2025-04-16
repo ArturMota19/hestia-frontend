@@ -1,9 +1,11 @@
 @use "../../styles/mixins" as *;
 
 .button{
-  @include font-bold-5;
+  @include font-medium-5;
   width: 100%;
+  padding: 8px;
   border-radius: 8px;
+  box-sizing: border-box;
   outline: none;
   border: none;
   cursor: pointer;
@@ -37,4 +39,12 @@
   &:hover{
     background-color: var(--quaternary-hover-color);
   }  
+}
+
+.delete{
+  background-color: var(--text-field-error-color);
+  color: var(--tertiary-color);
+  &:hover{
+    background-color: var(--text-field-error-color-hover);
+  }
 }

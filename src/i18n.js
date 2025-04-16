@@ -33,6 +33,7 @@ const resources = {
       passwordPlaceholder: "Digite sua senha",
       namePlaceholder: "Digite seu nome",
       confirmpasswordPlaceholder: "Confirme sua senha",
+      select: "Selecione",
       // Inputs Errors
       requiredField: "Campo obrigatório",
       invalidEmail: "Email inválido",
@@ -47,6 +48,25 @@ const resources = {
       // Screen Guard
       mobileOnly: "O acesso a este site não está disponível para aparelhos móveis.",
       mobileOnlyDesc: "Por favor, use um dispositivo com uma tela maior.",
+      // Create Preset Page
+      createHousePreset: "Criar Preset da Casa",
+      rooms: "Cômodos",
+      presetName: "Nome do Preset",
+      presetNamePlaceholder: "Digite o nome do preset",
+      roomName: "Nome do Cômodo",
+      roomNamePlaceholder: "Digite o nome do quarto",
+      room1: "Cômodo 1",
+      room2: "Cômodo 2",
+      distance: "Distância",
+      distancePlaceholder: "Digite a distância",
+      atuator: "Atuador",
+      atuatorPlaceholder: "Selecione o atuador",
+      atuators: "Atuadores",
+      atuatorsPlaceholder: "Selecione os atuadores",
+      roomCapacity: "Capacidade do Cômodo",
+      roomCapacityPlaceholder: "Digite a capacidade do cômodo",
+      addRoom: "Adicionar Cômodo",
+      removeRoom: "Remover Cômodo",
     },
   },
   en: {
@@ -74,6 +94,7 @@ const resources = {
       passwordPlaceholder: "Enter your password",
       namePlaceholder: "Enter your name",
       confirmpasswordPlaceholder: "Confirm your password",
+      select: "Select",
       // Inputs Errors
       requiredField: "Required field",
       invalidEmail: "Invalid email",
@@ -88,6 +109,26 @@ const resources = {
       // Screen Guard
       mobileOnly: "Access to this site is not available for mobile devices.",
       mobileOnlyDesc: "Please use a device with a larger screen.",
+      // Create Preset Page
+      createHousePreset: "Create House Preset",
+      rooms: "Rooms",
+      presetName: "Preset Name",
+      presetNamePlaceholder: "Enter the preset name",
+      roomName: "Room Name",
+      roomNamePlaceholder: "Enter the room name",
+      room1: "Room 1",
+      room2: "Room 2",
+      distance: "Distance",
+      distancePlaceholder: "Enter the distance",
+      atuator: "Actuator",
+      atuatorPlaceholder: "Select the actuator",
+      atuators: "Actuators",
+      atuatorsPlaceholder: "Select the actuators",
+      roomCapacity: "Room Capacity",
+      roomCapacityPlaceholder: "Enter the room capacity",
+      addRoom: "Add Room",
+      removeRoom: "Remove Room",
+      
     },
   },
 };

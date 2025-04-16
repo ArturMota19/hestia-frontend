@@ -2,7 +2,7 @@
 //Styles
 import s from "./Button.module.scss";
 
-export default function Button({ text, backgroundColor, height, doFunction=false }) {
+export default function Button({ type="button", text, backgroundColor, height, doFunction=false }) {
   return (
     <button
       style={{ height: height }}
@@ -13,6 +13,8 @@ export default function Button({ text, backgroundColor, height, doFunction=false
           ? s.secondary
           : backgroundColor == "tertiary"
           ? s.tertiary
+          : backgroundColor == "delete" 
+          ? s.delete
           : s.quaternary
       }`
       }
