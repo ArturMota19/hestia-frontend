@@ -16,6 +16,7 @@ import { useTranslation } from "react-i18next";
 //Styles
 import s from "./CreatePreset.module.scss";
 import Loading from "../../basics/Loading/Loading";
+import Header from "../../basics/Header/Header";
 
 export default function CreatePreset() {
   const navigate = useNavigate();
@@ -27,6 +28,7 @@ export default function CreatePreset() {
         <meta charSet="utf-8" />
         <title>HESTIA | Create Preset</title>
       </Helmet>
+      <Header/>
       <section className={s.hestiaInfoWrapper}>
       </section>
     </main>
