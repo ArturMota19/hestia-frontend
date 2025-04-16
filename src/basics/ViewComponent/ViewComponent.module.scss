@@ -1,6 +1,7 @@
+@use '../../styles/mixins' as *;
+
 .wrapperViewComponent{
   width: 100%;
-  background-color: red;
   border-radius: 16px;
   padding: 16px;
 
@@ -11,4 +12,47 @@
   img{
     width: 256px;
   }
+  .wrapperInfo{
+    display: flex;
+
+    justify-content: center;
+    flex-direction: column;
+    gap: 16px;
+
+    h5{
+      @include font-medium-8;
+      color: var(--tertiary-color);
+    }
+
+    p {
+      @include font-regular-5;
+      color: var(--tertiary-color);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 2; 
+      line-clamp: 2; 
+      -webkit-box-orient: vertical;
+    }
+  }
+}
+
+.buttonsDiv{
+  display: flex;
+  gap: 8px;
+
+  button{
+    p{
+      font-size: 1.25rem !important;
+      line-height: 1rem !important;
+    }
+  }
+}
+
+
+.oddColor{
+  background-color: var(--primary-color);
+}
+.evenColor{
+  background-color: var(--quaternary-color);
 }
