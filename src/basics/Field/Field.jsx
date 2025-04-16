@@ -11,6 +11,7 @@ export default function Field({
   readOnly = false,
   formik,
   value = "",
+  isLogged = false,
 }) {
 
   const { t } = useTranslation();
@@ -18,7 +19,7 @@ export default function Field({
   return (
     <main className={s.inputWrapper}>
       <p
-        className={s.label}
+        className={isLogged ? `${s.label} ${s.internColors}` : `${s.label} ${s.notInternColors}`}
       >
         {t(fieldName)}
       </p>
