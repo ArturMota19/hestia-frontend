@@ -2,7 +2,7 @@
 //Styles
 import s from "./Button.module.scss";
 
-export default function Button({ type="button", text, backgroundColor, height, doFunction=false }) {
+export default function Button({ type="button", text, backgroundColor, height, doFunction=false, disabled=false }) {
   return (
     <button
       style={{ height: height }}
@@ -18,6 +18,7 @@ export default function Button({ type="button", text, backgroundColor, height, d
           : s.quaternary
       }`
       }
+      disabled={disabled}
       onClick={doFunction ? () => doFunction() : null}>
       <p>{text}</p>
     </button>

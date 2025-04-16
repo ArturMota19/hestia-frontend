@@ -23,6 +23,8 @@ const resources = {
       entry: "Entrar",
       doRegister: "Não tem uma conta? Clique aqui para Registrar-se.",
       doLogin: "Já tem uma conta? Clique aqui para Entrar.",
+      next: "Próximo",
+      prev: "Anterior",
       // Inputs Labels
       email: "Email",
       password: "Senha",
@@ -70,6 +72,8 @@ const resources = {
       graph: "Grafo dos Cômodos",
       addGraph: "Adicionar Grafo",
       removeGraph: "Remover Grafo",
+      // View Preset Page
+      viewHousePreset: "Visualização de Presets",
     },
   },
   en: {
@@ -87,6 +91,8 @@ const resources = {
       entry: "Sign In",
       doRegister: "Don't have an account? Click here to Register.",
       doLogin: "Already have an account? Click here to Sign In.",
+      next: "Next",
+      prev: "Previous",
       // Inputs Labels
       email: "Email",
       password: "Password",
@@ -134,6 +140,8 @@ const resources = {
       addGraph: "Add Graph",
       removeGraph: "Remove Graph",
       graph: "Graph of Rooms",
+      // View Preset Page
+      viewHousePreset: "View Presets",
       
     },
   },
