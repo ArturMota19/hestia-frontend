@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import * as Yup from "yup";
 import { useFormik } from "formik";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 //Styles
 import s from "./CreatePreset.module.scss";
@@ -44,11 +44,15 @@ export default function CreatePreset() {
       roomCapacity: "",
       atuators: [],
     },
-    validationSchema,
+    validationSchemaRooms,
     onSubmit: async (values) => {
       console.log(values)
     },
   });
+  useEffect(() => {
+    console.log(formikRooms.values)
+    console.log(formikRooms.errors)
+  },[formikRooms.values])
   // Formik to Rooms
   const validationSchemaGraph = Yup.object().shape({
     room1: Yup.string().required(t('requiredField')),
@@ -96,7 +100,7 @@ export default function CreatePreset() {
       <Header/>
       <section className={s.hestiaInfoWrapper}>
         <h1>Criar Preset Casa</h1>
-        <div>
+        <div className={s.wrapperInternForm}>
           <form>
             <Field
               type="text"
@@ -105,9 +109,9 @@ export default function CreatePreset() {
               isLogged={true}
             />
           </form>
-          <h2>Cômodos</h2>
-          <form onSubmit={formikRooms.handleSubmit}>
-            <div>
+          <form className={s.wrapperForm} onSubmit={formikRooms.handleSubmit}>
+            <h2>Cômodos</h2>
+            <div className={s.wrapperThreeInputs}>
               <DropdownField
                 type="text"
                 fieldName="roomName"
@@ -129,6 +133,7 @@ export default function CreatePreset() {
                 value={formikRooms.values.atuators}
                 options={fakeEnumAtuators}
                 readOnly={false}
+                isMultiSelect={true}
               />
             </div>
             <button type="submit">ADD</button>
