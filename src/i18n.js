@@ -75,6 +75,17 @@ const resources = {
       removeGraph: "Remover Grafo",
       // View Preset Page
       viewHousePreset: "Visualização de Presets",
+      // Create Params Page
+      person: "Pessoa",
+      actuator: "Atuador",
+      room: "Cômodo",
+      activity: "Atividade",
+      notPossibleActuator: "Não é possível criar novos atuadores, pois eles são objetos fixos definidos no código original do projeto.",
+      viewActuators: "Visualizar Atuadores",
+      capacity: "Capacidade",
+      capacityPlaceholder: "Digite a capacidade",
+      nameParam: "Nome do Parâmetro",
+      nameParamPlaceholder: "Digite o nome do parâmetro",
     },
   },
   en: {
@@ -144,6 +155,15 @@ const resources = {
       graph: "Graph of Rooms",
       // View Preset Page
       viewHousePreset: "View Presets",
+      // Create Params Page
+      person: "Person",
+      actuator: "Actuator",
+      room: "Room",
+      activity: "Activity",
+      notPossibleActuator: "It is not possible to create new actuators, as they are fixed objects defined in the original code of the project.",
+      viewActuators: "View Actuators",
+      nameParam: "Parameter Name",
+      nameParamPlaceholder: "Enter the parameter name",
       
     },
   },
