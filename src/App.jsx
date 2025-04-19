@@ -17,6 +17,7 @@ function App() {
   const Home = lazy(() => import('./pages/Home/Home'));
   const CreatePreset = lazy(() => import('./pages/Presets/CreatePreset/CreatePreset'));
   const ViewPreset = lazy(() => import('./pages/Presets/ViewPreset/ViewPreset'));
+  const CreateParams = lazy(() => import('./pages/Params/CreateParams/CreateParams'));
 
   return (
     <ScreenGuard>
@@ -33,6 +34,9 @@ function App() {
             {/* Presets Routes */}
               <Route path="/create-preset" element={<CreatePreset />} />
               <Route path="/view-presets" element={<ViewPreset />} />
+            {/* Create Params */}
+            <Route path="/create-params" element={<CreateParams />} />
+            <Route path="/view-params" element={<ViewPreset />} />
           </Routes>
         </Suspense>
       </BrowserRouter>
