@@ -1,0 +1,73 @@
+@use '../../../styles/mixins' as *;
+
+.wrapperCreateRoutine{
+    margin-bottom: 0rem;
+    width: 100% !important;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--tertiary-color);
+
+    .hestiaInfoWrapper{
+        width: var(--page-wrapper);
+        padding: var(--padding-wrap);
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+
+        h1{
+            @include font-bold-8;
+            color: var(--primary-color);
+        }
+
+        .wrapperInternForm{
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .wrapperForm{
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 12px;
+
+            h2{
+                width: 100%;
+                @include font-medium-6;
+                color: var(--primary-color);
+                text-align: left;
+            }
+
+            .wrapperThreeInputs{
+                width: 100%;
+                display: flex;
+                justify-content: space-between;
+                align-items: baseline;
+                gap: 8px;
+            }
+            .buttonsDiv{
+                width: 25%;
+                display: flex;
+                gap: 16px;
+
+                button{
+                    font-weight: 400 !important;
+                    font-size: 1.15rem !important;
+                    line-height: 1rem !important;
+                }
+                
+            }
+        }
+    }
+    .createButton{
+        width: 30%;
+        margin-top: 16px;
+    }
+}

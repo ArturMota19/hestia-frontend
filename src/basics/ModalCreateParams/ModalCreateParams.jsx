@@ -14,6 +14,14 @@ import { useNavigate } from "react-router-dom";
 
 
 export default function ModalCreateParams({ isOpen, setIsOpen, type, formik }) {
+  let fakeDataPresets = [
+    { id: 1, name: "Casa Moderna" },
+    { id: 2, name: "Casa Clássica" },
+    { id: 3, name: "Casa Minimalista" },
+    { id: 4, name: "Casa Rústica" },
+    { id: 5, name: "Casa Contemporânea" },
+    
+  ]
   if (!isOpen) return null;
   const navigate = useNavigate();
   const { t } = useTranslation();
@@ -44,19 +52,14 @@ export default function ModalCreateParams({ isOpen, setIsOpen, type, formik }) {
             </div>
             <h4>{t("person")}</h4>
             <form className={s.formWrapper} onSubmit={formikPeople.handleSubmit}>
-              <Field
+              <DropdownField
                 type="text"
-                fieldName="nameParam"
-                formik={formikPeople}
-                isLogged={true}
+                fieldName="roomName"
+                // formik={formikRooms}
+                // value={formikRooms.values.roomName}
+                options={fakeDataPresets}
+                readOnly={false}
               />
-              {/* Do a dropwon to select one image */}
-              {/* <Field
-                fieldName="image"
-                type="text"
-                formik={formik}
-                isLogged={true}
-              /> */}
               <Button
                 text={t("create")}
                 backgroundColor={"quaternary"}

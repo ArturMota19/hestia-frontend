@@ -32,7 +32,7 @@ export default function Home() {
 
   return (
     <main className={s.wrapperHome}>
-      <ThemeToggleButton isHeader={false}/>
+      <ThemeToggleButton isHeader={false} />
       <div className={"languageToggleButtonWrapper"}>
         <LanguageToggleButton />
       </div>
@@ -55,7 +55,7 @@ export default function Home() {
           />
           <ItemGrid
             icon={createPresetsIcon}
-            url="/create-preset"
+            url="/create-presets"
             text={t("createPresets")}
           />
           <ItemGrid
