@@ -47,7 +47,7 @@ export default function Field({
         name={fieldName}
         onChange={(e) => formik.handleChange(e)}
         onBlur={formik.handleBlur}
-        value={value || (formik?.values[fieldName] || "")}
+        value={formik?.values[fieldName] || ""}
         readOnly={readOnly}
         placeholder={t(`${fieldName}Placeholder`)}
         className={
