@@ -27,7 +27,7 @@ export default function CreateRoutine() {
         <div className={s.wrapperInternForm}>
           <div>
             <h2>{t('personsRoutines')}</h2>
-            <Field 
+            {/* <Field 
               placeholder={t('search')} 
               type="text" 
               width={400} 
@@ -35,7 +35,7 @@ export default function CreateRoutine() {
               backgroundColor={"white"} 
               borderColor={"secondary"} 
               borderRadius={8}
-            />
+            /> */}
           </div>
         </div>
         <div className={s.createButton}>
