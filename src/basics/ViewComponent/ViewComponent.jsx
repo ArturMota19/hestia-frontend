@@ -1,6 +1,6 @@
 // Components
 // Images
-import houseIcon from "../../assets/icons/house-icon.svg";
+
 // Imports
 import Button from "../../basics/Button/Button";
 import { useTranslation } from "react-i18next";
@@ -10,10 +10,14 @@ import s from "./ViewComponent.module.scss";
 export default function ViewComponent({
 	index,
 	title,
-	text,
+	room=[],
+	actuatorSpec=[],
+	capacity=null,
 	type, 
+	image="/",
 	hasActions = false,
 }) {
+	console.log(room)
   const { t } = useTranslation();
   const columns = 2;
 	const row = Math.floor(index / columns);
@@ -33,23 +37,32 @@ export default function ViewComponent({
 		>
 			<div className={s.wrapperInfo}>
 				<h5>{title}</h5>
-				<p>{text}</p>
+				{capacity && <p>{t("capacity")}: {capacity}</p>}
+				{room.length > 0 && <p>{t("rooms")}: {room.join(", ")}</p>}
+				{actuatorSpec.length > 0 &&
+					actuatorSpec.map((spec, index) => {
+						const [key, value] = Object.entries(spec)[0];
+						return(
+							<p key={index}>{key} - {value}</p>
+						)
+					})
+				}
         {hasActions &&
           <div className={s.buttonsDiv}>
             <Button 
             text={t('edit')} 
             backgroundColor={"secondary"} 
             height={36}
-            doFunction={console.log("edit")}/>
+            doFunction={() => console.log("edit")}/>
             <Button 
             text={t('delete')} 
             backgroundColor={"delete"} 
             height={36}
-            doFunction={console.log("delete")}/>
+            doFunction={() => console.log("delete")}/>
           </div>
         }
 			</div>
-			<img src={type == "preset" ? houseIcon : "/"} />
+			<img src={image} alt={type} />
 		</div>
 	);
 }

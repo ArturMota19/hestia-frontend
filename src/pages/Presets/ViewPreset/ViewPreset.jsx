@@ -1,6 +1,7 @@
 // Components
 import Header from "../../../basics/Header/Header";
 // Images
+import houseIcon from "../../../assets/icons/house-icon.svg";
 // Imports
 import { Helmet } from "react-helmet";
 //Styles
@@ -17,44 +18,60 @@ export default function ViewPreset() {
 
   let fakeData = [
     {
-      houseNome: "Preset Casa 1",
-      rooms: ["Cozinha", "Sala", "Quarto", "Banheiro", "Varanda"],
+      paramName: "Casa Moderna",
+      actuatorSpec: ["Luzes", "Câmeras", "Sensores de Movimento"],
+      capacity: 5,
+      type: "preset",
+      rooms: ["Cozinha", "Sala de Estar", "Quarto Principal", "Banheiro", "Garagem"],
     },
     {
-      houseNome: "Preset Casa 2",
-      rooms: ["Cozinha", "Sala de Jantar", "Quarto", "Escritório", "Garagem"],
+      paramName: "Apartamento Compacto",
+      actuatorSpec: ["Ar Condicionado", "Fechadura Inteligente"],
+      capacity: 3,
+      type: "preset",
+      rooms: ["Sala", "Quarto", "Banheiro"],
     },
     {
-      houseNome: "Preset Casa 3",
-      rooms: ["Sala", "Quarto", "Banheiro", "Lavanderia", "Jardim"],
+      paramName: "Escritório Executivo",
+      actuatorSpec: ["Projetor", "Luzes Automáticas", "Câmeras de Segurança"],
+      capacity: 10,
+      type: "preset",
+      rooms: ["Sala de Reunião", "Escritório", "Copa", "Banheiro"],
     },
     {
-      houseNome: "Preset Casa 4",
-      rooms: ["Cozinha", "Sala", "Quarto", "Banheiro", "Closet"],
+      paramName: "Casa de Campo",
+      actuatorSpec: ["Aquecedor", "Sistema de Irrigação"],
+      capacity: 7,
+      type: "preset",
+      rooms: ["Sala", "Cozinha", "Quarto", "Banheiro", "Jardim"],
     },
     {
-      houseNome: "Preset Casa 5",
-      rooms: ["Sala de Estar", "Sala de Jantar", "Quarto", "Banheiro", "Terraço"],
+      paramName: "Loja de Roupas",
+      actuatorSpec: ["Câmeras", "Sensores de Presença"],
+      capacity: 15,
+      type: "preset",
+      rooms: ["Área de Vendas", "Estoque", "Banheiro"],
     },
     {
-      houseNome: "Preset Casa 6",
-      rooms: ["Cozinha", "Sala", "Quarto", "Banheiro", "Porão"],
+      paramName: "Apartamento Luxo",
+      actuatorSpec: ["Luzes Inteligentes", "Cortinas Automáticas"],
+      capacity: 4,
+      type: "preset",
+      rooms: ["Sala de Estar", "Quarto", "Banheiro", "Varanda"],
     },
     {
-      houseNome: "Preset Casa 7",
-      rooms: ["Cozinha", "Sala", "Quarto", "Banheiro", "Área de Serviço"],
+      paramName: "Casa Familiar",
+      actuatorSpec: ["Sistema de Som", "Luzes", "Câmeras"],
+      capacity: 6,
+      type: "preset",
+      rooms: ["Sala", "Cozinha", "Quarto", "Banheiro", "Quintal"],
     },
     {
-      houseNome: "Preset Casa 8",
-      rooms: ["Sala", "Quarto", "Banheiro", "Escritório", "Piscina"],
-    },
-    {
-      houseNome: "Preset Casa 9",
-      rooms: ["Cozinha", "Sala", "Quarto", "Banheiro", "Quintal"],
-    },
-    {
-      houseNome: "Preset Casa 10",
-      rooms: ["Cozinha", "Sala de Estar", "Quarto", "Banheiro", "Sala de Jogos"],
+      paramName: "Consultório Médico",
+      actuatorSpec: ["Ar Condicionado", "Luzes Automáticas"],
+      capacity: 8,
+      type: "preset",
+      rooms: ["Recepção", "Consultório", "Banheiro"],
     },
   ];
 
@@ -79,10 +96,11 @@ export default function ViewPreset() {
 						currentItems.map((item, index) => (
 							<ViewComponent
 								index={index}
-								title={item.houseNome}
-								text={item.rooms.join(", ")}
+								title={item.paramName}
+								room={item.rooms}
 								type={"preset"}
 								hasActions={true}
+                image={houseIcon}
 							/>
 						))
 					) : (
