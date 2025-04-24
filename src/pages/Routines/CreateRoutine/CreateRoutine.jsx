@@ -12,11 +12,14 @@ import * as Yup from "yup";
 import { useFormik } from "formik";
 //Styles
 import s from "./CreateRoutine.module.scss";
+import RoutineModal from "../../../basics/RoutineModal/RoutineModal";
+import { useState } from "react";
 
 
 export default function CreateRoutine() {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
+  const [isModalOpen, setIsModalOpen] = useState(true);
 
   let fakeEnumPresets = [
     { id: "preset1", name: "Preset 1" },
@@ -50,6 +53,7 @@ export default function CreateRoutine() {
         <title>HESTIA | Create Preset</title>
       </Helmet>
       <Header/>
+      <RoutineModal isOpen={isModalOpen} setIsOpen={setIsModalOpen} />
       <section className={s.hestiaInfoWrapper}>
         <h1>{t('createRoutines')}</h1>
         <div className={s.wrapperInternForm}>

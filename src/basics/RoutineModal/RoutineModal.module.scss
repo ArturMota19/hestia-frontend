@@ -1,0 +1,42 @@
+.wrapperModal {
+  width: 100% !important;
+  background: #ccc;
+  padding: 20px;
+}
+
+.grid {
+  width: 100% !important;
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr;
+  row-gap: 1px;
+  background: #333;
+  height: 1440px; // 30px * 48
+}
+
+.timeSlot {
+  height: 30px;
+  background: #444;
+  color: white;
+  padding-left: 10px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.block {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  color: white;
+  padding-left: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.resizer {
+  cursor: pointer;
+  font-size: 12px;
+  padding: 2px;
+}
