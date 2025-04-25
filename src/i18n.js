@@ -75,6 +75,8 @@ const resources = {
       removeGraph: "Remover Grafo",
       // View Preset Page
       viewHousePreset: "Visualização de Presets",
+      // View Params Page
+      viewHouseParams: "Visualização de Parâmetros",
       // Create Params Page
       person: "Pessoa",
       actuator: "Atuador",
@@ -158,6 +160,8 @@ const resources = {
       graph: "Graph of Rooms",
       // View Preset Page
       viewHousePreset: "View Presets",
+      // View Params Page
+      viewHouseParams: "View Parameters",
       // Create Params Page
       person: "Person",
       actuator: "Actuator",
