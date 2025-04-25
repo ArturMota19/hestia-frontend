@@ -27,14 +27,17 @@ export default function AddActivityModal({isActivityModalOpen, setIsActivityModa
       validationSchema,
       onSubmit: async (values) => {
         console.log(values)
-        // setItems((prevItems) => [
-        //   ...prevItems,
-        //   {
-        //     activity: values.activity,
-        //     actuators: values.actuators,
-        //   },
-        // ]);
-        // setIsActivityModalOpen(false);
+        setItems((prevItems) => [
+          ...prevItems,
+          {
+            id: prevItems.length + 1,
+            title: values.activity,
+            start: 0,
+            duration: 1,
+          },
+        ]);
+        console.log(items, values)
+        setIsActivityModalOpen(false);
       },
     });
     const fakeEnumActivities = [

@@ -16,19 +16,33 @@
   width: 85%;
   min-width: 1150px;
   max-width: 1920px;
-  height: auto;
   max-height: 80vh;
+
+  padding: 20px 20px 20px 20px;
   overflow-y: auto;
+
   background: var(--quintenary-color);
-  padding: 20px;
   border-radius: 8px;
 
   display: flex;
   flex-direction: column;
-  align-items: start;
-
   gap: 16px;
 }
+
+.fixedHeader {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+
+  background: var(--quintenary-color);
+  padding: 10px 0;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
 
 .scrollContainer {
   overflow-x: auto;
@@ -103,11 +117,12 @@
   justify-content: space-between;
 }
 .activityForm{
+  z-index: 12;
   padding: 2rem;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  position: absolute;
+  position: absolute !important;
   background-color: var(--quaternary-color);
   border-radius: 8px;
   display: flex;

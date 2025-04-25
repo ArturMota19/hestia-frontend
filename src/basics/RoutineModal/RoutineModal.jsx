@@ -58,27 +58,29 @@ export default function RoutineModal({
   return (
     <section className={s.wrapperModal}>
       <div className={s.timeline}>
-        <section className={s.titleRoutine}>
-          <p>{peopleName}a</p>
-          <p>{weekDay}b</p>
-          <p>{presetName}c</p>
-        </section>
+        <div className={s.fixedHeader}>
+          <section className={s.titleRoutine}>
+            <p>{peopleName}a</p>
+            <p>{weekDay}b</p>
+            <p>{presetName}c</p>
+          </section>
+          <section className={s.addActivityButton}>
+            <Button
+              text={t("addActivity")}
+              backgroundColor={"primary"}
+              height={42}
+              doFunction={() => {
+                setIsActivityModalOpen(true);
+              }}
+            />
+          </section>
+        </div>
         <AddActivityModal
           isActivityModalOpen={isActivityModalOpen}
           setIsActivityModalOpen={setIsActivityModalOpen}
           items={items}
           setItems={setItems}
         />
-        <section className={s.addActivityButton}>
-          <Button
-            text={t("addActivity")}
-            backgroundColor={"primary"}
-            height={42}
-            doFunction={() => {
-              setIsActivityModalOpen(true);
-            }}
-          />
-        </section>
         {items.length > 0 && (
           <>
             <div className={s.scrollContainer}>
