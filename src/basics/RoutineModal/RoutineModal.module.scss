@@ -11,35 +11,43 @@
 }
 
 .timeline {
+  width: 85%;
+  min-width: 1150px;
+  max-width: 1920px;
   height: 80vh;
-  background: #333;
+  background: black;
   padding: 20px;
   border-radius: 8px;
-  width: 90%;
+}
+
+.scrollContainer {
+  overflow-x: auto;
 }
 
 .hours {
   display: flex;
-  overflow-x: auto;
-  background: #ccc;
-}
-
-.hour {
-  text-align: center;
-  font-size: 12px;
-  border-right: 1px solid #999;
-  flex-shrink: 0;
+  width: calc(48 * 50px); // ou 2400px
+  background: yellow;
 }
 
 .events {
+  width: calc(48 * 50px); // mesma largura que .hours
   height: 50vh;
   position: relative;
   background: #222;
   margin-top: 10px;
 }
 
+
+.hour {
+  width: 100%;
+  text-align: center;
+  border-right: 1px solid red;
+  flex-shrink: 0;
+}
+
 .eventBox {
-  background: dodgerblue;
+  background: purple;
   color: white;
   height: 100%;
   display: flex;

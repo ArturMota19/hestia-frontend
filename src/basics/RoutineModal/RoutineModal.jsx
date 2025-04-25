@@ -14,7 +14,8 @@ export default function RoutineModal({ isOpen, setIsOpen }) {
     { id: 3, title: "Ver televisão", start: 21, duration: 1 },
   ]);
   // items size
-  const gridSize = 50;
+  const gridSize = 50; // 30m = 50px
+  const timeSlots = 48; // 24h * 2  
   const rowHeight = 50;
 
   const handleDragStop = (e, data, id) => {
@@ -51,54 +52,61 @@ export default function RoutineModal({ isOpen, setIsOpen }) {
   return (
     <section className={s.wrapperModal}>
       <div className={s.timeline}>
-        {/* Hours */}
-        <div className={s.hours}>
-          {Array.from({ length: 24 }, (_, i) => (
-            <div key={i} className={s.hour} style={{ width: gridSize }}>
-              {i}:00
-            </div>
-          ))}
-        </div>
-        <button onClick={() => PrintEvents()}>TESTE</button>
-        {/* Activities */}
-        <div className={s.events}>
-          {items.map((item, index) => (
-            <Draggable
-              key={item.id}
-              axis="x"
-              bounds="parent"
-              grid={[gridSize, gridSize]}
-              position={{ x: item.start * gridSize, y: 0 }}
-              onStop={(e, data) => handleDragStop(e, data, item.id)}
-              handle=".drag-handle">
-              <div
-                style={{
-                  position: "absolute",
-                  top: index * rowHeight, // each event in one line
-                  left: 0,
-                }}>
-                <ResizableBox
-                  width={item.duration * gridSize}
-                  height={rowHeight - 10}
-                  minConstraints={[gridSize, rowHeight - 10]}
-                  maxConstraints={[gridSize * 24, rowHeight - 10]}
-                  axis="x"
-                  onResizeStop={(e, data) => handleResizeStop(e, data, item.id)}
-                  resizeHandles={["e"]}
-                  handle={
-                    <span
-                      className={s.resizeHandle}
-                      onMouseDown={(e) => e.stopPropagation()}
-                    />
-                  }>
-                  <div className={`${s.eventBox} drag-handle`}>
-                    {item.title}
-                  </div>
-                </ResizableBox>
-              </div>
-            </Draggable>
-          ))}
-          
+        <div className={s.scrollContainer}>
+          {/* Hours */}
+          <div className={s.hours}>
+            {Array.from({ length: timeSlots }, (_, i) => {
+              const hour = Math.floor(i / 2);
+              const minute = i % 2 === 0 ? "00" : "30";
+              return (
+                <div key={i} className={s.hour} style={{ width: gridSize }}>
+                  {hour}:{minute}
+                </div>
+              );
+            })}
+          </div>
+          <button onClick={() => PrintEvents()}>TEST ACTIVITIES</button>
+          {/* Activities */}
+          <div className={s.events}>
+            {items.map((item, index) => (
+              <Draggable
+                key={item.id}
+                axis="x"
+                bounds="parent"
+                grid={[gridSize, gridSize]}
+                position={{ x: item.start * gridSize, y: 0 }}
+                onStop={(e, data) => handleDragStop(e, data, item.id)}
+                handle=".drag-handle">
+                <div
+                  style={{
+                    position: "absolute",
+                    top: index * rowHeight,
+                    left: 0,
+                  }}>
+                  <ResizableBox
+                    width={item.duration * gridSize}
+                    height={rowHeight - 10}
+                    minConstraints={[gridSize, rowHeight - 10]}
+                    maxConstraints={[(timeSlots - item.start) * gridSize, rowHeight - 10]}
+                    axis="x"
+                    onResizeStop={(e, data) =>
+                      handleResizeStop(e, data, item.id)
+                    }
+                    resizeHandles={["e"]}
+                    handle={
+                      <span
+                        className={s.resizeHandle}
+                        onMouseDown={(e) => e.stopPropagation()}
+                      />
+                    }>
+                    <div className={`${s.eventBox} drag-handle`}>
+                      {item.title}
+                    </div>
+                  </ResizableBox>
+                </div>
+              </Draggable>
+            ))}
+          </div>
         </div>
       </div>
     </section>
