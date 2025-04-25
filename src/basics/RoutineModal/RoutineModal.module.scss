@@ -1,3 +1,5 @@
+@use "../../styles/mixins" as *;
+
 .wrapperModal {
   background: rgba(0,0,0,0.7);
   position: fixed;
@@ -14,8 +16,10 @@
   width: 85%;
   min-width: 1150px;
   max-width: 1920px;
-  height: 80vh;
-  background: black;
+  height: auto;
+  max-height: 80vh;
+  overflow-y: auto;
+  background: var(--quintenary-color);
   padding: 20px;
   border-radius: 8px;
 }
@@ -27,14 +31,14 @@
 .hours {
   display: flex;
   width: calc(48 * 50px); // ou 2400px
-  background: yellow;
+  background: var(--secondary-color);
+  color: var(--tertiary-color);
 }
 
 .events {
   width: calc(48 * 50px); // mesma largura que .hours
-  height: 50vh;
   position: relative;
-  background: #222;
+  background: var(--secondary-color);
   margin-top: 10px;
 }
 
@@ -42,12 +46,12 @@
 .hour {
   width: 100%;
   text-align: center;
-  border-right: 1px solid red;
+  border-right: 1px solid var(--primary-color);
   flex-shrink: 0;
 }
 
 .eventBox {
-  background: purple;
+  background-color: red;
   color: white;
   height: 100%;
   display: flex;
@@ -66,5 +70,19 @@
   height: 100%;
   background: rgba(255, 255, 255, 0.3);
   cursor: ew-resize;
+}
+
+.arrayButtons{
+  width: 45%;
+  margin: 0 auto;
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+  justify-content: center;
+  align-items: center;
+
+  button{
+    font-size: 1.25rem !important;
+  }
 }
 

@@ -50,7 +50,7 @@ export default function CreateRoutine() {
     <main className={s.wrapperCreateRoutine}>
       <Helmet>
         <meta charSet="utf-8" />
-        <title>HESTIA | Create Preset</title>
+        <title>HESTIA | Create Routine</title>
       </Helmet>
       <Header/>
       <RoutineModal isOpen={isModalOpen} setIsOpen={setIsModalOpen} />

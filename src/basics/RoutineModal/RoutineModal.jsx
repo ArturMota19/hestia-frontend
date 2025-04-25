@@ -3,15 +3,17 @@ import Draggable from "react-draggable";
 import { ResizableBox } from "react-resizable";
 import "react-resizable/css/styles.css";
 import s from "./RoutineModal.module.scss";
+import Button from "../Button/Button";
 
 export default function RoutineModal({ isOpen, setIsOpen }) {
   if (!isOpen) return null;
 
   // items array
   const [items, setItems] = useState([
-    { id: 1, title: "Dormir", start: 0, duration: 6 },
-    { id: 2, title: "Tomar Banho", start: 13, duration: 1 },
-    { id: 3, title: "Ver televisão", start: 21, duration: 1 },
+    { id: 1, title: "Dormir", start: 0, duration: 1 },
+    { id: 2, title: "Tomar Banho", start: 1, duration: 1 },
+    { id: 3, title: "Ver televisão", start: 2, duration: 1 },
+    { id: 4, title: "Fazer tal Coisa", start: 3, duration: 1},
   ]);
   // items size
   const gridSize = 50; // 30m = 50px
@@ -44,7 +46,7 @@ export default function RoutineModal({ isOpen, setIsOpen }) {
   function PrintEvents() {
     items.forEach((item) => {
       console.log(
-        `Title: ${item.title}, Start: ${item.start}, Duration: ${item.duration}`
+        `${item.title} ${item.start} ${item.duration}`
       );
     });
   }
@@ -65,9 +67,8 @@ export default function RoutineModal({ isOpen, setIsOpen }) {
               );
             })}
           </div>
-          <button onClick={() => PrintEvents()}>TEST ACTIVITIES</button>
           {/* Activities */}
-          <div className={s.events}>
+          <div style={{height: `${items.length * 50}px`}} className={s.events}>
             {items.map((item, index) => (
               <Draggable
                 key={item.id}
@@ -107,6 +108,26 @@ export default function RoutineModal({ isOpen, setIsOpen }) {
               </Draggable>
             ))}
           </div>
+        </div>
+        <div className={s.arrayButtons}>
+          <Button
+            text={"Descartar Alterações"}
+            backgroundColor={"secondary"}
+            height={42}
+            doFunction={() => {
+              PrintEvents();
+              setIsOpen(false);
+            }}
+          />
+          <Button
+            text={"Salvar Rotina"}
+            backgroundColor={"primary"}
+            height={42}
+            doFunction={() => {
+              PrintEvents();
+              setIsOpen(false);
+            }}
+          />
         </div>
       </div>
     </section>
