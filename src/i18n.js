@@ -86,6 +86,9 @@ const resources = {
       capacityPlaceholder: "Digite a capacidade",
       nameParam: "Nome do Parâmetro",
       nameParamPlaceholder: "Digite o nome do parâmetro",
+      errorValue: "Taxa de Erro",
+      errorValuePlaceholder: "Digite a taxa de erro",
+      invalidErrorValue: "A taxa de erro deve estar entre 0 e 100",
     },
   },
   en: {
@@ -164,6 +167,9 @@ const resources = {
       viewActuators: "View Actuators",
       nameParam: "Parameter Name",
       nameParamPlaceholder: "Enter the parameter name",
+      errorValue: "Error Rate",
+      errorValuePlaceholder: "Enter the error rate",
+      invalidErrorValue: "Error rate must be between 0 and 100",
       
     },
   },
