@@ -1,7 +1,8 @@
 // Components
 
 // Images
-
+import { MdModeEdit } from "react-icons/md";
+import { IoMdAdd } from "react-icons/io";
 // Imports
 
 // Styles
@@ -16,10 +17,19 @@ export default function PersonRoutine({ person }) {
       <div className={s.eachDayWrapper}>
         <div className={s.dayName}>
           <h4>{t(day.dayName)}</h4>
+          <div className={s.internActionsButton}>
+            {day.routine.length > 0 ? (
+              <button>
+                <MdModeEdit />
+              </button>
+            ) : (
+              <button>
+                <IoMdAdd />
+              </button>
+            )}
+          </div>
         </div>
-        <div className={s.routineActions}>
-          shdfgjsdhiugsd
-        </div>
+        <div className={s.routineActions}>shdfgjsdhiugsd</div>
       </div>
     );
   };

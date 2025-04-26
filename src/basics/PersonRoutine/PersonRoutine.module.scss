@@ -23,9 +23,31 @@
       width: 180px;
       padding: 8px;
       background-color: var(--quaternary-color);
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       h4{
         @include font-regular-4;
         text-align: center;
+      }
+      .internActionsButton{
+        button{
+          width: 1.5rem;
+          height: 1.5rem;
+          outline: none;
+          border: none;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 4px;
+          cursor: pointer;
+          background-color: var(--primary-color);
+          transition: 1s;
+          &:hover{
+            transform: scale(1.05);
+          }
+        }
       }
     }
     .routineActions{
