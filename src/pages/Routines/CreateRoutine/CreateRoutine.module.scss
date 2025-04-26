@@ -1,9 +1,8 @@
 @use '../../../styles/mixins' as *;
 
 .wrapperCreateRoutine{
-    margin-bottom: 0rem;
     width: 100% !important;
-    height: 100vh;
+    height: auto;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -85,8 +84,13 @@
         }
     }
     .createButton{
-        width: 30%;
+        width: 50%;
+        margin: 0 auto;
         margin-top: 16px;
+
+        display: flex;
+        align-items: end;
+        gap: 16px;
     }
     .selectOnePreset{
         @include font-medium-5;

@@ -15,6 +15,7 @@ import s from "./CreateRoutine.module.scss";
 import RoutineModal from "../../../basics/RoutineModal/RoutineModal";
 import { useState } from "react";
 import PersonRoutine from "../../../basics/PersonRoutine/PersonRoutine";
+import toast from "react-hot-toast";
 
 export default function CreateRoutine() {
   const { t, i18n } = useTranslation();
@@ -25,13 +26,13 @@ export default function CreateRoutine() {
   const [people, setPeople] = useState([
     {
       person: "Fulana de Tal",
-      monday: { dayName: "monday", tasks: ["Task 1", "Task 2"] },
-      tuesday: { dayName: "tuesday", tasks: ["Task 3"] },
-      wednesday: { dayName: "wednesday", tasks: ["Task 1", "Task 2"] },
-      thursday: { dayName: "thursday", tasks: ["Task 4", "Task 5"] },
-      friday: {dayName: "friday"},
-      saturday: { dayName: "saturday", tasks: ["Task 6"] },
-      sunday: { dayName: "sunday", tasks: ["Task 1", "Task 2"] },
+      monday: { dayName: "monday", routine: [] },
+      tuesday: { dayName: "tuesday", routine: [] },
+      wednesday: { dayName: "wednesday", routine: [] },
+      thursday: { dayName: "thursday", routine: [] },
+      friday: {dayName: "friday", routine: []},
+      saturday: { dayName: "saturday", routine: [] },
+      sunday: { dayName: "sunday", routine: [] },
     },
   ]);
 
@@ -47,6 +48,12 @@ export default function CreateRoutine() {
     { id: "preset9", name: "Preset 9" },
     { id: "preset10", name: "Preset 10" },
   ];
+  let fakeEnumPersons = [
+    { id: "01", name: "Pessoa 1" },
+    { id: "02", name: "Pessoa 2" },
+    { id: "03", name: "Pessoa 3" },
+    { id: "04", name: "Pessoa 4" },
+  ];
   const validationSchema = Yup.object().shape({
     preset: Yup.string().required(t("requiredField")),
   });
@@ -57,6 +64,40 @@ export default function CreateRoutine() {
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       console.log(values);
+    },
+  });
+  const validationSchemaPerson = Yup.object().shape({
+    person: Yup.string().required(t("requiredField")),
+  });
+  const formikPerson = useFormik({
+    initialValues: {
+      person: "",
+    },
+    validationSchema: validationSchemaPerson,
+    onSubmit: async (values) => {
+      if(people.length > 0){
+        const filteredPerson = people.filter((people) => people.person === values.person);
+        if(filteredPerson.length > 0 ){
+          toast.error(`A ${filteredPerson[0].person} já possui uma rotina cadastrada.`,{
+            duration: 4000,
+            position: 'top-center',
+          });
+          return
+        }
+      }
+      setPeople((prevItems) => [
+        ...prevItems,
+        {
+          person: values.person,
+          monday: { dayName: "monday", routine: [] },
+          tuesday: { dayName: "tuesday", routine: [] },
+          wednesday: { dayName: "wednesday", routine: [] },
+          thursday: { dayName: "thursday", routine: [] },
+          friday: { dayName: "friday", routine: [] },
+          saturday: { dayName: "saturday", routine: [] },
+          sunday: { dayName: "sunday", routine: [] },
+        },
+      ]);
     },
   });
 
@@ -96,16 +137,21 @@ export default function CreateRoutine() {
             {people.map((eachPerson) => {
               return <PersonRoutine person={eachPerson} />;
             })}
-            <div className={s.createButton}>
+            <form onSubmit={formikPerson.handleSubmit} className={s.createButton}>
+              <DropdownField
+                type="text"
+                fieldName="person"
+                formik={formikPerson}
+                value={formikPerson.values.person}
+                options={fakeEnumPersons}
+                readOnly={false}
+              />
               <Button
                 text={t("addPerson")}
                 backgroundColor={"secondary"}
                 height={48}
-                doFunction={() => {
-                  console.log("oi");
-                }}
               />
-            </div>
+            </form>
           </>
         ) : (
           <p className={s.selectOnePreset}>{t("selectOnePreset")}</p>
