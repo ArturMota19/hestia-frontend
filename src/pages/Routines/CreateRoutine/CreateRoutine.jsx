@@ -1,7 +1,7 @@
 // Components
 import Header from "../../../basics/Header/Header";
 import Field from "../../../basics/Field/Field";
-import DropdownField from "../../../basics/DropdownField/DropdownField"
+import DropdownField from "../../../basics/DropdownField/DropdownField";
 import Button from "../../../basics/Button/Button";
 // Images
 // Imports
@@ -14,12 +14,26 @@ import { useFormik } from "formik";
 import s from "./CreateRoutine.module.scss";
 import RoutineModal from "../../../basics/RoutineModal/RoutineModal";
 import { useState } from "react";
-
+import PersonRoutine from "../../../basics/PersonRoutine/PersonRoutine";
 
 export default function CreateRoutine() {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
-  const [isModalOpen, setIsModalOpen] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [weekDay, setWeekDay] = useState("");
+  const [person, setPerson] = useState("");
+  const [people, setPeople] = useState([
+    {
+      person: "Fulana de Tal",
+      monday: { dayName: "monday", tasks: ["Task 1", "Task 2"] },
+      tuesday: { dayName: "tuesday", tasks: ["Task 3"] },
+      wednesday: { dayName: "wednesday", tasks: ["Task 1", "Task 2"] },
+      thursday: { dayName: "thursday", tasks: ["Task 4", "Task 5"] },
+      friday: {dayName: "friday"},
+      saturday: { dayName: "saturday", tasks: ["Task 6"] },
+      sunday: { dayName: "sunday", tasks: ["Task 1", "Task 2"] },
+    },
+  ]);
 
   let fakeEnumPresets = [
     { id: "preset1", name: "Preset 1" },
@@ -32,9 +46,9 @@ export default function CreateRoutine() {
     { id: "preset8", name: "Preset 8" },
     { id: "preset9", name: "Preset 9" },
     { id: "preset10", name: "Preset 10" },
-  ]
+  ];
   const validationSchema = Yup.object().shape({
-    preset: Yup.string().required(t('requiredField')),
+    preset: Yup.string().required(t("requiredField")),
   });
   const formikPresets = useFormik({
     initialValues: {
@@ -52,13 +66,19 @@ export default function CreateRoutine() {
         <meta charSet="utf-8" />
         <title>HESTIA | Create Routine</title>
       </Helmet>
-      <Header/>
-      <RoutineModal isOpen={isModalOpen} setIsOpen={setIsModalOpen} />
+      <Header />
+      <RoutineModal
+        isOpen={isModalOpen}
+        setIsOpen={setIsModalOpen}
+        weekDay={weekDay}
+        presetName={formikPresets.values.preset}
+        person={person}
+      />
       <section className={s.hestiaInfoWrapper}>
-        <h1>{t('createRoutines')}</h1>
+        <h1>{t("createRoutines")}</h1>
         <div className={s.wrapperInternForm}>
           <div className={s.titleRoutinesCreate}>
-            <h2>{t('personsRoutines')}</h2>
+            <h2>{t("personsRoutines")}</h2>
             <div className={s.inputWrapperDropdown}>
               <DropdownField
                 type="text"
@@ -71,14 +91,25 @@ export default function CreateRoutine() {
             </div>
           </div>
         </div>
-        <div className={s.createButton}>
-          <Button 
-            text={t('addPerson')} 
-            backgroundColor={"secondary"} 
-            height={48}
-            doFunction={() => {console.log("oi")}}
-          />
-        </div>
+        {!formikPresets.values.preset ? ( // change this to if true after development
+          <>
+            {people.map((eachPerson) => {
+              return <PersonRoutine person={eachPerson} />;
+            })}
+            <div className={s.createButton}>
+              <Button
+                text={t("addPerson")}
+                backgroundColor={"secondary"}
+                height={48}
+                doFunction={() => {
+                  console.log("oi");
+                }}
+              />
+            </div>
+          </>
+        ) : (
+          <p className={s.selectOnePreset}>{t("selectOnePreset")}</p>
+        )}
       </section>
     </main>
   );

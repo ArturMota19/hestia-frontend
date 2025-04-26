@@ -71,7 +71,7 @@
 }
 
 .eventBox {
-  background-color: red;
+  background-color: var(--primary-color);
   color: white;
   height: 100%;
   display: flex;
@@ -80,6 +80,14 @@
   position: relative;
   cursor: move;
   user-select: none;
+  p{
+    min-width: 30px;
+    @include font-regular-3;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-align: center;
+  }
 }
 
 .resizeHandle {

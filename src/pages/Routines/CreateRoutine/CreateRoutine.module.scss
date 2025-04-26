@@ -88,4 +88,12 @@
         width: 30%;
         margin-top: 16px;
     }
+    .selectOnePreset{
+        @include font-medium-5;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--secondary-color);
+    }
 }

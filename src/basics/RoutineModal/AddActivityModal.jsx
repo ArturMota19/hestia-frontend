@@ -76,7 +76,7 @@ export default function AddActivityModal({isActivityModalOpen, setIsActivityModa
               type="text"
               fieldName="activity"
               formik={formik}
-              value={formik.values.name}
+              value={formik.values.activity}
               options={fakeEnumActivities}
               readOnly={false}
             />

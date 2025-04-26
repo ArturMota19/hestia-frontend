@@ -10,7 +10,7 @@ import AddActivityModal from "./AddActivityModal";
 export default function RoutineModal({
   isOpen,
   setIsOpen,
-  peopleName,
+  person,
   weekDay,
   presetName,
 }) {
@@ -60,9 +60,9 @@ export default function RoutineModal({
       <div className={s.timeline}>
         <div className={s.fixedHeader}>
           <section className={s.titleRoutine}>
-            <p>{peopleName}a</p>
-            <p>{weekDay}b</p>
-            <p>{presetName}c</p>
+            <p>{person}</p>
+            <p>{weekDay}</p>
+            <p>{presetName}</p>
           </section>
           <section className={s.addActivityButton}>
             <Button
@@ -135,7 +135,7 @@ export default function RoutineModal({
                           />
                         }>
                         <div className={`${s.eventBox} drag-handle`}>
-                          {item.title}
+                          <p>{item.title}</p>
                         </div>
                       </ResizableBox>
                     </div>
