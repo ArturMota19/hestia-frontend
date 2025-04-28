@@ -129,11 +129,11 @@ export default function ViewParams() {
 		<main className={s.wrapperViewParams}>
 			<Helmet>
 				<meta charSet="utf-8" />
-				<title>HESTIA | View Preset</title>
+				<title>HESTIA | View Params</title>
 			</Helmet>
 			<Header />
 			<section className={s.hestiaInfoWrapper}>
-				<h1>{t("viewHousePreset")}</h1>
+				<h1>{t("viewHouseParams")}</h1>
 				<section className={s.gridWrapper}>
 					{currentItems.length > 0 ? (
 						currentItems.map((item, index) => (
@@ -149,7 +149,7 @@ export default function ViewParams() {
 						))
 					) : (
 						<div>
-							<h4>{t("noHousePreset")}</h4>
+							<h4>{t("noParams")}</h4>
 						</div>
 					)}
 				</section>

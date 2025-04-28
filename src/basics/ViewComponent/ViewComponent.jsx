@@ -12,6 +12,7 @@ export default function ViewComponent({
 	title,
 	room=[],
 	actuatorSpec=[],
+	people=[],
 	capacity=null,
 	type, 
 	image="/",
@@ -36,7 +37,7 @@ export default function ViewComponent({
 			}
 		>
 			<div className={s.wrapperInfo}>
-				<h5>{title}</h5>
+				<h5>{t("routine")} - {title}</h5>
 				{capacity && <p>{t("capacity")}: {capacity}</p>}
 				{room.length > 0 && <p>{t("rooms")}: {room.join(", ")}</p>}
 				{actuatorSpec.length > 0 &&
@@ -47,6 +48,7 @@ export default function ViewComponent({
 						)
 					})
 				}
+				{people.length > 0 && <p>{t("people")}: {people.join(", ")}</p>}
         {hasActions &&
           <div className={s.buttonsDiv}>
             <Button 

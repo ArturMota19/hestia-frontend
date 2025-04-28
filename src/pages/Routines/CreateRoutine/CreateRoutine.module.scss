@@ -1,14 +1,31 @@
 @use '../../../styles/mixins' as *;
 
 .wrapperCreateRoutine{
-    margin-bottom: 0rem;
     width: 100% !important;
-    height: 100vh;
+    min-height: 100vh;
+    height: auto;
     display: flex;
-    align-items: center;
+    align-items: start;
     justify-content: center;
-    align-items: center;
     background-color: var(--tertiary-color);
+
+    .titleRoutinesCreate{
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+
+        h2{
+            @include font-medium-6;
+            color: var(--primary-color);
+            margin-bottom: 0rem;
+        }
+
+        .inputWrapperDropdown{
+            display: flex;
+            justify-content: end;
+            width: 25% !important;
+        }
+    }
 
     .hestiaInfoWrapper{
         width: var(--page-wrapper);
@@ -67,7 +84,20 @@
         }
     }
     .createButton{
-        width: 30%;
+        width: 50%;
+        margin: 0 auto;
         margin-top: 16px;
+
+        display: flex;
+        align-items: end;
+        gap: 16px;
+    }
+    .selectOnePreset{
+        @include font-medium-5;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--secondary-color);
     }
 }

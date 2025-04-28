@@ -1,0 +1,153 @@
+@use "../../styles/mixins" as *;
+
+.wrapperModal {
+  background: rgba(0,0,0,0.7);
+  position: fixed;
+  z-index: 10;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.timeline {
+  width: 85%;
+  min-width: 1150px;
+  max-width: 1920px;
+  max-height: 80vh;
+
+  padding: 20px 20px 20px 20px;
+  overflow-y: auto;
+
+  background: var(--quintenary-color);
+  border-radius: 8px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.fixedHeader {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+
+  background: var(--quintenary-color);
+  padding: 10px 0;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+
+.scrollContainer {
+  overflow-x: auto;
+}
+
+.hours {
+  display: flex;
+  width: calc(48 * 50px); // ou 2400px
+  background: var(--secondary-color);
+  color: var(--tertiary-color);
+}
+
+.events {
+  width: calc(48 * 50px); // mesma largura que .hours
+  position: relative;
+  background: var(--secondary-color);
+  margin-top: 10px;
+}
+
+
+.hour {
+  width: 100%;
+  text-align: center;
+  border-right: 1px solid var(--primary-color);
+  flex-shrink: 0;
+}
+
+.eventBox {
+  background-color: var(--primary-color);
+  color: white;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  cursor: move;
+  user-select: none;
+  p{
+    min-width: 30px;
+    @include font-regular-3;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-align: center;
+  }
+}
+
+.resizeHandle {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 10px;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.3);
+  cursor: ew-resize;
+}
+
+.arrayButtons{
+  width: 45%;
+  margin: 0 auto;
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+  justify-content: center;
+  align-items: center;
+
+  button{
+    font-size: 1.25rem !important;
+  }
+}
+
+.firstActivity{
+  width: 50%;
+  margin: 0 auto;
+}
+.titleRoutine{
+  @include font-regular-5;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+.activityForm{
+  z-index: 12;
+  padding: 2rem;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  position: absolute !important;
+  background-color: var(--quaternary-color);
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 40%;
+  height: auto;
+  gap: 8px;
+  .wrapperInputs{
+    width: 100%;
+  }
+  h4{
+    @include font-bold-6;
+    color: var(--secondary-color)
+  }
+}
+.addActivityButton{
+  width: 25%;
+}

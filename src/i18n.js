@@ -75,6 +75,10 @@ const resources = {
       removeGraph: "Remover Grafo",
       // View Preset Page
       viewHousePreset: "Visualização de Presets",
+      noPresets: "Sem Presets cadastrados",
+      // View Params Page
+      viewHouseParams: "Visualização de Parâmetros",
+      noParams: "Sem Parâmetros cadastrados",
       // Create Params Page
       person: "Pessoa",
       actuator: "Atuador",
@@ -86,6 +90,28 @@ const resources = {
       capacityPlaceholder: "Digite a capacidade",
       nameParam: "Nome do Parâmetro",
       nameParamPlaceholder: "Digite o nome do parâmetro",
+      errorValue: "Taxa de Erro",
+      errorValuePlaceholder: "Digite a taxa de erro",
+      invalidErrorValue: "A taxa de erro deve estar entre 0 e 100",
+      // Create Routine Page
+      personsRoutines: "Pessoas e Atividades",
+      selectOnePreset: "Selecione um Preset para continuar",
+      preset: "Preset",
+      monday: "Segunda",
+      tuesday: "Terça",
+      wednesday: "Quarta",
+      thursday: "Quinta",
+      friday: "Sexta",
+      saturday: "Sábado",
+      sunday: "Domingo",
+      addActivity: "Adicionar Atividade",
+      actuators: "Atuadores",
+      addPerson: "Adicionar Pessoa",
+      // View Routine Page
+      people: "Pessoas",
+      noRoutines: "Sem Rotinas cadastradas",
+      routine: "Rotina"
+
     },
   },
   en: {
@@ -155,6 +181,10 @@ const resources = {
       graph: "Graph of Rooms",
       // View Preset Page
       viewHousePreset: "View Presets",
+      noPresets: "No Presets registered",
+      // View Params Page
+      viewHouseParams: "View Parameters",
+      noParams: "No Parameters registered",
       // Create Params Page
       person: "Person",
       actuator: "Actuator",
@@ -164,6 +194,28 @@ const resources = {
       viewActuators: "View Actuators",
       nameParam: "Parameter Name",
       nameParamPlaceholder: "Enter the parameter name",
+      errorValue: "Error Rate",
+      errorValuePlaceholder: "Enter the error rate",
+      invalidErrorValue: "Error rate must be between 0 and 100",
+      // Create Routine Page
+      personsRoutines: "People and Activities",
+      selectOnePreset: "Select a Preset to continue",
+      preset: "Preset",
+      monday: "Monday",
+      tuesday: "Tuesday",
+      wednesday: "Wednesday",
+      thursday: "Thursday",
+      friday: "Friday",
+      saturday: "Saturday",
+      sunday: "Sunday",
+      addActivity: "Add Activity",
+      actuators: "Actuators",
+      addPerson: "Add Person",
+      // View Routine Page
+      people: "People",
+      noRoutines: "No Routines registered",
+      routine: "Routine"
+
       
     },
   },
