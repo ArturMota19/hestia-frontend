@@ -9,27 +9,47 @@ import { IoMdAdd } from "react-icons/io";
 import { useTranslation } from "react-i18next";
 import s from "./PersonRoutine.module.scss";
 
-export default function PersonRoutine({ person }) {
+export default function PersonRoutine({ person, setIsModalOpen, setPerson, setWeekDay }) {
   const { t } = useTranslation();
+  function openModal(day){
+    setPerson(person.person)
+    setWeekDay(day.dayName)
+    setIsModalOpen(true)
+  }
 
   const EachDay = ({ day }) => {
     return (
       <div className={s.eachDayWrapper}>
-        <div className={s.dayName}>
-          <h4>{t(day.dayName)}</h4>
-          <div className={s.internActionsButton}>
-            {day.routine.length > 0 ? (
-              <button>
-                <MdModeEdit />
-              </button>
-            ) : (
-              <button>
-                <IoMdAdd />
-              </button>
-            )}
-          </div>
+      <div className={s.dayName}>
+        <h4>{t(day.dayName)}</h4>
+        <div className={s.internActionsButton}>
+        {day.routine.length > 0 ? (
+          <button>
+          <MdModeEdit />
+          </button>
+        ) : (
+          <button onClick={() => openModal(day)}>
+          <IoMdAdd />
+          </button>
+        )}
         </div>
-        <div className={s.routineActions}>shdfgjsdhiugsd</div>
+      </div>
+      <div className={s.routineActions}>
+        {day.routine.map((activity) => {
+        const totalDuration = day.routine.reduce((sum, act) => sum + act.duration, 0);
+        const widthPercentage = (activity.duration / totalDuration) * 100;
+
+        return (
+          <div
+          key={activity.id}
+          className={s.activityBlock}
+          title={activity.title}
+          style={{ width: `${widthPercentage}%`}} // Example color
+          >
+          </div>
+        );
+        })}
+      </div>
       </div>
     );
   };

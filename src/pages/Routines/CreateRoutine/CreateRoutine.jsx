@@ -30,7 +30,7 @@ export default function CreateRoutine() {
       tuesday: { dayName: "tuesday", routine: [] },
       wednesday: { dayName: "wednesday", routine: [] },
       thursday: { dayName: "thursday", routine: [] },
-      friday: {dayName: "friday", routine: []},
+      friday: { dayName: "friday", routine: [] },
       saturday: { dayName: "saturday", routine: [] },
       sunday: { dayName: "sunday", routine: [] },
     },
@@ -75,14 +75,19 @@ export default function CreateRoutine() {
     },
     validationSchema: validationSchemaPerson,
     onSubmit: async (values) => {
-      if(people.length > 0){
-        const filteredPerson = people.filter((people) => people.person === values.person);
-        if(filteredPerson.length > 0 ){
-          toast.error(`A ${filteredPerson[0].person} já possui uma rotina cadastrada.`,{
-            duration: 4000,
-            position: 'top-center',
-          });
-          return
+      if (people.length > 0) {
+        const filteredPerson = people.filter(
+          (people) => people.person === values.person
+        );
+        if (filteredPerson.length > 0) {
+          toast.error(
+            `A ${filteredPerson[0].person} já possui uma rotina cadastrada.`,
+            {
+              duration: 4000,
+              position: "top-center",
+            }
+          );
+          return;
         }
       }
       setPeople((prevItems) => [
@@ -114,6 +119,8 @@ export default function CreateRoutine() {
         weekDay={weekDay}
         presetName={formikPresets.values.preset}
         person={person}
+        people={people}
+        setPeople={setPeople}
       />
       <section className={s.hestiaInfoWrapper}>
         <h1>{t("createRoutines")}</h1>
@@ -132,12 +139,22 @@ export default function CreateRoutine() {
             </div>
           </div>
         </div>
-        {!formikPresets.values.preset ? ( // change this to if true after development
+        {formikPresets.values.preset ? ( // change this to if true after development
           <>
             {people.map((eachPerson) => {
-              return <PersonRoutine person={eachPerson} />;
+              return (
+                <PersonRoutine
+                  person={eachPerson}
+                  setIsModalOpen={setIsModalOpen}
+                  setPerson={setPerson}
+                  setWeekDay={setWeekDay}
+                  preset={formikPresets.values.preset}
+                />
+              );
             })}
-            <form onSubmit={formikPerson.handleSubmit} className={s.createButton}>
+            <form
+              onSubmit={formikPerson.handleSubmit}
+              className={s.createButton}>
               <DropdownField
                 type="text"
                 fieldName="person"

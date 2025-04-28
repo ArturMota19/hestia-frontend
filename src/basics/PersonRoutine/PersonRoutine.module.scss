@@ -11,6 +11,7 @@
   h3{
     @include font-medium-4;
   }
+  
 
   .eachDayWrapper{
     width: 100%;
@@ -55,6 +56,13 @@
       width: 100%;
       padding: 8px;
       background-color: var(--secondary-color);
+      display: flex;
+
+      .activityBlock{
+        display: flex !important;
+        background-color: var(--primary-color);
+        border: 1px solid var(--tertiary-color);
+      }
     }
   }
 }

@@ -6,6 +6,7 @@ import s from "./RoutineModal.module.scss";
 import Button from "../Button/Button";
 import { useTranslation } from "react-i18next";
 import AddActivityModal from "./AddActivityModal";
+import toast from "react-hot-toast";
 
 export default function RoutineModal({
   isOpen,
@@ -13,6 +14,8 @@ export default function RoutineModal({
   person,
   weekDay,
   presetName,
+  people,
+  setPeople
 }) {
   if (!isOpen) return null;
   const { t } = useTranslation();
@@ -49,11 +52,49 @@ export default function RoutineModal({
     );
   };
 
-  function PrintEvents() {
-    items.forEach((item) => {
-      console.log(`${item.title} ${item.start} ${item.duration}`);
+  async function SaveRoutine() {
+    const totalDuration = items.reduce((sum, item) => sum + item.duration, 0);
+    if (totalDuration !== 48) {
+        toast.error(`A duração total das atividades deve ser 24h. Atualmente é ${totalDuration/2}h.`, {
+            duration: 4000,
+            position: 'top-center',
+        });
+        return;
+    }
+    let activities = items.map((item) => {
+        const startHours = item.start / 2;
+        const durationHours = item.duration / 2;
+        const endHours = startHours + durationHours;
+        const formatTime = (hours) => {
+            const h = Math.floor(hours);
+            const m = Math.round((hours - h) * 60);
+            return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+        };
+
+        return {
+            id: item.id,
+            title: item.title,
+            startTime: formatTime(startHours),
+            endTime: formatTime(endHours),
+            duration: durationHours // em horas, opcional
+        };
     });
-  }
+    people.filter((p) => p.person === person)
+    setPeople((prevPeople) =>
+      prevPeople.map((p) =>
+      p.person === person
+        ? {
+          ...p,
+          [weekDay]: {
+          ...p[weekDay],
+          routine: activities,
+          },
+        }
+        : p
+      )
+    );
+    setIsOpen(false)
+}
 
   return (
     <section className={s.wrapperModal}>
@@ -149,7 +190,6 @@ export default function RoutineModal({
                 backgroundColor={"secondary"}
                 height={42}
                 doFunction={() => {
-                  PrintEvents();
                   setIsOpen(false);
                 }}
               />
@@ -158,8 +198,7 @@ export default function RoutineModal({
                 backgroundColor={"primary"}
                 height={42}
                 doFunction={() => {
-                  PrintEvents();
-                  setIsOpen(false);
+                  SaveRoutine();
                 }}
               />
             </div>

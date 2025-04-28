@@ -12,7 +12,7 @@ import { useFormik } from "formik";
 import s from './RoutineModal.module.scss'
 
 
-export default function AddActivityModal({isActivityModalOpen, setIsActivityModalOpen, items, setItems}) {
+export default function AddActivityModal({isActivityModalOpen, setIsActivityModalOpen, items, setItems, preset}) {
     if(!isActivityModalOpen) return null;
     const {t} = useTranslation()
     const validationSchema = Yup.object().shape({
