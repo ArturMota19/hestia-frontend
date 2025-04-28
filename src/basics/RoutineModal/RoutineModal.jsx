@@ -29,28 +29,53 @@ export default function RoutineModal({
   const timeSlots = 48; // 24h * 2
   const rowHeight = 50;
 
+  function hasOverlap(newItem, items, ignoreId = null) {
+    return items.some((item) => {
+      if (item.id === ignoreId) return false; // Ignora ele mesmo
+      const newStart = newItem.start;
+      const newEnd = newItem.start + newItem.duration;
+      const existingStart = item.start;
+      const existingEnd = item.start + item.duration;
+      return newStart < existingEnd && existingStart < newEnd;
+    });
+  }
+  
+
   const handleDragStop = (e, data, id) => {
-    setItems((prevItems) =>
-      prevItems.map((item) =>
-        item.id === id
-          ? { ...item, start: Math.max(0, Math.round(data.x / gridSize)) }
-          : item
-      )
-    );
+    setItems((prevItems) => {
+      const newStart = Math.max(0, Math.round(data.x / gridSize));
+      const currentItem = prevItems.find((item) => item.id === id);
+      const newItem = { ...currentItem, start: newStart };
+  
+      if (hasOverlap(newItem, prevItems, id)) {
+        toast.error("Não é possível mover para sobrepor outra atividade!");
+        return prevItems;
+      }
+  
+      return prevItems.map((item) =>
+        item.id === id ? { ...item, start: newStart } : item
+      );
+    });
   };
+  
 
   const handleResizeStop = (event, { size }, id) => {
-    setItems((prevItems) =>
-      prevItems.map((item) =>
-        item.id === id
-          ? {
-              ...item,
-              duration: Math.max(1, Math.round(size.width / gridSize)),
-            }
-          : item
-      )
-    );
+    setItems((prevItems) => {
+      const newDuration = Math.max(1, Math.round(size.width / gridSize));
+      const currentItem = prevItems.find((item) => item.id === id);
+      const newItem = { ...currentItem, duration: newDuration };
+  
+      if (hasOverlap(newItem, prevItems, id)) {
+        toast.error("Não é possível redimensionar para sobrepor outra atividade!");
+        return prevItems; 
+      }
+  
+      return prevItems.map((item) =>
+        item.id === id ? { ...item, duration: newDuration } : item
+      );
+    });
   };
+  
 
   async function SaveRoutine() {
     const totalDuration = items.reduce((sum, item) => sum + item.duration, 0);

@@ -13,7 +13,9 @@ import s from './RoutineModal.module.scss'
 
 
 export default function AddActivityModal({isActivityModalOpen, setIsActivityModalOpen, items, setItems, preset}) {
+  console.log(items)
     if(!isActivityModalOpen) return null;
+    const totalDuration = items.reduce((sum, item) => sum + item.duration, 0);
     const {t} = useTranslation()
     const validationSchema = Yup.object().shape({
       activity: Yup.mixed().required(t('requiredField')),
@@ -31,7 +33,7 @@ export default function AddActivityModal({isActivityModalOpen, setIsActivityModa
           {
             id: prevItems.length + 1,
             title: values.activity,
-            start: 0,
+            start: totalDuration,
             duration: 1,
           },
         ]);
