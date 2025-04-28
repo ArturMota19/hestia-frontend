@@ -149,7 +149,7 @@ export default function ViewParams() {
 						))
 					) : (
 						<div>
-							<h4>{t("noHousePreset")}</h4>
+							<h4>{t("noParams")}</h4>
 						</div>
 					)}
 				</section>

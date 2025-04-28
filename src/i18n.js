@@ -75,8 +75,10 @@ const resources = {
       removeGraph: "Remover Grafo",
       // View Preset Page
       viewHousePreset: "Visualização de Presets",
+      noPresets: "Sem Presets cadastrados",
       // View Params Page
       viewHouseParams: "Visualização de Parâmetros",
+      noParams: "Sem Parâmetros cadastrados",
       // Create Params Page
       person: "Pessoa",
       actuator: "Atuador",
@@ -104,7 +106,12 @@ const resources = {
       sunday: "Domingo",
       addActivity: "Adicionar Atividade",
       actuators: "Atuadores",
-      addPerson: "Adicionar Pessoa"
+      addPerson: "Adicionar Pessoa",
+      // View Routine Page
+      people: "Pessoas",
+      noRoutines: "Sem Rotinas cadastradas",
+      routine: "Rotina"
+
     },
   },
   en: {
@@ -174,8 +181,10 @@ const resources = {
       graph: "Graph of Rooms",
       // View Preset Page
       viewHousePreset: "View Presets",
+      noPresets: "No Presets registered",
       // View Params Page
       viewHouseParams: "View Parameters",
+      noParams: "No Parameters registered",
       // Create Params Page
       person: "Person",
       actuator: "Actuator",
@@ -201,7 +210,12 @@ const resources = {
       sunday: "Sunday",
       addActivity: "Add Activity",
       actuators: "Actuators",
-      addPerson: "Add Person"
+      addPerson: "Add Person",
+      // View Routine Page
+      people: "People",
+      noRoutines: "No Routines registered",
+      routine: "Routine"
+
       
     },
   },

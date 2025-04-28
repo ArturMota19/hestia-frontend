@@ -26,6 +26,7 @@ function App() {
   const CreateRoutine = lazy(() =>
     import("./pages/Routines/CreateRoutine/CreateRoutine")
   );
+  const ViewRoutines = lazy(() => import("./pages/Routines/ViewRoutines/ViewRoutines"))
 
   return (
     <ScreenGuard>
@@ -47,7 +48,7 @@ function App() {
             <Route path="/view-params" element={<ViewParams />} />
             {/* Routines Routes */}
             <Route path="/create-routines" element={<CreateRoutine />} />
-            {/* <Route path="/view-routines" element={<ViewPreset />} /> */}
+            <Route path="/view-routines" element={<ViewRoutines />} />
           </Routes>
         </Suspense>
       </BrowserRouter>
