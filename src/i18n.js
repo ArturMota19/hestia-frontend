@@ -91,6 +91,20 @@ const resources = {
       errorValue: "Taxa de Erro",
       errorValuePlaceholder: "Digite a taxa de erro",
       invalidErrorValue: "A taxa de erro deve estar entre 0 e 100",
+      // Create Routine Page
+      personsRoutines: "Pessoas e Atividades",
+      selectOnePreset: "Selecione um Preset para continuar",
+      preset: "Preset",
+      monday: "Segunda",
+      tuesday: "Terça",
+      wednesday: "Quarta",
+      thursday: "Quinta",
+      friday: "Sexta",
+      saturday: "Sábado",
+      sunday: "Domingo",
+      addActivity: "Adicionar Atividade",
+      actuators: "Atuadores",
+      addPerson: "Adicionar Pessoa"
     },
   },
   en: {
@@ -174,6 +188,20 @@ const resources = {
       errorValue: "Error Rate",
       errorValuePlaceholder: "Enter the error rate",
       invalidErrorValue: "Error rate must be between 0 and 100",
+      // Create Routine Page
+      personsRoutines: "People and Activities",
+      selectOnePreset: "Select a Preset to continue",
+      preset: "Preset",
+      monday: "Monday",
+      tuesday: "Tuesday",
+      wednesday: "Wednesday",
+      thursday: "Thursday",
+      friday: "Friday",
+      saturday: "Saturday",
+      sunday: "Sunday",
+      addActivity: "Add Activity",
+      actuators: "Actuators",
+      addPerson: "Add Person"
       
     },
   },

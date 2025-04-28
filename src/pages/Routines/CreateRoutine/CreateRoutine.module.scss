@@ -2,11 +2,11 @@
 
 .wrapperCreateRoutine{
     width: 100% !important;
+    min-height: 100vh;
     height: auto;
     display: flex;
-    align-items: center;
+    align-items: start;
     justify-content: center;
-    align-items: center;
     background-color: var(--tertiary-color);
 
     .titleRoutinesCreate{

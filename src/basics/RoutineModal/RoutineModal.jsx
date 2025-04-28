@@ -102,7 +102,7 @@ export default function RoutineModal({
         <div className={s.fixedHeader}>
           <section className={s.titleRoutine}>
             <p>{person}</p>
-            <p>{weekDay}</p>
+            <p>{t(weekDay)}</p>
             <p>{presetName}</p>
           </section>
           <section className={s.addActivityButton}>
@@ -186,7 +186,7 @@ export default function RoutineModal({
             </div>
             <div className={s.arrayButtons}>
               <Button
-                text={"Descartar Alterações"}
+                text={t("cancel")}
                 backgroundColor={"secondary"}
                 height={42}
                 doFunction={() => {
@@ -194,7 +194,7 @@ export default function RoutineModal({
                 }}
               />
               <Button
-                text={"Salvar Rotina"}
+                text={t("save")}
                 backgroundColor={"primary"}
                 height={42}
                 doFunction={() => {

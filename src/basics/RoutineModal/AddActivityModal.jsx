@@ -17,7 +17,6 @@ export default function AddActivityModal({isActivityModalOpen, setIsActivityModa
     const {t} = useTranslation()
     const validationSchema = Yup.object().shape({
       activity: Yup.mixed().required(t('requiredField')),
-      actuators: Yup.mixed().required(t('requiredField'))
     });
     const formik = useFormik({
       initialValues: {
@@ -69,44 +68,44 @@ export default function AddActivityModal({isActivityModalOpen, setIsActivityModa
     },
     ]
   return (
-        <form className={s.activityForm} onSubmit={formik.handleSubmit}>
-          <h4>{t('addAnActivity')}</h4>
-          <div className={s.wrapperInputs}>
-            <DropdownField
-              type="text"
-              fieldName="activity"
-              formik={formik}
-              value={formik.values.activity}
-              options={fakeEnumActivities}
-              readOnly={false}
-            />
-            <DropdownField
-              type="text"
-              fieldName="actuators"
-              formik={formik}
-              value={formik.values.actuators}
-              options={fakeEnumAtuators}
-              readOnly={false}
-              isMultiSelect={true}
-            />
-          </div>
-          <div className={s.arrayButtons}>
-            <Button
-                type="button"
-                text={t('cancel')}
-                backgroundColor={"secondary"}
-                height={42}
-                doFunction={() => {
-                  setIsActivityModalOpen(false);
-                }}
-              />
-            <Button
-                type="button"
-                text={t('save')}
-                backgroundColor={"primary"}
-                height={42}
-              />
-          </div>
-        </form>
+    <form className={s.activityForm} onSubmit={formik.handleSubmit}>
+      <h4>{t("addActivity")}</h4>
+      <div className={s.wrapperInputs}>
+        <DropdownField
+          type="text"
+          fieldName="activity"
+          formik={formik}
+          value={formik.values.activity}
+          options={fakeEnumActivities}
+          readOnly={false}
+        />
+        <DropdownField
+          type="text"
+          fieldName="actuators"
+          formik={formik}
+          value={formik.values.actuators}
+          options={fakeEnumAtuators}
+          readOnly={false}
+          isMultiSelect={true}
+        />
+      </div>
+      <div className={s.arrayButtons}>
+        <Button
+          type="button"
+          text={t("cancel")}
+          backgroundColor={"secondary"}
+          height={42}
+          doFunction={() => {
+            setIsActivityModalOpen(false);
+          }}
+        />
+        <Button
+          type="button"
+          text={t("save")}
+          backgroundColor={"primary"}
+          height={42}
+        />
+      </div>
+    </form>
   );
 }
