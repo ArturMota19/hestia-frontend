@@ -23,18 +23,7 @@ export default function CreateRoutine() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [weekDay, setWeekDay] = useState("");
   const [person, setPerson] = useState("");
-  const [people, setPeople] = useState([
-    {
-      person: "Fulana de Tal",
-      monday: { dayName: "monday", routine: [] },
-      tuesday: { dayName: "tuesday", routine: [] },
-      wednesday: { dayName: "wednesday", routine: [] },
-      thursday: { dayName: "thursday", routine: [] },
-      friday: { dayName: "friday", routine: [] },
-      saturday: { dayName: "saturday", routine: [] },
-      sunday: { dayName: "sunday", routine: [] },
-    },
-  ]);
+  const [people, setPeople] = useState([]);
 
   let fakeEnumPresets = [
     { id: "preset1", name: "Preset 1" },
