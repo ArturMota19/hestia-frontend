@@ -12,13 +12,17 @@ import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import { useTranslation } from "react-i18next";
+import {BaseRequest} from "../../../services/BaseRequest"
 //Styles
 import s from "./Login.module.scss";
 import PasswordField from "../../../basics/PasswordField/PasswordField";
+import { useState } from "react";
+import toast from "react-hot-toast";
 
 
 export default function Login() {
   const navigate = useNavigate()
+  const [isLoading, setIsLoading] = useState(false)
   const { t, i18n } = useTranslation();
   const validationSchema = Yup.object().shape({
     email: Yup.string().required(t('requiredField')).email(t('invalidEmail')),
@@ -31,7 +35,27 @@ export default function Login() {
     },
     validationSchema,
     onSubmit: async (values) => {
-      console.log(values)
+      let data = {
+        email: values.email,
+        password: values.password
+      }
+      const response = await BaseRequest({
+        method: "POST",
+        url: "/auth/login",
+        data: data,
+        setIsLoading
+      })
+
+      if(response.status == 200){
+        toast.success("Login efetuado com sucesso.", {
+          duration: 1000,
+        });
+        localStorage.setItem("AHtoken", response.data.token)
+        setTimeout(() => {
+          navigate("/home")
+        }, 1000)
+        
+      }
     },
   });
 
@@ -64,10 +88,11 @@ export default function Login() {
             readOnly={false}
           />
           <Button
+            type="submit"
             text={t('entry')}
             height="48px"
             backgroundColor="tertiary"
-            doFunction={formik.handleSubmit}
+            doFunction={() => {}}
           />
           <a className={s.linkForget} href="/register">{t('doRegister')}</a>
         </form>
