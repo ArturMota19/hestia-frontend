@@ -5,6 +5,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Suspense, lazy } from "react";
 import Loading from "./basics/Loading/Loading";
 import { Toaster } from "react-hot-toast";
+import { ProtectedRoute } from "./services/ProtectedRoute";
 // Styles
 
 function App() {
@@ -39,16 +40,16 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             {/* Protected Pages */}
-            <Route path="/home" element={<Home />} />
+            <Route path="/home" element={<ProtectedRoute requiresAuth={true} component={Home} />} />
             {/* Presets Routes */}
-            <Route path="/create-presets" element={<CreatePreset />} />
-            <Route path="/view-presets" element={<ViewPreset />} />
+            <Route path="/create-presets" element={<ProtectedRoute requiresAuth={true} component={CreatePreset}/>} />
+            <Route path="/view-presets" element={<ProtectedRoute requiresAuth={true} component={ViewPreset}/>} />
             {/* Params Routes */}
-            <Route path="/create-params" element={<CreateParams />} />
-            <Route path="/view-params" element={<ViewParams />} />
+            <Route path="/create-params" element={<ProtectedRoute requiresAuth={true} component={CreateParams}/>} />
+            <Route path="/view-params" element={<ProtectedRoute requiresAuth={true} component={ViewParams}/>} />
             {/* Routines Routes */}
-            <Route path="/create-routines" element={<CreateRoutine />} />
-            <Route path="/view-routines" element={<ViewRoutines />} />
+            <Route path="/create-routines" element={<ProtectedRoute requiresAuth={true} component={CreateRoutine}/>} />
+            <Route path="/view-routines" element={<ProtectedRoute requiresAuth={true} component={ViewRoutines}/>} />
           </Routes>
         </Suspense>
       </BrowserRouter>
