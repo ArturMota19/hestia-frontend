@@ -13,11 +13,15 @@ import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import { useTranslation } from "react-i18next";
+import { BaseRequest } from "../../../services/BaseRequest";
 //Styles
 import s from "./Register.module.scss";
+import { useState } from "react";
+import toast from "react-hot-toast";
 
 export default function Register() {
   const navigate = useNavigate()
+  const [isLoading, setIsLoading] = useState(false)
   const { t, i18n } = useTranslation();
   const validationSchema = Yup.object().shape({
     email: Yup.string().required(t('requiredField')).email(t('invalidEmail')),
@@ -36,7 +40,27 @@ export default function Register() {
     },
     validationSchema,
     onSubmit: async (values) => {
-      console.log(values)
+      let data = {
+        name: values.name,
+        email: values.email,
+        password: values.password
+      }
+      const response = await BaseRequest({
+        method: "POST",
+        url: "/auth/register",
+        data: data,
+        setIsLoading
+      })
+
+      if(response.status == 201){
+        toast.success("Conta criada com sucesso.", {
+          duration: 2500,
+        });
+        setTimeout(() => {
+          navigate("/login")
+        }, 2500)
+        
+      }
     },
   });
 
@@ -82,10 +106,11 @@ export default function Register() {
             readOnly={false}
           />
           <Button
+            type="submit"
             text={t('createAccount')}
             height="48px"
             backgroundColor="tertiary"
-            doFunction={formik.handleSubmit}
+            doFunction={() => {}}
           />
           <a className={s.linkForget} href="/login">{t('doLogin')}</a>
         </form>
