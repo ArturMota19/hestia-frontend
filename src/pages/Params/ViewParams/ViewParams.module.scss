@@ -13,6 +13,19 @@
         display: flex;
         gap: 16px;
     }
+    .noParamsDiv{
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        h4, a{
+            @include font-medium-5;
+            width: 100%;
+            text-align: center;
+        }
+        a{
+            color: var(--primary-color)
+        }
+    }
 
     .hestiaInfoWrapper{
         max-width: var(--max-width);

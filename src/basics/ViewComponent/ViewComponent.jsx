@@ -47,7 +47,7 @@ export default function ViewComponent({
 					actuatorSpec.map((spec, index) => {
 						const [key, value] = Object.entries(spec)[0];
 						return(
-							<p key={index}>{key} - {value}</p>
+							<p key={index}>{t(`${key}`)} - {value ? t('yes') : t('no')}</p>
 						)
 					})
 				}

@@ -22,12 +22,14 @@ export default function ViewParams() {
   const [data, setData] = useState([])
   const [itemsCount, setItemsCount] = useState(1)
   const itemsPerPage = 6;
+  const [isLoading, setIsLoading] = useState(false)
 
   async function FetchData(){
     const response = await BaseRequest({
       method: "GET",
       url: `/${paramType}/getAll/${currentPage}`,
-      isAuth: true
+      isAuth: true,
+      setIsLoading
     })
     setData(response.data[paramType])
     setItemsCount(response.data.count)
@@ -82,7 +84,7 @@ export default function ViewParams() {
           doFunction={() => {setParamType("actuators");setCurrentPage(1)}}/>
         </section>
 				<section className={s.gridWrapper}>
-					{data.length > 0 ? (
+					{data.length > 0 && !isLoading &&
 						data.map((item, index) => (
 							<ViewComponent
 								index={index}
@@ -90,17 +92,23 @@ export default function ViewParams() {
                 actuatorSpec={item.actuatorSpec}
                 capacity={item.capacity}
 								type={item.type}
-								hasActions={true}
+								hasActions={item.type == "actuators"}
                 image={item.type === "person" ? peopleParam : item.type === "actuator" ? actuatorParam : item.type === "room" ? roomParam : activityParam}
 							/>
 						))
-					) : (
-						<div>
-							<h4>{t("noParams")}</h4>
-						</div>
-					)}
+					}
 				</section>
+        {data.length <= 0 && !isLoading &&
+          <div className={s.noParamsDiv}>
+            <h4>{t("noParams")} {t(paramType)}</h4>
+            <a href="/create-params">{t('createParams')}</a>
+          </div>
+        }
+        {data.length <= 0 && isLoading &&
+          <p>Carregando</p>
+        }
         {/* TODO: Transform this in a component */}
+        {data.length > 0 &&
         <div className={s.pagination}>
           <Button 
             text={t('prev')} 
@@ -118,6 +126,7 @@ export default function ViewParams() {
             disabled={currentPage === totalPages}
             doFunction={handleNext}/>
         </div>
+        }
 			</section>
 		</main>
 	);

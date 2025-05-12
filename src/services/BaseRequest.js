@@ -79,6 +79,6 @@ export async function BaseRequest({
     } 
   } finally {
     // Disable loading
-    if (setIsLoading) setIsLoading(false);
+    //if (setIsLoading) setIsLoading(false);
   }
 }

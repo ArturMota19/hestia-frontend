@@ -16,7 +16,7 @@ const resources = {
       edit: "Editar",
       delete: "Deletar",
       save: "Salvar",
-      "view": "Visualizar",
+      view: "Visualizar",
       cancel: "Cancelar",
       login: "Logar-se",
       logout: "Sair",
@@ -26,6 +26,8 @@ const resources = {
       doLogin: "Já tem uma conta? Clique aqui para Entrar.",
       next: "Próximo",
       prev: "Anterior",
+      yes: "Sim",
+      no: "Não",
       // Inputs Labels
       email: "Email",
       password: "Senha",
@@ -78,7 +80,7 @@ const resources = {
       noPresets: "Sem Presets cadastrados",
       // View Params Page
       viewHouseParams: "Visualização de Parâmetros",
-      noParams: "Sem Parâmetros cadastrados",
+      noParams: "Sem Parâmetros cadastrados para",
       // Create Params Page
       person: "Pessoa",
       actuator: "Atuador",
@@ -111,12 +113,19 @@ const resources = {
       people: "Pessoas",
       noRoutines: "Sem Rotinas cadastradas",
       routine: "Rotina",
-      activities: "Atividades"
-
-    },
-  },
-  en: {
-    translation: {
+      activities: "Atividades",
+      // Actuators props
+      hasBrightValue: "Possui Luminosidade",
+      hasSwitch: "Possui Interruptor",
+      hasTempValue: "Possui Temperatura",
+      hasSoundVolume: "Possui Volume de Som",
+      hasTempSet: "Possui Configuração de Temperatura",
+      hasMode: "Possui Modo",
+      hasHumanMotionState: "Possui Sensor de Movimento",
+      },
+      },
+      en: {
+        translation: {
       // Inputs Actions
       create: "Create",
       createAccount: "Create Account",
@@ -133,6 +142,8 @@ const resources = {
       doLogin: "Already have an account? Click here to Sign In.",
       next: "Next",
       prev: "Previous",
+      yes: "Yes",
+      no: "No",
       // Inputs Labels
       email: "Email",
       password: "Password",
@@ -185,7 +196,7 @@ const resources = {
       noPresets: "No Presets registered",
       // View Params Page
       viewHouseParams: "View Parameters",
-      noParams: "No Parameters registered",
+      noParams: "No Parameters registered for",
       // Create Params Page
       person: "Person",
       actuator: "Actuator",
@@ -216,7 +227,15 @@ const resources = {
       people: "People",
       noRoutines: "No Routines registered",
       routine: "Routine",
-      activities: "Activities"
+      activities: "Activities",
+      // Actuators props
+      hasBrightValue: "Has Brightness",
+      hasSwitch: "Has Switch",
+      hasTempValue: "Has Temperature",
+      hasSoundVolume: "Has Sound Volume",
+      hasTempSet: "Has Temperature Setting",
+      hasMode: "Has Mode",
+      hasHumanMotionState: "Has Motion Sensor",
 
       
     },
