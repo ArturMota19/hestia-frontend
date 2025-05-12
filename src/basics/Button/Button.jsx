@@ -1,8 +1,9 @@
 // Images
 //Styles
+import { PuffLoader } from "react-spinners";
 import s from "./Button.module.scss";
 
-export default function Button({ type="button", text, backgroundColor, height, doFunction=false, disabled=false }) {
+export default function Button({ type="button", text, backgroundColor, height, doFunction=false, disabled=false, isLoading=false }) {
   return (
     <button
       type={type}
@@ -19,9 +20,15 @@ export default function Button({ type="button", text, backgroundColor, height, d
           : s.quaternary
       }`
       }
-      disabled={disabled}
+      disabled={isLoading ? true : disabled}
       onClick={doFunction ? () => doFunction() : null}>
-      <p>{text}</p>
+      {isLoading ? 
+        <PuffLoader
+          size={25}
+          color={'var(--primary-color)'}
+          speedMultiplier={1}
+        />
+      : <p>{text}</p>}
     </button>
   );
 }

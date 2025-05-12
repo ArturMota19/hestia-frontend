@@ -95,6 +95,7 @@ const resources = {
       errorValue: "Taxa de Erro",
       errorValuePlaceholder: "Digite a taxa de erro",
       invalidErrorValue: "A taxa de erro deve estar entre 0 e 100",
+      color: "Cor",
       // Create Routine Page
       personsRoutines: "Pessoas e Atividades",
       selectOnePreset: "Selecione um Preset para continuar",
@@ -209,6 +210,7 @@ const resources = {
       errorValue: "Error Rate",
       errorValuePlaceholder: "Enter the error rate",
       invalidErrorValue: "Error rate must be between 0 and 100",
+      color: "Color",
       // Create Routine Page
       personsRoutines: "People and Activities",
       selectOnePreset: "Select a Preset to continue",

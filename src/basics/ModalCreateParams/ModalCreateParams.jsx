@@ -67,6 +67,7 @@ export default function ModalCreateParams({ isOpen, setIsOpen, type, formik }) {
                 backgroundColor={"quaternary"}
                 height={32}
                 type="submit"
+                isLoading={isLoading}
               />
             </form>
           </div>
@@ -128,6 +129,7 @@ export default function ModalCreateParams({ isOpen, setIsOpen, type, formik }) {
                 backgroundColor={"quaternary"}
                 height={32}
                 type="submit"
+                isLoading={isLoading}
               />
             </form>
           </div>
@@ -198,6 +200,7 @@ export default function ModalCreateParams({ isOpen, setIsOpen, type, formik }) {
                 backgroundColor={"quaternary"}
                 height={32}
                 type="submit"
+                isLoading={isLoading}
               />
             </form>
           </div>
@@ -219,6 +222,7 @@ export default function ModalCreateParams({ isOpen, setIsOpen, type, formik }) {
               backgroundColor={"quaternary"}
               height={32}
               doFunction={() => navigate("/view-params")}
+              isLoading={isLoading}
             />
           </div>
         </section>
