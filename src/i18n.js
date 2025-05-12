@@ -110,7 +110,8 @@ const resources = {
       // View Routine Page
       people: "Pessoas",
       noRoutines: "Sem Rotinas cadastradas",
-      routine: "Rotina"
+      routine: "Rotina",
+      activities: "Atividades"
 
     },
   },
@@ -214,7 +215,8 @@ const resources = {
       // View Routine Page
       people: "People",
       noRoutines: "No Routines registered",
-      routine: "Routine"
+      routine: "Routine",
+      activities: "Activities"
 
       
     },

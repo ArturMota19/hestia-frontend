@@ -18,7 +18,6 @@ export default function ViewComponent({
 	image="/",
 	hasActions = false,
 }) {
-	console.log(room)
   const { t } = useTranslation();
   const columns = 2;
 	const row = Math.floor(index / columns);
@@ -37,7 +36,11 @@ export default function ViewComponent({
 			}
 		>
 			<div className={s.wrapperInfo}>
+				{people.length > 0 ? 
 				<h5>{t("routine")} - {title}</h5>
+				:
+				<h5>{title}</h5>
+			}
 				{capacity && <p>{t("capacity")}: {capacity}</p>}
 				{room.length > 0 && <p>{t("rooms")}: {room.join(", ")}</p>}
 				{actuatorSpec.length > 0 &&

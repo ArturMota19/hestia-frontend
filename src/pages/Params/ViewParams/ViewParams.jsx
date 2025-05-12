@@ -7,120 +7,45 @@ import roomParam from "../../../assets/icons/params/room-param.svg";
 import activityParam from "../../../assets/icons/params/activity-param.svg";
 // Imports
 import { Helmet } from "react-helmet";
+import {BaseRequest} from "../../../services/BaseRequest"
 //Styles
 import s from "./ViewParams.module.scss";
 import { useTranslation } from "react-i18next";
 import ViewComponent from "../../../basics/ViewComponent/ViewComponent";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Button from "../../../basics/Button/Button";
 
 export default function ViewParams() {
 	const { t } = useTranslation();
   const [currentPage, setCurrentPage] = useState(1);
+  const [paramType, setParamType] = useState("people") // people, activity, room
+  const [data, setData] = useState([])
+  const [itemsCount, setItemsCount] = useState(1)
   const itemsPerPage = 6;
 
+  async function FetchData(){
+    const response = await BaseRequest({
+      method: "GET",
+      url: `/${paramType}/getAll/${currentPage}`,
+      isAuth: true
+    })
+    setData(response.data[paramType])
+    setItemsCount(response.data.count)
+  }
+  useEffect(() => {
+    FetchData()
+  },[currentPage, paramType])
+
   let fakeData = [
-    {
-      paramName: "Pessoa Tal XYZ",
-      actuatorSpec: [],
-      capacity: null,
-      type: "person"
-    },
     {
       paramName: "Ar Condicionado",
       actuatorSpec: [{ sound: "34" }, { talParam: "OFF" }],
       capacity: null,
       type: "actuator"
     },
-    {
-      paramName: "Rom tal tal",
-      actuatorSpec: [],
-      capacity: 3,
-      type: "room"
-    },
-    {
-      paramName: "Atividade Tal",
-      actuatorSpec: [],
-      capacity: null,
-      type: "activity"
-    },
-    {
-      paramName: "Pessoa João Silva",
-      actuatorSpec: [],
-      capacity: null,
-      type: "person"
-    },
-    {
-      paramName: "Lâmpada Inteligente",
-      actuatorSpec: [{ brightness: "70%" }, { status: "ON" }],
-      capacity: null,
-      type: "actuator"
-    },
-    {
-      paramName: "Sala de Estar",
-      actuatorSpec: [],
-      capacity: 5,
-      type: "room"
-    },
-    {
-      paramName: "Reunião de Equipe",
-      actuatorSpec: [],
-      capacity: null,
-      type: "activity"
-    },
-    {
-      paramName: "Pessoa Maria Oliveira",
-      actuatorSpec: [],
-      capacity: null,
-      type: "person"
-    },
-    {
-      paramName: "Ventilador",
-      actuatorSpec: [{ speed: "3" }, { status: "ON" }],
-      capacity: null,
-      type: "actuator"
-    },
-    {
-      paramName: "Cozinha",
-      actuatorSpec: [],
-      capacity: 2,
-      type: "room"
-    },
-    {
-      paramName: "Treinamento de Segurança",
-      actuatorSpec: [],
-      capacity: null,
-      type: "activity"
-    },
-    {
-      paramName: "Pessoa Carlos Pereira",
-      actuatorSpec: [],
-      capacity: null,
-      type: "person"
-    },
-    {
-      paramName: "Aquecedor",
-      actuatorSpec: [{ temperature: "22°C" }, { status: "ON" }],
-      capacity: null,
-      type: "actuator"
-    },
-    {
-      paramName: "Quarto Principal",
-      actuatorSpec: [],
-      capacity: 4,
-      type: "room"
-    },
-    {
-      paramName: "Sessão de Yoga",
-      actuatorSpec: [],
-      capacity: null,
-      type: "activity"
-    }
   ];
 
-  const totalPages = Math.ceil(fakeData.length / itemsPerPage);
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const currentItems = fakeData.slice(startIndex, startIndex + itemsPerPage);
+  const totalPages = Math.ceil(itemsCount / itemsPerPage);
 
   const handlePrev = () => setCurrentPage(prev => Math.max(prev - 1, 1));
   const handleNext = () => setCurrentPage(prev => Math.min(prev + 1, totalPages));
@@ -134,9 +59,31 @@ export default function ViewParams() {
 			<Header />
 			<section className={s.hestiaInfoWrapper}>
 				<h1>{t("viewHouseParams")}</h1>
+        <section className={s.wrapperButtons}>
+          <Button 
+          text={t('people')} 
+          backgroundColor={paramType == "people" ? "primary" : "secondary"} 
+          height={36}
+          doFunction={() => {setParamType("people");setCurrentPage(1)}}/>
+          <Button 
+          text={t('activities')} 
+          backgroundColor={paramType == "activities" ? "primary" : "secondary"} 
+          height={36}
+          doFunction={() => {setParamType("activities");setCurrentPage(1)}}/>
+          <Button 
+          text={t('rooms')} 
+          backgroundColor={paramType == "rooms" ? "primary" : "secondary"} 
+          height={36}
+          doFunction={() => {setParamType("rooms");setCurrentPage(1)}}/>
+          <Button 
+          text={t('actuators')} 
+          backgroundColor={paramType == "actuators" ? "primary" : "secondary"} 
+          height={36}
+          doFunction={() => {setParamType("actuators");setCurrentPage(1)}}/>
+        </section>
 				<section className={s.gridWrapper}>
-					{currentItems.length > 0 ? (
-						currentItems.map((item, index) => (
+					{data.length > 0 ? (
+						data.map((item, index) => (
 							<ViewComponent
 								index={index}
 								title={item.paramName}
