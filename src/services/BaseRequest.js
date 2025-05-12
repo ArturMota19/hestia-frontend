@@ -38,11 +38,12 @@ export async function BaseRequest({
       // The request was made and the server responded with a status code
       const { status } = error.response;
       console.log(error.response)
-      if (status === 401 && error.response.data.message === "Access denied. No token provided.") {
+      if (status === 401 && error.response.data.message === "Invalid token.") {
         toast.error("Token expirado. Faça login novamente.",{
           toastId: "authError",
         });
         localStorage.removeItem("AHtoken")
+        window.location.href = "/login";
       }
       else if (status === 401) {
         toast.error("Houve um problema de autorização. Consulte o suas autorizações e tente novamente.",{

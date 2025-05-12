@@ -5,6 +5,7 @@ import s from "./Button.module.scss";
 export default function Button({ type="button", text, backgroundColor, height, doFunction=false, disabled=false }) {
   return (
     <button
+      type={type}
       style={{ height: height, lineHeight: `${height/2}px` }}
       className={`${s.button} ${
         backgroundColor == "primary"

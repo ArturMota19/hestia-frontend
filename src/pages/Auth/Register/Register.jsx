@@ -49,9 +49,8 @@ export default function Register() {
         method: "POST",
         url: "/auth/register",
         data: data,
-        setIsLoading
+        setIsLoading,
       })
-
       if(response.status == 201){
         toast.success("Conta criada com sucesso.", {
           duration: 2500,
@@ -106,11 +105,11 @@ export default function Register() {
             readOnly={false}
           />
           <Button
-            type="submit"
+            type="button"
             text={t('createAccount')}
             height="48px"
             backgroundColor="tertiary"
-            doFunction={() => {}}
+            doFunction={() => formik.handleSubmit()}
           />
           <a className={s.linkForget} href="/login">{t('doLogin')}</a>
         </form>

@@ -84,7 +84,21 @@ export default function ModalCreateParams({ isOpen, setIsOpen, type, formik }) {
         },
         validationSchema: validationSchemaRoom,
         onSubmit: async (values) => {
-          console.log(values)
+          let data = {
+            name: values.nameParam,
+            capacity: values.capacity,
+          }
+          const response = await BaseRequest({
+            method: "POST",
+            url: "/rooms/register",
+            data: data,
+            setIsLoading,
+            isAuth: true,
+          })
+          if(response.status == 201){
+            toast.success("Cômodo criado com sucesso.")
+            setIsOpen(false)
+          }
         },
       });
       return (
