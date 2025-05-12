@@ -6,6 +6,7 @@ export async function BaseRequest({
   url,
   data = {},
   setIsLoading = false,
+  isAuth= false,
   // responseType = false,
   // credentials = false,
 }) {
@@ -18,6 +19,7 @@ export async function BaseRequest({
     const headers = {
       // "responseType" : responseType ? responseType : "json",
       "Content-Type": "application/json",
+      ...(isAuth && { Authorization: `Bearer ${localStorage.getItem("AHtoken")}` }),
     };
 
     const config = { headers };
@@ -36,7 +38,7 @@ export async function BaseRequest({
       // The request was made and the server responded with a status code
       const { status } = error.response;
       console.log(error.response)
-      if (status === 401 && error.message == "No token, authorization denied"){
+      if (status === 401 && error.response.data.message === "Access denied. No token provided.") {
         toast.error("Token expirado. Faça login novamente.",{
           toastId: "authError",
         });

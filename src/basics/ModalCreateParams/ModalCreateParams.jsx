@@ -11,27 +11,39 @@ import { useTranslation } from "react-i18next";
 import s from "./ModalCreateParams.module.scss";
 import Button from "../Button/Button";
 import { useNavigate } from "react-router-dom";
+import { BaseRequest } from "../../services/BaseRequest";
+import { useState } from "react";
+import toast from "react-hot-toast";
 
 
 export default function ModalCreateParams({ isOpen, setIsOpen, type, formik }) {
   if (!isOpen) return null;
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const [isLoading, setIsLoading] = useState(false)
 
   switch (type) {
     case "person":
       const validationSchemaPeople = Yup.object().shape({
         nameParam: Yup.string().required(t('requiredField')),
-        image: Yup.string().required(t('requiredField')),
       });
       const formikPeople = useFormik({
         initialValues: {
           nameParam: "",
-          image: "",
         },
         validationSchema: validationSchemaPeople,
         onSubmit: async (values) => {
-          console.log("values", values)
+          const response = await BaseRequest({
+            method: "POST",
+            url: "/people/register",
+            data: {name: values.nameParam},
+            setIsLoading,
+            isAuth: true,
+          })
+          if(response.status == 201){
+            toast.success("Pessoa criada com sucesso.")
+            setIsOpen(false)
+          }
         },
       });
       return (
@@ -50,13 +62,6 @@ export default function ModalCreateParams({ isOpen, setIsOpen, type, formik }) {
                 formik={formikPeople}
                 isLogged={true}
               />
-              {/* Do a dropwon to select one image */}
-              {/* <Field
-                fieldName="image"
-                type="text"
-                formik={formik}
-                isLogged={true}
-              /> */}
               <Button
                 text={t("create")}
                 backgroundColor={"quaternary"}
@@ -128,7 +133,22 @@ export default function ModalCreateParams({ isOpen, setIsOpen, type, formik }) {
         },
         validationSchema: validationSchemaActivity,
         onSubmit: async (values) => {
-          console.log(values)
+          let data = {
+            name: values.nameParam,
+            errorValue: values.errorValue,
+            color: values.color
+          }
+          const response = await BaseRequest({
+            method: "POST",
+            url: "/activities/register",
+            data: data,
+            setIsLoading,
+            isAuth: true,
+          })
+          if(response.status == 201){
+            toast.success("Atividade criada com sucesso.")
+            setIsOpen(false)
+          }
         },
       });
       return (
@@ -148,7 +168,7 @@ export default function ModalCreateParams({ isOpen, setIsOpen, type, formik }) {
                 isLogged={true}
               />
               <Field
-                type="text"
+                type="number"
                 fieldName="errorValue"
                 formik={formikActivity}
                 isLogged={true}
