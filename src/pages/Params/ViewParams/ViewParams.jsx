@@ -14,6 +14,7 @@ import { useTranslation } from "react-i18next";
 import ViewComponent from "../../../basics/ViewComponent/ViewComponent";
 import { useEffect, useState } from "react";
 import Button from "../../../basics/Button/Button";
+import { PuffLoader } from "react-spinners";
 
 export default function ViewParams() {
 	const { t } = useTranslation();
@@ -105,7 +106,13 @@ export default function ViewParams() {
           </div>
         }
         {data.length <= 0 && isLoading &&
-          <p>Carregando</p>
+          <div className={s.loadingWrapper}>
+            <PuffLoader
+              size={100}
+              color={'var(--primary-color)'}
+              speedMultiplier={1}
+            />
+          </div>
         }
         {/* TODO: Transform this in a component */}
         {data.length > 0 &&
