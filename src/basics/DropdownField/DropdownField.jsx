@@ -22,6 +22,7 @@ export default function DropdownField({
   const optionTemplate = (option) => {
     return <div>{option.name}</div>;
   };
+
   const {t} = useTranslation();
   if(isMultiSelect){
     const hasError = formik.touched[fieldName] && formik.errors[fieldName];
@@ -60,14 +61,15 @@ export default function DropdownField({
         type={type}
         name={fieldName}
         onBlur={formik.handleBlur}
+        optionLabel="name"
         value={formik?.values[fieldName]}
         readOnly={readOnly}
-        placeholder={(formik?.values[fieldName] || t('select'))}
+        placeholder={t('select')}
         options={options}
         filter={options.length > 5}
         filterPlaceholder="Pesquisar"
         emptyFilterMessage="Sem resultado"
-        onChange={(e) => formik.setFieldValue(fieldName, e.value.name)}
+        onChange={(e) => formik.setFieldValue(fieldName, e.value)}
         itemTemplate={optionTemplate}
         panelClassName={s.panelDropdown}
         className={

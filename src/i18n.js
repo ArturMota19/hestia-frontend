@@ -75,6 +75,7 @@ const resources = {
       graph: "Grafo dos Cômodos",
       addGraph: "Adicionar Grafo",
       removeGraph: "Remover Grafo",
+      addMoreRooms: "Adicione ao menos dois cômodos para construir um grafo",
       // View Preset Page
       viewHousePreset: "Visualização de Presets",
       noPresets: "Sem Presets cadastrados",
@@ -192,6 +193,7 @@ const resources = {
       addGraph: "Add Graph",
       removeGraph: "Remove Graph",
       graph: "Graph of Rooms",
+      addMoreRooms: "Add at least two rooms to build a graph",
       // View Preset Page
       viewHousePreset: "View Presets",
       noPresets: "No Presets registered",
