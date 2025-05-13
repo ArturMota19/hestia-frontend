@@ -22,6 +22,7 @@ export default function CreatePreset() {
   const [enumRooms, setEnumRooms] = useState([]);
   const [enumActuators, setEnumActuators] = useState([]);
   const [graphOptions, setGraphOptions] = useState([]);
+  const [isLoading, setIsLoading] = useState(false)
   const { t, i18n } = useTranslation();
   // Formik to house name
   const validationSchema = Yup.object().shape({
@@ -48,7 +49,26 @@ export default function CreatePreset() {
         });
         return;
       }
-      console.log(values, rooms, graph);
+      let data = {
+        name: values.presetName,
+        rooms: rooms,
+        graphRooms: graph
+
+      }
+      const response = await BaseRequest({
+        method: "POST",
+        url: "/presets/register",
+        data,
+        isAuth: true,
+        setIsLoading
+      })
+      if(response.status == 201){
+        formik.resetForm()
+        formikRooms.resetForm()
+        formikGraph.resetForm()
+        setRooms([])
+        setGraph([])
+      }
     },
   });
   // Formik to rooms
