@@ -39,15 +39,6 @@ export default function ViewParams() {
     FetchData()
   },[currentPage, paramType])
 
-  let fakeData = [
-    {
-      paramName: "Ar Condicionado",
-      actuatorSpec: [{ sound: "34" }, { talParam: "OFF" }],
-      capacity: null,
-      type: "actuator"
-    },
-  ];
-
   const totalPages = Math.ceil(itemsCount / itemsPerPage);
 
   const handlePrev = () => setCurrentPage(prev => Math.max(prev - 1, 1));

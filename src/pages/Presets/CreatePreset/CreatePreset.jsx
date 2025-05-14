@@ -1,7 +1,7 @@
 // Components
 import Header from "../../../basics/Header/Header";
 import Field from "../../../basics/Field/Field";
-import DropdownField from "../../../basics/DropdownField/DropdownField"
+import DropdownField from "../../../basics/DropdownField/DropdownField";
 import Button from "../../../basics/Button/Button";
 // Images
 // Imports
@@ -11,18 +11,22 @@ import { useTranslation } from "react-i18next";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import { useEffect, useState } from "react";
-import toast from 'react-hot-toast';
+import toast from "react-hot-toast";
+import { BaseRequest } from "../../../services/BaseRequest";
 //Styles
 import s from "./CreatePreset.module.scss";
-
 
 export default function CreatePreset() {
   const [rooms, setRooms] = useState([]);
   const [graph, setGraph] = useState([]);
+  const [enumRooms, setEnumRooms] = useState([]);
+  const [enumActuators, setEnumActuators] = useState([]);
+  const [graphOptions, setGraphOptions] = useState([]);
+  const [isLoading, setIsLoading] = useState(false)
   const { t, i18n } = useTranslation();
   // Formik to house name
   const validationSchema = Yup.object().shape({
-    presetName: Yup.string().required(t('requiredField')),
+    presetName: Yup.string().required(t("requiredField")),
   });
   const formik = useFormik({
     initialValues: {
@@ -30,100 +34,142 @@ export default function CreatePreset() {
     },
     validationSchema,
     onSubmit: async (values) => {
-      if(rooms.length === 0) {
-        toast.error('Cadastre ao menos um cômodo para continuar!',{
+      if (rooms.length === 0) {
+        toast.error("Cadastre ao menos um cômodo para continuar!", {
           duration: 4000,
-          position: 'top-center',
+          position: "top-center",
         });
         return;
       }
-      if(graph.length === 0) {
-        toast.error('Cadastre ao menos um cômodo para continuar!',{
+      if (graph.length === 0) {
+        toast.error("Cadastre ao menos um cômodo para continuar!", {
           duration: 4000,
-          position: 'top-center',
+          position: "top-center",
         });
         return;
       }
-      console.log(values, rooms, graph);
+      let data = {
+        name: values.presetName,
+        rooms: rooms,
+        graphRooms: graph
+
+      }
+      const response = await BaseRequest({
+        method: "POST",
+        url: "/presets/register",
+        data,
+        isAuth: true,
+        setIsLoading
+      })
+      if(response.status == 201){
+        toast.success("Preset criado com sucesso")
+        formik.resetForm()
+        formikRooms.resetForm()
+        formikGraph.resetForm()
+        setRooms([])
+        setGraph([])
+      }
     },
   });
   // Formik to rooms
   const validationSchemaRooms = Yup.object().shape({
-    roomName: Yup.string().required(t('requiredField')),
-    roomCapacity: Yup.number().required(t('requiredField')),
-    atuators: Yup.array()
-    .min(1, t('requiredField'))
+    roomName: Yup.object().nullable().required("Campo obrigatório"),
+    roomCapacity: Yup.number().required(t("requiredField")),
+    atuators: Yup.array().min(1, t("requiredField")),
   });
   const formikRooms = useFormik({
     initialValues: {
-      roomName: "",
+      roomName: null,
       roomCapacity: "",
       atuators: [],
     },
     validationSchema: validationSchemaRooms,
     onSubmit: async (values) => {
+      if (rooms.some((room) => room.roomName === values.roomName)) {
+        toast.error("Cômodo já adicionado.");
+        return;
+      }
       setRooms([...rooms, values]);
+      setGraphOptions([...graphOptions, values.roomName]);
       formikRooms.resetForm();
     },
   });
   // Formik to Rooms
   const validationSchemaGraph = Yup.object().shape({
-    room1: Yup.string().required(t('requiredField')),
-    room2: Yup.string().required(t('requiredField')),
-    distance: Yup.number().required(t('requiredField')),
+    room1: Yup.object().nullable().required("Campo obrigatório"),
+    room2: Yup.object().nullable().required("Campo obrigatório"),
+    distance: Yup.number().required(t("requiredField")),
   });
   const formikGraph = useFormik({
     initialValues: {
       room1: "",
       room2: "",
-      distannce: "",
+      distance: "",
     },
     validationSchema: validationSchemaGraph,
     onSubmit: async (values) => {
+      if (values.room1.id == values.room2.id) {
+        toast.error("Os cômodos devem ser diferentes");
+        return;
+      }
+      if (
+        graph.some(
+          (connection) =>
+            (connection.room1.id === values.room1.id &&
+              connection.room2.id === values.room2.id) ||
+            (connection.room1.id === values.room2.id &&
+              connection.room2.id === values.room1.id)
+        )
+      ) {
+        toast.error("Ligação entre cômodos já existe.");
+        return;
+      }
       setGraph([...graph, values]);
       formikGraph.resetForm();
     },
   });
-  
-  // Fake enums and data for rooms and atuators
-  let fakeEnumAtuators = [{
-    name: 'Cafeteira',
-    id: 'atuador1',
-  },
-  {
-    name: 'Lâmpada',
-    id: 'atuador3',
-  },
-  {
-    name: 'Ar Condicionado',
-    id: 'atuador2',
-  },
-  ]
-  let fakeEnumRooms = [{
-    name: 'Sala',
-    id: 'room1',
-    capacity: 4,
-  },
-  {
-    name: 'Cozinha',
-    id: 'room2',
-    capacity: 2,
-  },
-  {
-    name: 'Quarto',
-    id: 'room3',
-    capacity: 3,
-  },
-]
+
+  async function FetchData() {
+    const responseRooms = await BaseRequest({
+      method: "GET",
+      url: "/rooms/getSelf",
+      isAuth: true,
+    });
+    if (responseRooms.status == 200) {
+      setEnumRooms(responseRooms.data.rooms);
+    }
+    const responseActuators = await BaseRequest({
+      method: "GET",
+      url: "/actuators/getAllWithoutPagination",
+      isAuth: true,
+    });
+    if (responseActuators.status == 200) {
+      setEnumActuators(responseActuators.data.actuators);
+    }
+  }
+
+  useEffect(() => {
+    FetchData();
+  }, []);
+
+  useEffect(() => {
+    if (formikRooms.values.roomName) {
+      formikRooms.setFieldValue(
+        "roomCapacity",
+        formikRooms.values.roomName.capacity
+      );
+    }
+  }, [formikRooms.values.roomName]);
+
   return (
     <main className={s.wrapperCreatePreset}>
       <Helmet>
         <meta charSet="utf-8" />
         <title>HESTIA | Create Preset</title>
       </Helmet>
-      <Header/>
+      <Header />
       <section className={s.hestiaInfoWrapper}>
-        <h1>{t('createHousePreset')}</h1>
+        <h1>{t("createHousePreset")}</h1>
         <div className={s.wrapperInternForm}>
           <form>
             <Field
@@ -134,16 +180,17 @@ export default function CreatePreset() {
             />
           </form>
           <form className={s.wrapperForm} onSubmit={formikRooms.handleSubmit}>
-            <h2>{t('rooms')}</h2>
-            {rooms && rooms.length > 0 && 
+            <h2>{t("rooms")}</h2>
+            {rooms &&
+              rooms.length > 0 &&
               rooms.map((room, index) => (
-                <div className={s.wrapperThreeInputs}>
+                <div key={index} className={s.wrapperThreeInputs}>
                   <Field
                     type="text"
                     fieldName="roomName"
                     readOnly={true}
                     isLogged={true}
-                    value={room.roomName}
+                    value={room.roomName.name}
                   />
                   <Field
                     type="text"
@@ -157,24 +204,26 @@ export default function CreatePreset() {
                     fieldName="atuators"
                     isLogged={true}
                     readOnly={true}
-                    value={room.atuators.map((atuator) => atuator.name).join(", ")}
+                    value={room.atuators
+                      .map((atuator) => atuator.name)
+                      .join(", ")}
                   />
                 </div>
-              ))
-            }
+              ))}
             <div className={s.wrapperThreeInputs}>
               <DropdownField
                 type="text"
                 fieldName="roomName"
                 formik={formikRooms}
                 value={formikRooms.values.roomName}
-                options={fakeEnumRooms}
+                options={enumRooms}
                 readOnly={false}
               />
               <Field
                 type="number"
                 fieldName="roomCapacity"
                 formik={formikRooms}
+                readOnly={true}
                 isLogged={true}
               />
               <DropdownField
@@ -182,111 +231,118 @@ export default function CreatePreset() {
                 fieldName="atuators"
                 formik={formikRooms}
                 value={formikRooms.values.atuators}
-                options={fakeEnumAtuators}
+                options={enumActuators}
                 readOnly={false}
                 isMultiSelect={true}
               />
             </div>
             <div className={s.buttonsDiv}>
-              <Button 
-                text={t('addRoom')} 
+              <Button
+                text={t("addRoom")}
                 type="submit"
-                backgroundColor={"quaternary"} 
+                backgroundColor={"quaternary"}
                 height={32}
               />
-              <Button 
-                text={t('removeRoom')} 
-                backgroundColor={"delete"} 
+              <Button
+                text={t("removeRoom")}
+                backgroundColor={"delete"}
                 height={32}
                 doFunction={() => {
-                    if (rooms.length > 0) {
+                  if (rooms.length > 0) {
                     setRooms(rooms.slice(0, -1));
-                    }
+                  }
                 }}
               />
             </div>
           </form>
-          <form className={s.wrapperForm} onSubmit={formikGraph.handleSubmit}>
-            <h2>{t('graph')}</h2>
-            {graph && graph.length > 0 && 
-              graph.map((graph, index) => (
-                <div className={s.wrapperThreeInputs}>
-                  <Field
-                    type="text"
-                    fieldName="room1"
-                    readOnly={true}
-                    isLogged={true}
-                    value={graph.room1}
-                  />
-                  <Field
-                    type="text"
-                    fieldName="distance"
-                    isLogged={true}
-                    readOnly={true}
-                    value={graph.distance}
-                  />
-                  <Field
-                    type="text"
-                    fieldName="room2"
-                    readOnly={true}
-                    isLogged={true}
-                    value={graph.room2}
-                  />
-                </div>
-              ))
-            }
-            <div className={s.wrapperThreeInputs}>
-              <DropdownField
-                type="text"
-                fieldName="room1"
-                formik={formikGraph}
-                value={formikGraph.values.room1}
-                options={fakeEnumRooms}
-                readOnly={false}
-              />
-              <Field
-                type="number"
-                fieldName="distance"
-                formik={formikGraph}
-                isLogged={true}
-              />
-              <DropdownField
-                type="text"
-                fieldName="room2"
-                formik={formikGraph}
-                value={formikGraph.values.room2}
-                options={fakeEnumRooms}
-                readOnly={false}
-              />
-            </div>
-            <div className={s.buttonsDiv}>
-              <Button 
-                text={t('addGraph')} 
-                type="submit"
-                backgroundColor={"quaternary"} 
-                height={32}
-              />
-              <Button 
-                text={t('removeGraph')} 
-                backgroundColor={"delete"} 
-                height={32}
-                doFunction={() => {
+          {graphOptions.length > 1 ? (
+            <form className={s.wrapperForm} onSubmit={formikGraph.handleSubmit}>
+              <h2>{t("graph")}</h2>
+              {graph &&
+                graph.length > 0 &&
+                graph.map((graph, index) => (
+                  <div className={s.wrapperThreeInputs}>
+                    <Field
+                      type="text"
+                      fieldName="room1"
+                      readOnly={true}
+                      isLogged={true}
+                      value={graph.room1.name}
+                    />
+                    <Field
+                      type="text"
+                      fieldName="distance"
+                      isLogged={true}
+                      readOnly={true}
+                      value={graph.distance}
+                    />
+                    <Field
+                      type="text"
+                      fieldName="room2"
+                      readOnly={true}
+                      isLogged={true}
+                      value={graph.room2.name}
+                    />
+                  </div>
+                ))}
+              <div className={s.wrapperThreeInputs}>
+                <DropdownField
+                  type="text"
+                  fieldName="room1"
+                  formik={formikGraph}
+                  value={formikGraph.values.room1}
+                  options={graphOptions}
+                  readOnly={false}
+                />
+                <Field
+                  type="number"
+                  fieldName="distance"
+                  formik={formikGraph}
+                  isLogged={true}
+                />
+                <DropdownField
+                  type="text"
+                  fieldName="room2"
+                  formik={formikGraph}
+                  value={formikGraph.values.room2}
+                  options={graphOptions}
+                  readOnly={false}
+                />
+              </div>
+              <div className={s.buttonsDiv}>
+                <Button
+                  text={t("addGraph")}
+                  type="submit"
+                  backgroundColor={"quaternary"}
+                  height={32}
+                />
+                <Button
+                  text={t("removeGraph")}
+                  backgroundColor={"delete"}
+                  height={32}
+                  doFunction={() => {
                     if (graph.length > 0) {
-                    setGraph(graph.slice(0, -1));
+                      setGraph(graph.slice(0, -1));
                     }
-                }}
-              />
+                  }}
+                />
+              </div>
+            </form>
+          ) : (
+            <div>
+              <p className={s.errorNoGraph}>{t("addMoreRooms")} </p>
             </div>
-          </form>
+          )}
         </div>
         <div className={s.createButton}>
-          <Button 
-            text={t('create')} 
-            backgroundColor={"primary"} 
+          <Button
+            text={t("create")}
+            backgroundColor={"primary"}
             height={48}
             doFunction={() => {
               formik.handleSubmit();
-          }}
+            }}
+            isLoading={isLoading}
           />
         </div>
       </section>

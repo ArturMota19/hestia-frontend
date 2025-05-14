@@ -6,10 +6,23 @@
     height: auto;
     min-height: 100vh;
     display: flex;
-    align-items: center;
+    align-items: start;
     justify-content: center;
-    align-items: center;
     background-color: var(--tertiary-color);
+
+    .noPresetsDiv{
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        h4, a{
+            @include font-medium-5;
+            width: 100%;
+            text-align: center;
+        }
+        a{
+            color: var(--primary-color)
+        }
+    }
 
     .hestiaInfoWrapper{
         max-width: var(--max-width);

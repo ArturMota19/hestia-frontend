@@ -2,19 +2,27 @@
 
 .wrapperCreatePreset{
     margin-bottom: 0rem;
+    padding-bottom: 5rem;
     width: 100% !important;
-    height: 100vh;
+    min-height: 100vh;
+    height: auto;
     display: flex;
-    align-items: center;
+    align-items: start;
     justify-content: center;
-    align-items: center;
     background-color: var(--tertiary-color);
+
+    .errorNoGraph{
+        @include font-regular-4;
+        text-align: center;
+        color: var(--primary-color);
+    }
 
     .hestiaInfoWrapper{
         width: var(--page-wrapper);
         padding: var(--padding-wrap);
         height: 100%;
         display: flex;
+        align-items: start;
         flex-direction: column;
         gap: 16px;
 
