@@ -4,17 +4,33 @@ import Header from "../../../basics/Header/Header";
 import houseIcon from "../../../assets/icons/house-icon.svg";
 // Imports
 import { Helmet } from "react-helmet";
+import { BaseRequest } from "../../../services/BaseRequest";
 //Styles
 import s from "./ViewPreset.module.scss";
 import { useTranslation } from "react-i18next";
 import ViewComponent from "../../../basics/ViewComponent/ViewComponent";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Button from "../../../basics/Button/Button";
 
 export default function ViewPreset() {
 	const { t } = useTranslation();
   const [currentPage, setCurrentPage] = useState(1);
+  const [isLoading, setIsLoading] = useState(false)
   const itemsPerPage = 6;
+
+  async function FetchData(){
+    const response = await BaseRequest({
+      method: "GET",
+      url: `presets/getAll/${currentPage}`,
+      isAuth: true,
+      setIsLoading
+    })
+    console.log(response)
+  }
+
+  useEffect(() => {
+    FetchData()
+  },[])
 
   let fakeData = [
     {

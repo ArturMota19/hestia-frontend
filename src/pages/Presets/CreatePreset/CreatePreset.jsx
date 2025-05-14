@@ -34,7 +34,6 @@ export default function CreatePreset() {
     },
     validationSchema,
     onSubmit: async (values) => {
-      console.log(rooms, graph)
       if (rooms.length === 0) {
         toast.error("Cadastre ao menos um cômodo para continuar!", {
           duration: 4000,
@@ -63,6 +62,7 @@ export default function CreatePreset() {
         setIsLoading
       })
       if(response.status == 201){
+        toast.success("Preset criado com sucesso")
         formik.resetForm()
         formikRooms.resetForm()
         formikGraph.resetForm()
