@@ -10,6 +10,20 @@
     justify-content: center;
     background-color: var(--tertiary-color);
 
+    .noPresetsDiv{
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        h4, a{
+            @include font-medium-5;
+            width: 100%;
+            text-align: center;
+        }
+        a{
+            color: var(--primary-color)
+        }
+    }
+
     .hestiaInfoWrapper{
         max-width: var(--max-width);
         width: var(--page-wrapper);

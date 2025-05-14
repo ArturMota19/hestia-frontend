@@ -72,7 +72,7 @@ export default function ViewPreset() {
 			<section className={s.hestiaInfoWrapper}>
 				<h1>{t("viewHousePreset")}</h1>
 				<section className={s.gridWrapper}>
-					{housePresets.length > 0 ? (
+					{housePresets.length > 0 && (
 						housePresets.map((item, index) => (
 							<ViewComponent
 								index={index}
@@ -83,30 +83,35 @@ export default function ViewPreset() {
                 image={houseIcon}
 							/>
 						))
-					) : (
-						<div>
-							<h4>{t("noHousePreset")}</h4>
-						</div>
-					)}
+					) 
+        }
 				</section>
+        {housePresets.length <= 0 && !isLoading &&
+          <div className={s.noPresetsDiv}>
+            <h4>{t("noPresets")}</h4>
+            <a href="/create-presets">{t('createPresets')}</a>
+          </div>
+        }
         {/* TODO: Transform this in a component */}
-        <div className={s.pagination}>
-          <Button 
-            text={t('prev')} 
-            backgroundColor={currentPage === 1 ? "secondary" : "primary"} 
-            height={36}
-            disabled={currentPage === 1}
-            doFunction={handlePrev}/>
-          <span>
-            {currentPage} de {totalPages}
-          </span>
-          <Button 
-            text={t('next')} 
-            backgroundColor={currentPage === totalPages ? "secondary" : "primary"} 
-            height={36}
-            disabled={currentPage === totalPages}
-            doFunction={handleNext}/>
-        </div>
+        {housePresets.length > 0 &&
+          <div className={s.pagination}>
+            <Button 
+              text={t('prev')} 
+              backgroundColor={currentPage === 1 ? "secondary" : "primary"} 
+              height={36}
+              disabled={currentPage === 1}
+              doFunction={handlePrev}/>
+            <span>
+              {currentPage} de {totalPages}
+            </span>
+            <Button 
+              text={t('next')} 
+              backgroundColor={currentPage === totalPages ? "secondary" : "primary"} 
+              height={36}
+              disabled={currentPage === totalPages}
+              doFunction={handleNext}/>
+          </div>
+        }
 			</section>
 		</main>
 	);

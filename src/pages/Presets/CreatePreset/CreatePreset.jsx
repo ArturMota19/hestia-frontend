@@ -342,6 +342,7 @@ export default function CreatePreset() {
             doFunction={() => {
               formik.handleSubmit();
             }}
+            isLoading={isLoading}
           />
         </div>
       </section>
