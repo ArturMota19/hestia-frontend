@@ -110,6 +110,7 @@ export default function Register() {
             height="48px"
             backgroundColor="tertiary"
             doFunction={() => formik.handleSubmit()}
+            isLoading={isLoading}
           />
           <a className={s.linkForget} href="/login">{t('doLogin')}</a>
         </form>

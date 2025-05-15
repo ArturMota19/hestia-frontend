@@ -93,6 +93,7 @@ export default function Login() {
             height="48px"
             backgroundColor="tertiary"
             doFunction={() => {}}
+            isLoading={isLoading}
           />
           <a className={s.linkForget} href="/register">{t('doRegister')}</a>
         </form>
