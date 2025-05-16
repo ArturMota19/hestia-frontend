@@ -32,15 +32,15 @@ export default function ViewPreset() {
       const updatedPresets = response.data.presetData.map((preset) => {
       // Get each Room
       const rooms = [];
-      preset.HouseRooms.forEach((room) => {
+      preset.houserooms.forEach((room) => {
         let stringActuators = "";
-        room.RoomActuators.forEach((actuator, index) => {
+        room.roomactuators.forEach((actuator, index) => {
         stringActuators += actuator.name;
-        if (index < room.RoomActuators.length - 1) {
+        if (index < room.roomactuators.length - 1) {
           stringActuators += ", ";
         }
         });
-        const finalString = `${room.Room.name} (${stringActuators})`;
+        const finalString = `${room.room.name} (${stringActuators})`;
         rooms.push(finalString);
       });
       return {
