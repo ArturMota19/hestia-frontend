@@ -92,6 +92,7 @@ export default function AddActivityModal({
           readOnly={false}
           isMultiSelect={false}
         />
+        {/* Do a mapping to each actuator -> their status */}
         {formik.values.room &&
           <DropdownField
             type="text"
