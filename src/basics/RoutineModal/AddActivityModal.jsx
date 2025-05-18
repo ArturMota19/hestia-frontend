@@ -31,6 +31,8 @@ export default function AddActivityModal({
   const formik = useFormik({
     initialValues: {
       activity: "",
+      room: "",
+      associatedActivities: "",
       actuators: "",
     },
     validationSchema,
@@ -50,6 +52,7 @@ export default function AddActivityModal({
     },
   });
 
+
   async function GetActivities() {
     const response = await BaseRequest({
       method: "GET",
@@ -64,22 +67,9 @@ export default function AddActivityModal({
 
   useEffect(() => {
     GetActivities();
+    console.log(preset)
   }, []);
 
-  let fakeEnumAtuators = [
-    {
-      name: "Cafeteira",
-      id: "atuador1",
-    },
-    {
-      name: "Lâmpada",
-      id: "atuador3",
-    },
-    {
-      name: "Ar Condicionado",
-      id: "atuador2",
-    },
-  ];
   return (
     <form className={s.activityForm} onSubmit={formik.handleSubmit}>
       <h4>{t("addActivity")}</h4>
@@ -95,13 +85,24 @@ export default function AddActivityModal({
         {formik.values.activity && <p className={s.errorValue}>{t('errorValue')}: {formik.values.activity.errorValue}</p>}
         <DropdownField
           type="text"
-          fieldName="actuators"
+          fieldName="room"
           formik={formik}
-          value={formik.values.actuators}
-          options={fakeEnumAtuators}
+          value={formik.values.room}
+          options={preset.houserooms}
           readOnly={false}
-          isMultiSelect={true}
+          isMultiSelect={false}
         />
+        {formik.values.room &&
+          <DropdownField
+            type="text"
+            fieldName="actuators"
+            formik={formik}
+            value={formik.values.actuators}
+            options={formik.values.room.roomactuators}
+            readOnly={false}
+            isMultiSelect={true}
+          />
+        }
       </div>
       <div className={s.arrayButtons}>
         <Button
