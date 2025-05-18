@@ -126,7 +126,7 @@ export default function RoutineModal({
       <div className={s.timeline}>
         <div className={s.fixedHeader}>
           <section className={s.titleRoutine}>
-            <p>{person}</p>
+            <p>{person.name}</p>
             <p>{t(weekDay)}</p>
             <p>{presetName}</p>
           </section>

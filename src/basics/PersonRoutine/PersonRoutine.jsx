@@ -11,7 +11,7 @@ import s from "./PersonRoutine.module.scss";
 
 export default function PersonRoutine({ person, setIsModalOpen, setPerson, setWeekDay }) {
   const { t } = useTranslation();
-  console.log(person)
+
   function openModal(day){
     setPerson(person.person)
     setWeekDay(day.dayName)
