@@ -11,6 +11,7 @@ import s from "./PersonRoutine.module.scss";
 
 export default function PersonRoutine({ person, setIsModalOpen, setPerson, setWeekDay }) {
   const { t } = useTranslation();
+  console.log(person)
   function openModal(day){
     setPerson(person.person)
     setWeekDay(day.dayName)
@@ -56,7 +57,7 @@ export default function PersonRoutine({ person, setIsModalOpen, setPerson, setWe
 
   return (
     <section className={s.wrapperEachPerson}>
-      <h3>{person.person}</h3>
+      <h3>{person.person.name}</h3>
       <div>
         <EachDay day={person.monday} />
         <EachDay day={person.tuesday} />

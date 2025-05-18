@@ -13,9 +13,10 @@ import { useFormik } from "formik";
 //Styles
 import s from "./CreateRoutine.module.scss";
 import RoutineModal from "../../../basics/RoutineModal/RoutineModal";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PersonRoutine from "../../../basics/PersonRoutine/PersonRoutine";
 import toast from "react-hot-toast";
+import { BaseRequest } from "../../../services/BaseRequest";
 
 export default function CreateRoutine() {
   const { t, i18n } = useTranslation();
@@ -24,27 +25,44 @@ export default function CreateRoutine() {
   const [weekDay, setWeekDay] = useState("");
   const [person, setPerson] = useState("");
   const [people, setPeople] = useState([]);
+  const [presets, setPresets] = useState([])
+  const [enumPeople, setEnumPeople] = useState([])
+  const [isLoading, setIsLoading] = useState(false)
 
-  let fakeEnumPresets = [
-    { id: "preset1", name: "Preset 1" },
-    { id: "preset2", name: "Preset 2" },
-    { id: "preset3", name: "Preset 3" },
-    { id: "preset4", name: "Preset 4" },
-    { id: "preset5", name: "Preset 5" },
-    { id: "preset6", name: "Preset 6" },
-    { id: "preset7", name: "Preset 7" },
-    { id: "preset8", name: "Preset 8" },
-    { id: "preset9", name: "Preset 9" },
-    { id: "preset10", name: "Preset 10" },
-  ];
-  let fakeEnumPersons = [
-    { id: "01", name: "Pessoa 1" },
-    { id: "02", name: "Pessoa 2" },
-    { id: "03", name: "Pessoa 3" },
-    { id: "04", name: "Pessoa 4" },
-  ];
+  async function GetPresets(){
+    const response = await BaseRequest({
+      method: "GET",
+      url: `presets/getAllWithoutPage`,
+      isAuth: true,
+      setIsLoading
+    })
+    if(response.status == 200){
+      setPresets(response.data.presetData)
+    }
+  }
+
+  useEffect(() => {
+    GetPresets()
+  },[])
+
+  async function GetPeople(){
+      const response = await BaseRequest({
+      method: "GET",
+      url: `people/getAllWithoutPage`,
+      isAuth: true,
+      setIsLoading
+    })
+    if(response.status == 200){
+      setEnumPeople(response.data.peopleData)
+    }
+  }
+
+  useEffect(() => {
+    GetPeople()
+  }, [presets])
+
   const validationSchema = Yup.object().shape({
-    preset: Yup.string().required(t("requiredField")),
+    preset: Yup.mixed().required(t("requiredField")),
   });
   const formikPresets = useFormik({
     initialValues: {
@@ -56,7 +74,7 @@ export default function CreateRoutine() {
     },
   });
   const validationSchemaPerson = Yup.object().shape({
-    person: Yup.string().required(t("requiredField")),
+    person: Yup.mixed().required(t("requiredField")),
   });
   const formikPerson = useFormik({
     initialValues: {
@@ -122,7 +140,7 @@ export default function CreateRoutine() {
                 fieldName="preset"
                 formik={formikPresets}
                 value={formikPresets.values.preset}
-                options={fakeEnumPresets}
+                options={presets}
                 readOnly={false}
               />
             </div>
@@ -149,10 +167,11 @@ export default function CreateRoutine() {
                 fieldName="person"
                 formik={formikPerson}
                 value={formikPerson.values.person}
-                options={fakeEnumPersons}
+                options={enumPeople}
                 readOnly={false}
               />
               <Button
+                type="submit"
                 text={t("addPerson")}
                 backgroundColor={"secondary"}
                 height={48}
