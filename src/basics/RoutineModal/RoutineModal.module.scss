@@ -12,6 +12,14 @@
   justify-content: center;
 }
 
+.errorValue{
+  @include font-regular-3;
+  padding-top: .25rem;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
 .timeline {
   width: 85%;
   min-width: 1150px;

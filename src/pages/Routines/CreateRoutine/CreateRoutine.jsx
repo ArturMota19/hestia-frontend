@@ -124,7 +124,7 @@ export default function CreateRoutine() {
         isOpen={isModalOpen}
         setIsOpen={setIsModalOpen}
         weekDay={weekDay}
-        presetName={formikPresets.values.preset.name}
+        preset={formikPresets.values.preset}
         person={person}
         people={people}
         setPeople={setPeople}

@@ -9,66 +9,77 @@ import { useTranslation } from "react-i18next";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 // Styles
-import s from './RoutineModal.module.scss'
+import s from "./RoutineModal.module.scss";
+import { useEffect, useState } from "react";
+import { BaseRequest } from "../../services/BaseRequest";
 
+export default function AddActivityModal({
+  isActivityModalOpen,
+  setIsActivityModalOpen,
+  items,
+  setItems,
+  preset,
+}) {
+  if (!isActivityModalOpen) return null;
+  const [enumActivities, setEnumActivities] = useState([])
+  const [isLoading, setIsLoading] = useState(false)
+  const totalDuration = items.reduce((sum, item) => sum + item.duration, 0);
+  const { t } = useTranslation();
+  const validationSchema = Yup.object().shape({
+    activity: Yup.mixed().required(t("requiredField")),
+  });
+  const formik = useFormik({
+    initialValues: {
+      activity: "",
+      actuators: "",
+    },
+    validationSchema,
+    onSubmit: async (values) => {
+      console.log(values);
+      setItems((prevItems) => [
+        ...prevItems,
+        {
+          id: prevItems.length + 1,
+          title: values.activity,
+          start: totalDuration,
+          duration: 1,
+        },
+      ]);
+      console.log(items, values);
+      setIsActivityModalOpen(false);
+    },
+  });
 
-export default function AddActivityModal({isActivityModalOpen, setIsActivityModalOpen, items, setItems, preset}) {
-  console.log(items)
-    if(!isActivityModalOpen) return null;
-    const totalDuration = items.reduce((sum, item) => sum + item.duration, 0);
-    const {t} = useTranslation()
-    const validationSchema = Yup.object().shape({
-      activity: Yup.mixed().required(t('requiredField')),
+  async function GetActivities() {
+    const response = await BaseRequest({
+      method: "GET",
+      url: `activities/getAllWithoutPage`,
+      isAuth: true,
+      setIsLoading,
     });
-    const formik = useFormik({
-      initialValues: {
-        activity: "",
-        actuators: "",
-      },
-      validationSchema,
-      onSubmit: async (values) => {
-        console.log(values)
-        setItems((prevItems) => [
-          ...prevItems,
-          {
-            id: prevItems.length + 1,
-            title: values.activity,
-            start: totalDuration,
-            duration: 1,
-          },
-        ]);
-        console.log(items, values)
-        setIsActivityModalOpen(false);
-      },
-    });
-    const fakeEnumActivities = [
-      { id: 1, name: "Dormir", errorRate: 0.1, color: "#F34DDD" },
-      { id: 2, name: "Tomar Banho", errorRate: 0.05, color: "#4DA6FF" },
-      { id: 3, name: "Ver televisão", errorRate: 0.2, color: "#FFD700" },
-      { id: 4, name: "Fazer tal Coisa", errorRate: 0.15, color: "#32CD32" },
-      { id: 5, name: "Ler um Livro", errorRate: 0.08, color: "#FF4500" },
-      { id: 6, name: "Cozinhar", errorRate: 0.12, color: "#8A2BE2" },
-      { id: 7, name: "Estudar", errorRate: 0.07, color: "#00CED1" },
-      { id: 8, name: "Exercitar-se", errorRate: 0.09, color: "#FF6347" },
-      { id: 9, name: "Meditar", errorRate: 0.03, color: "#6A5ACD" },
-      { id: 10, name: "Jogar Video Game", errorRate: 0.18, color: "#FF69B4" },
-      { id: 11, name: "Fazer Compras", errorRate: 0.11, color: "#20B2AA" },
-      { id: 12, name: "Passear com o Cachorro", errorRate: 0.06, color: "#FFDAB9" },
-    ];
-  
-    let fakeEnumAtuators = [{
-      name: 'Cafeteira',
-      id: 'atuador1',
+    if (response.status == 200) {
+      setEnumActivities(response.data.activitieData);
+    }
+  }
+
+  useEffect(() => {
+    GetActivities();
+  }, []);
+
+  let fakeEnumAtuators = [
+    {
+      name: "Cafeteira",
+      id: "atuador1",
     },
     {
-      name: 'Lâmpada',
-      id: 'atuador3',
+      name: "Lâmpada",
+      id: "atuador3",
     },
     {
-      name: 'Ar Condicionado',
-      id: 'atuador2',
+      name: "Ar Condicionado",
+      id: "atuador2",
     },
-    ]
+  ];
   return (
     <form className={s.activityForm} onSubmit={formik.handleSubmit}>
       <h4>{t("addActivity")}</h4>
@@ -78,9 +89,10 @@ export default function AddActivityModal({isActivityModalOpen, setIsActivityModa
           fieldName="activity"
           formik={formik}
           value={formik.values.activity}
-          options={fakeEnumActivities}
+          options={enumActivities}
           readOnly={false}
         />
+        {formik.values.activity && <p className={s.errorValue}>{t('errorValue')}: {formik.values.activity.errorValue}</p>}
         <DropdownField
           type="text"
           fieldName="actuators"

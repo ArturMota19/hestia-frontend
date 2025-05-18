@@ -13,7 +13,7 @@ export default function RoutineModal({
   setIsOpen,
   person,
   weekDay,
-  presetName,
+  preset,
   people,
   setPeople
 }) {
@@ -128,7 +128,7 @@ export default function RoutineModal({
           <section className={s.titleRoutine}>
             <p>{person.name}</p>
             <p>{t(weekDay)}</p>
-            <p>{presetName}</p>
+            <p>{preset.name}</p>
           </section>
           <section className={s.addActivityButton}>
             <Button
@@ -146,6 +146,7 @@ export default function RoutineModal({
           setIsActivityModalOpen={setIsActivityModalOpen}
           items={items}
           setItems={setItems}
+          preset={preset}
         />
         {items.length > 0 && (
           <>
