@@ -138,7 +138,7 @@ const RenderActuatorProps = ({ formikParam }) => {
   if (!props) return <p>Tipo desconhecido: {type}</p>;
 
   return (
-    <div>
+    <div className={s.wrapperProps}>
       {props.map((prop, idx) => {
         const handleChange = (e) => {
           let value;
@@ -155,11 +155,12 @@ const RenderActuatorProps = ({ formikParam }) => {
         switch (prop.type) {
           case "boolean":
             return (
-              <div key={prop.name}>
+              <div className={s.inputWrapper} key={prop.name}>
                 <label>
                   {prop.name}:{" "}
                   <input
                     type="checkbox"
+                    className={s.checkBox}
                     name={prop.name}
                     checked={
                       formikParam.values.status[idx]?.value || false
@@ -171,12 +172,13 @@ const RenderActuatorProps = ({ formikParam }) => {
             );
           case "range":
             return (
-              <div key={prop.name}>
+              <div className={s.inputWrapper} key={prop.name}>
                 <label>
                   {prop.name}:{" "}
                   <input
                     type="number"
                     name={prop.name}
+                    className={s.field}
                     min={prop.min}
                     max={prop.max}
                     value={
@@ -189,11 +191,12 @@ const RenderActuatorProps = ({ formikParam }) => {
             );
           case "enum":
             return (
-              <div key={prop.name}>
+              <div className={s.inputWrapper} key={prop.name}>
                 <label>
                   {prop.name}:{" "}
                   <select
                     name={prop.name}
+                    className={s.field}
                     value={
                       formikParam.values.status[idx]?.value || ""
                     }
