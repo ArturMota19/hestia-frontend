@@ -89,12 +89,14 @@ function CheckValidProps(values) {
       return { error: `unknownProp: ${prop.name}` };
     }
 
+    const inputIntValue = parseInt(prop.value)
+
     if (expectedProp.type === "boolean") {
       if (typeof prop.value !== "boolean") {
         return { error: `invalidType: ${prop.name} should be boolean` };
       }
     } else if (expectedProp.type === "range") {
-      if (typeof prop.value !== "number" || prop.value < expectedProp.min || prop.value > expectedProp.max) {
+      if (inputIntValue < expectedProp.min || inputIntValue > expectedProp.max) {
         return { error: `outOfRange: ${prop.name} should be between ${expectedProp.min} and ${expectedProp.max}` };
       }
     } else if (expectedProp.type === "enum") {
