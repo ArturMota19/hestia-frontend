@@ -11,10 +11,34 @@
   align-items: center;
   justify-content: center;
 }
+/*REMEMBER TO DO SCROLL IN ACTIVITY MODAL!*/
+.wrapperAddActuators{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: .5rem;
+  padding-top: .5rem;
+
+  button{
+    width: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: .5rem;
+    border: none;
+    background-color: var(--quintenary-color);
+    color: var(--primary-color);
+    border-radius: 8px;
+    cursor: pointer;
+    padding: .5rem;
+  }
+}
 
 .errorValue{
   @include font-regular-3;
-  padding-top: .25rem;
+  padding-top: .5rem;
   width: 100%;
   display: flex;
   justify-content: center;
@@ -145,7 +169,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 40%;
+  width: 60%;
   height: auto;
   gap: 8px;
   .wrapperInputs{

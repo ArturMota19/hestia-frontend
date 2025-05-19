@@ -3,7 +3,7 @@ import Button from "../Button/Button";
 import DropdownField from "../DropdownField/DropdownField";
 import { useTranslation } from "react-i18next";
 // Images
-
+import { IoMdAdd } from "react-icons/io";
 // Imports
 
 import * as Yup from "yup";
@@ -12,6 +12,7 @@ import { useFormik } from "formik";
 import s from "./RoutineModal.module.scss";
 import { useEffect, useState } from "react";
 import { BaseRequest } from "../../services/BaseRequest";
+import toast from "react-hot-toast";
 
 export default function AddActivityModal({
   isActivityModalOpen,
@@ -21,10 +22,139 @@ export default function AddActivityModal({
   preset,
 }) {
   if (!isActivityModalOpen) return null;
-  const [enumActivities, setEnumActivities] = useState([])
-  const [isLoading, setIsLoading] = useState(false)
+  const [enumActivities, setEnumActivities] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [actuatorsProps, setActuatorsProps] = useState([]);
   const totalDuration = items.reduce((sum, item) => sum + item.duration, 0);
   const { t } = useTranslation();
+
+const actuatorStatusMap = {
+  LAMPADA: [
+    { name: "switch_led", type: "boolean" },
+    { name: "bright_value_v2", type: "range", min: 0, max: 1000 },
+    { name: "temp_value_v2", type: "range", min: 0, max: 1000 },
+  ],
+  CAFETEIRA: [{ name: "switch", type: "boolean" }],
+  PLUG: [{ name: "switch_1", type: "boolean" }],
+  SOM: [
+    { name: "switch", type: "boolean" },
+    { name: "sound_volume", type: "range", min: 0, max: 100 },
+  ],
+  AR_CONDICIONADO: [
+    { name: "switch", type: "boolean" },
+    { name: "temp_set", type: "range", min: 16, max: 30 },
+    {
+      name: "mode",
+      type: "enum",
+      options: ["COLL", "HOT", "WET", "WIND", "AUTO"],
+    },
+  ],
+  TV: [
+    { name: "switch", type: "boolean" },
+    { name: "sound_volume", type: "range", min: 0, max: 100 },
+  ],
+  SENSOR_PRESENCA: [
+    { name: "presence_state", type: "boolean" },
+    {
+      name: "human_motion_state",
+      type: "enum",
+      options: ["NONE", "SMALL_MOVE", "LARGER_MOVE"],
+    },
+  ],
+};
+
+const RenderActuatorProps = ({ formikParam }) => {
+  let type = formikParam.values.actuator.name
+  const props = actuatorStatusMap[type];
+
+  if (!props) return <p>Tipo desconhecido: {type}</p>;
+
+  return (
+    <div>
+      {props.map((prop, idx) => {
+        const handleChange = (e) => {
+          let value;
+          if (prop.type === "boolean") {
+            value = e.target.checked;
+          } else if (prop.type === "range" || prop.type === "enum") {
+            value = e.target.value;
+          }
+          // Atualiza o status no formikParam.values.status
+          const newStatus = [...formikParam.values.status];
+          newStatus[idx] = { name: prop.name, value };
+          formikParam.setFieldValue("status", newStatus);
+        };
+
+        switch (prop.type) {
+          case "boolean":
+            return (
+              <div key={prop.name}>
+                <label>
+                  {prop.name}:{" "}
+                  <input
+                    type="checkbox"
+                    name={prop.name}
+                    checked={
+                      formikParam.values.status[idx]?.value || false
+                    }
+                    onChange={handleChange}
+                  />
+                </label>
+              </div>
+            );
+          case "range":
+            return (
+              <div key={prop.name}>
+                <label>
+                  {prop.name}:{" "}
+                  <input
+                    type="number"
+                    name={prop.name}
+                    min={prop.min}
+                    max={prop.max}
+                    value={
+                      formikParam.values.status[idx]?.value || ""
+                    }
+                    onChange={handleChange}
+                  />
+                </label>
+              </div>
+            );
+          case "enum":
+            return (
+              <div key={prop.name}>
+                <label>
+                  {prop.name}:{" "}
+                  <select
+                    name={prop.name}
+                    value={
+                      formikParam.values.status[idx]?.value || ""
+                    }
+                    onChange={handleChange}
+                  >
+                    <option value="">Selecione</option>
+                    {prop.options.map((option) => (
+                      <option key={option} value={option}>
+                        {option}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              </div>
+            );
+          default:
+            return (
+              <div key={prop.name}>
+                <p>Tipo não suportado: {prop.type}</p>
+              </div>
+            );
+        }
+      })}
+    </div>
+  );
+};
+
+
   const validationSchema = Yup.object().shape({
     activity: Yup.mixed().required(t("requiredField")),
   });
@@ -33,7 +163,6 @@ export default function AddActivityModal({
       activity: "",
       room: "",
       associatedActivities: "",
-      actuators: "",
     },
     validationSchema,
     onSubmit: async (values) => {
@@ -52,6 +181,28 @@ export default function AddActivityModal({
     },
   });
 
+  const validationSchemaActuators = Yup.object().shape({
+    actuator: Yup.mixed().required(t("requiredField")),
+  });
+  const formikActuators = useFormik({
+    initialValues: {
+      actuator: {},
+      status: [],
+    },
+    validationSchema: validationSchemaActuators,
+    onSubmit: async (values) => {
+      if(values.status.length < 1){
+        toast.error("Adicione ao menos uma propriedade para o atuador.")
+        return
+      }
+      if (actuatorsProps.some(a => a.actuator.name === values.actuator.name)) {
+        toast.error("Este atuador já foi adicionado.");
+        return;
+      }
+      setActuatorsProps([...actuatorsProps, values])
+      formikActuators.resetForm()
+    },
+  });
 
   async function GetActivities() {
     const response = await BaseRequest({
@@ -67,7 +218,7 @@ export default function AddActivityModal({
 
   useEffect(() => {
     GetActivities();
-    console.log(preset)
+    console.log(preset);
   }, []);
 
   return (
@@ -82,7 +233,11 @@ export default function AddActivityModal({
           options={enumActivities}
           readOnly={false}
         />
-        {formik.values.activity && <p className={s.errorValue}>{t('errorValue')}: {formik.values.activity.errorValue}</p>}
+        {formik.values.activity && (
+          <p className={s.errorValue}>
+            {t("errorValue")}: {formik.values.activity.errorValue}
+          </p>
+        )}
         <DropdownField
           type="text"
           fieldName="room"
@@ -92,18 +247,27 @@ export default function AddActivityModal({
           readOnly={false}
           isMultiSelect={false}
         />
-        {/* Do a mapping to each actuator -> their status */}
-        {formik.values.room &&
-          <DropdownField
-            type="text"
-            fieldName="actuators"
-            formik={formik}
-            value={formik.values.actuators}
-            options={formik.values.room.roomactuators}
-            readOnly={false}
-            isMultiSelect={true}
-          />
-        }
+        {formik.values.room && (
+          <form className={s.wrapperAddActuators} onSubmit={formikActuators.handleSubmit}>
+            <DropdownField
+              type="text"
+              fieldName="actuator"
+              formik={formikActuators}
+              value={formikActuators.values.actuator}
+              options={formik.values.room.roomactuators}
+              readOnly={false}
+            />
+            <RenderActuatorProps 
+              formikParam={formikActuators} 
+            />
+            <button
+              type="button"
+              onClick={() => formikActuators.handleSubmit()}>
+              {t("addActuator")}
+              <IoMdAdd />
+            </button>
+          </form>
+        )}
       </div>
       <div className={s.arrayButtons}>
         <Button
