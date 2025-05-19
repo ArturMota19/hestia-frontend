@@ -63,9 +63,75 @@ const actuatorStatusMap = {
   ],
 };
 
+/*
+LAMPADA: switch_led (ON/OFF), bright_value_v2 (0–1000), temp_value_v2 (0–1000)
+CAFETEIRA: switch (ON/OFF)
+PLUG: switch_1 (ON/OFF)
+SOM: switch (ON/OFF), sound_volume (0–100)
+AR_CONDICIONADO: switch (ON/OFF), temp_set (16–30), mode (COLL/HOT/WET/WIND/AUTO)
+TV: switch (ON/OFF), sound_volume (0–100)
+SENSOR_PRESENCA: presence_state (ON/OFF), human_motion_state (NONE/SMALL_MOVE/LARGER_MOVE)
+*/
+
+function CheckValidProps(values) {
+  const actuatorName = values.actuator.name;
+  const statusProps = values.status;
+  const expectedProps = actuatorStatusMap[actuatorName];
+
+  if (!expectedProps) {
+    return { error: "unknownActuator" };
+  }
+
+  for (const prop of statusProps) {
+    const expectedProp = expectedProps.find((p) => p.name === prop.name);
+
+    if (!expectedProp) {
+      return { error: `unknownProp: ${prop.name}` };
+    }
+
+    if (expectedProp.type === "boolean") {
+      if (typeof prop.value !== "boolean") {
+        return { error: `invalidType: ${prop.name} should be boolean` };
+      }
+    } else if (expectedProp.type === "range") {
+      if (typeof prop.value !== "number" || prop.value < expectedProp.min || prop.value > expectedProp.max) {
+        return { error: `outOfRange: ${prop.name} should be between ${expectedProp.min} and ${expectedProp.max}` };
+      }
+    } else if (expectedProp.type === "enum") {
+      if (!expectedProp.options.includes(prop.value)) {
+        return { error: `invalidOption: ${prop.name} should be one of ${expectedProp.options.join(", ")}` };
+      }
+    } else {
+      return { error: `unknownType: ${expectedProp.type}` };
+    }
+  }
+
+  return { valid: true };
+}
+
+
 const RenderActuatorProps = ({ formikParam }) => {
-  let type = formikParam.values.actuator.name
+  let type = formikParam.values.actuator.name;
   const props = actuatorStatusMap[type];
+
+  useEffect(() => {
+    if (!props) return;
+    if (
+      !formikParam.values.status ||
+      formikParam.values.status.length !== props.length ||
+      formikParam.values.status.some((s, i) => s?.name !== props[i].name)
+    ) {
+      const initialStatus = props.map((prop) => {
+        let value = "";
+        if (prop.type === "boolean") value = false;
+        else if (prop.type === "range") value = prop.min ?? 0;
+        else if (prop.type === "enum") value = prop.options?.[0] ?? "";
+        return { name: prop.name, value };
+      });
+      formikParam.setFieldValue("status", initialStatus);
+    }
+    // eslint-disable-next-line
+  }, [type]);
 
   if (!props) return <p>Tipo desconhecido: {type}</p>;
 
@@ -79,7 +145,6 @@ const RenderActuatorProps = ({ formikParam }) => {
           } else if (prop.type === "range" || prop.type === "enum") {
             value = e.target.value;
           }
-          // Atualiza o status no formikParam.values.status
           const newStatus = [...formikParam.values.status];
           newStatus[idx] = { name: prop.name, value };
           formikParam.setFieldValue("status", newStatus);
@@ -113,7 +178,7 @@ const RenderActuatorProps = ({ formikParam }) => {
                     min={prop.min}
                     max={prop.max}
                     value={
-                      formikParam.values.status[idx]?.value || ""
+                      formikParam.values.status[idx]?.value ?? prop.min ?? 0
                     }
                     onChange={handleChange}
                   />
@@ -191,6 +256,7 @@ const RenderActuatorProps = ({ formikParam }) => {
     },
     validationSchema: validationSchemaActuators,
     onSubmit: async (values) => {
+      console.log(values)
       if(values.status.length < 1){
         toast.error("Adicione ao menos uma propriedade para o atuador.")
         return
@@ -198,6 +264,12 @@ const RenderActuatorProps = ({ formikParam }) => {
       if (actuatorsProps.some(a => a.actuator.name === values.actuator.name)) {
         toast.error("Este atuador já foi adicionado.");
         return;
+      }
+      const isValid = CheckValidProps(values)
+
+      if(isValid.error){
+        toast.error(isValid.error)
+        return
       }
       setActuatorsProps([...actuatorsProps, values])
       formikActuators.resetForm()
