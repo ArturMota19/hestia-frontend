@@ -120,24 +120,28 @@ function CheckValidProps(values) {
     initialValues: {
       activity: "",
       room: "",
-      associatedActivities: "",
     },
     validationSchema,
     onSubmit: async (values) => {
-      console.log(values);
-      setItems((prevItems) => [
-        ...prevItems,
-        {
-          id: prevItems.length + 1,
-          title: values.activity,
-          start: totalDuration,
-          duration: 1,
-        },
-      ]);
-      console.log(items, values);
-      setIsActivityModalOpen(false);
+      console.log("CHEGOU AQ")
+      console.log(values, actuatorsProps);
+      // setItems((prevItems) => [
+      //   ...prevItems,
+      //   {
+      //     id: prevItems.length + 1,
+      //     title: values.activity,
+      //     start: totalDuration,
+      //     duration: 1,
+      //   },
+      // ]);
+      // setIsActivityModalOpen(false);
     },
   });
+
+  /* DEBUG USEEFFECT */
+useEffect(() => {
+  console.log(formik.errors, formik.values)
+}, [formik.errors])
 
   const validationSchemaActuators = Yup.object().shape({
     actuator: Yup.mixed().required(t("requiredField")),
@@ -149,7 +153,6 @@ function CheckValidProps(values) {
     },
     validationSchema: validationSchemaActuators,
     onSubmit: async (values) => {
-      console.log(values)
       if(values.status.length < 1){
         toast.error("Adicione ao menos uma propriedade para o atuador.")
         return
@@ -278,7 +281,7 @@ function CheckValidProps(values) {
           }}
         />
         <Button
-          type="button"
+          type="submit"
           text={t("save")}
           backgroundColor={"primary"}
           height={42}
