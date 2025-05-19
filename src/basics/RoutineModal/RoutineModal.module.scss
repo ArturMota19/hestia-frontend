@@ -19,6 +19,13 @@
   gap: 16px;
 }
 
+  .wrapperEachActuatorSaved{
+    width: 100%;
+    gap: 16px;
+    display: flex;
+  }
+
+
 .inputWrapper {
   width: 100%;
 
@@ -38,6 +45,7 @@
     align-items: center;
     justify-content: center;
   }
+
 
   .internColors{
     color: var(--secondary-color);
@@ -270,9 +278,11 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: start;
   width: 60%;
   height: auto;
+  max-height: 80vh;
+  overflow-x: auto;
   gap: 8px;
   .wrapperInputs{
     width: 100%;

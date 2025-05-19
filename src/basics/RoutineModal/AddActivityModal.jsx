@@ -2,12 +2,14 @@
 import Button from "../Button/Button";
 import DropdownField from "../DropdownField/DropdownField";
 import { useTranslation } from "react-i18next";
+import RenderActuatorProps from "./RenderActuatorProps";
 // Images
 import { IoMdAdd } from "react-icons/io";
 // Imports
 
 import * as Yup from "yup";
 import { useFormik } from "formik";
+import Field from "../Field/Field";
 // Styles
 import s from "./RoutineModal.module.scss";
 import { useEffect, useState } from "react";
@@ -111,120 +113,6 @@ function CheckValidProps(values) {
   return { valid: true };
 }
 
-
-const RenderActuatorProps = ({ formikParam }) => {
-  let type = formikParam.values.actuator.name;
-  const props = actuatorStatusMap[type];
-
-  useEffect(() => {
-    if (!props) return;
-    if (
-      !formikParam.values.status ||
-      formikParam.values.status.length !== props.length ||
-      formikParam.values.status.some((s, i) => s?.name !== props[i].name)
-    ) {
-      const initialStatus = props.map((prop) => {
-        let value = "";
-        if (prop.type === "boolean") value = false;
-        else if (prop.type === "range") value = prop.min ?? 0;
-        else if (prop.type === "enum") value = prop.options?.[0] ?? "";
-        return { name: prop.name, value };
-      });
-      formikParam.setFieldValue("status", initialStatus);
-    }
-    // eslint-disable-next-line
-  }, [type]);
-
-  if (!props) return <p>Tipo desconhecido: {type}</p>;
-
-  return (
-    <div className={s.wrapperProps}>
-      {props.map((prop, idx) => {
-        const handleChange = (e) => {
-          let value;
-          if (prop.type === "boolean") {
-            value = e.target.checked;
-          } else if (prop.type === "range" || prop.type === "enum") {
-            value = e.target.value;
-          }
-          const newStatus = [...formikParam.values.status];
-          newStatus[idx] = { name: prop.name, value };
-          formikParam.setFieldValue("status", newStatus);
-        };
-
-        switch (prop.type) {
-          case "boolean":
-            return (
-              <div className={s.inputWrapper} key={prop.name}>
-                <label>
-                  {prop.name}:{" "}
-                  <input
-                    type="checkbox"
-                    className={s.checkBox}
-                    name={prop.name}
-                    checked={
-                      formikParam.values.status[idx]?.value || false
-                    }
-                    onChange={handleChange}
-                  />
-                </label>
-              </div>
-            );
-          case "range":
-            return (
-              <div className={s.inputWrapper} key={prop.name}>
-                <label>
-                  {prop.name}:{" "}
-                  <input
-                    type="number"
-                    name={prop.name}
-                    className={s.field}
-                    min={prop.min}
-                    max={prop.max}
-                    value={
-                      formikParam.values.status[idx]?.value ?? prop.min ?? 0
-                    }
-                    onChange={handleChange}
-                  />
-                </label>
-              </div>
-            );
-          case "enum":
-            return (
-              <div className={s.inputWrapper} key={prop.name}>
-                <label>
-                  {prop.name}:{" "}
-                  <select
-                    name={prop.name}
-                    className={s.field}
-                    value={
-                      formikParam.values.status[idx]?.value || ""
-                    }
-                    onChange={handleChange}
-                  >
-                    <option value="">Selecione</option>
-                    {prop.options.map((option) => (
-                      <option key={option} value={option}>
-                        {option}
-                      </option>
-                    ))}
-                  </select>
-                </label>
-              </div>
-            );
-          default:
-            return (
-              <div key={prop.name}>
-                <p>Tipo não suportado: {prop.type}</p>
-              </div>
-            );
-        }
-      })}
-    </div>
-  );
-};
-
-
   const validationSchema = Yup.object().shape({
     activity: Yup.mixed().required(t("requiredField")),
   });
@@ -295,8 +183,13 @@ const RenderActuatorProps = ({ formikParam }) => {
 
   useEffect(() => {
     GetActivities();
-    console.log(preset);
   }, []);
+
+  useEffect(() => {
+    // Every time the field value changes, I reset the actuators
+    setActuatorsProps([])
+    formikActuators.resetForm()
+  },[formik.values.room])
 
   return (
     <form className={s.activityForm} onSubmit={formik.handleSubmit}>
@@ -326,6 +219,34 @@ const RenderActuatorProps = ({ formikParam }) => {
         />
         {formik.values.room && (
           <form className={s.wrapperAddActuators} onSubmit={formikActuators.handleSubmit}>
+            {actuatorsProps.length > 0 &&
+              actuatorsProps.map((actuator) => {
+                return(
+                  <div className={s.wrapperEachActuatorSaved}>
+                    <Field
+                      type="text"
+                      fieldName="name"
+                      readOnly={true}
+                      isLogged={true}
+                      value={actuator.actuator.name}
+                    />
+                    {actuator.status.length > 0 &&
+                      actuator.status.map((prop) => {
+                        return(
+                          <Field
+                            type="text"
+                            fieldName={prop.name}
+                            readOnly={true}
+                            isLogged={true}
+                            value={prop.value}
+                          />
+                        )
+                      })
+                    }
+                  </div>
+                )
+              })
+            }
             <DropdownField
               type="text"
               fieldName="actuator"
