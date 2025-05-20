@@ -124,13 +124,12 @@ function CheckValidProps(values) {
     },
     validationSchema,
     onSubmit: async (values) => {
-      console.log("CHEGOU AQ")
-      console.log(values, actuatorsProps, otherActivities);
       let data = {
         id: values.activity.id,
         title: values.activity.name,
         start: totalDuration,
         duration: 1,
+        activity: values.activity,
         actuators: actuatorsProps,
         otherActivities: otherActivities
       }

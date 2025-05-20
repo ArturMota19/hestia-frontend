@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Draggable from "react-draggable";
 import { ResizableBox } from "react-resizable";
 import "react-resizable/css/styles.css";
@@ -40,6 +40,10 @@ export default function RoutineModal({
       return newStart < existingEnd && existingStart < newEnd;
     });
   }
+
+  // useEffect(() => {
+  //   console.log(items)
+  // }, [items])
   
 
   const handleDragStop = (e, data, id) => {
@@ -207,7 +211,7 @@ export default function RoutineModal({
                             onMouseDown={(e) => e.stopPropagation()}
                           />
                         }>
-                        <div className={`${s.eventBox} drag-handle`}>
+                        <div className={`${s.eventBox} drag-handle`} style={{background: item.activity.color}}>
                           <p>{item.title}</p>
                         </div>
                       </ResizableBox>
