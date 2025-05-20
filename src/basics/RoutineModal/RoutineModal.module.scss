@@ -12,6 +12,30 @@
   justify-content: center;
 }
 
+.otherActivityWrapper{
+  width: 100%;
+  display: flex;
+  gap: 16px
+}
+
+.closeModal{
+  position: absolute;
+  top: -12px;
+  right: -12px;
+  cursor: pointer;
+  button{
+    background-color: transparent;
+    border: none;
+    font-size: 24px;
+    color: var(--primary-color);
+    cursor: pointer;
+    img{
+      width: 25px;
+      height: 25px;
+    }
+  }
+}
+
 .wrapperProps{
   width: 100%;
   display: flex !important;

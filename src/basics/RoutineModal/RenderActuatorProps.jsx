@@ -128,7 +128,7 @@ const RenderActuatorProps = ({formikParam}) => {
     formikParam.setFieldValue(`status[${idx}].value`, value);
   }, [formikParam.setFieldValue]);
 
-  if (!props) return <p>Tipo desconhecido: {type}</p>;
+  if (!props) return null;
 
   return (
     <div className={s.wrapperProps}>

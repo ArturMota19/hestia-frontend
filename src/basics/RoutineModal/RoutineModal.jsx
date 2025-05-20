@@ -7,6 +7,7 @@ import Button from "../Button/Button";
 import { useTranslation } from "react-i18next";
 import AddActivityModal from "./AddActivityModal";
 import toast from "react-hot-toast";
+import closeIcon from "../../assets/icons/basicIcons/close-icon.svg";
 
 export default function RoutineModal({
   isOpen,
@@ -125,6 +126,11 @@ export default function RoutineModal({
     <section className={s.wrapperModal}>
       <div className={s.timeline}>
         <div className={s.fixedHeader}>
+          <div className={s.closeModal}>
+              <button type="button" onClick={() => setIsOpen(false)}>
+                <img src={closeIcon} alt="Close Modal" />
+              </button>
+            </div>
           <section className={s.titleRoutine}>
             <p>{person.name}</p>
             <p>{t(weekDay)}</p>

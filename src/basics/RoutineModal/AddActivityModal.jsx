@@ -27,6 +27,7 @@ export default function AddActivityModal({
   const [enumActivities, setEnumActivities] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [actuatorsProps, setActuatorsProps] = useState([]);
+  const [otherActivities, setOtherActivities] = useState([])
   const totalDuration = items.reduce((sum, item) => sum + item.duration, 0);
   const { t } = useTranslation();
 
@@ -124,24 +125,22 @@ function CheckValidProps(values) {
     validationSchema,
     onSubmit: async (values) => {
       console.log("CHEGOU AQ")
-      console.log(values, actuatorsProps);
-      // setItems((prevItems) => [
-      //   ...prevItems,
-      //   {
-      //     id: prevItems.length + 1,
-      //     title: values.activity,
-      //     start: totalDuration,
-      //     duration: 1,
-      //   },
-      // ]);
-      // setIsActivityModalOpen(false);
+      console.log(values, actuatorsProps, otherActivities);
+      let data = {
+        id: values.activity.id,
+        title: values.activity.name,
+        start: totalDuration,
+        duration: 1,
+        actuators: actuatorsProps,
+        otherActivities: otherActivities
+      }
+      setItems((prevItems) => [
+        ...prevItems,
+        data
+      ]);
+      setIsActivityModalOpen(false);
     },
   });
-
-  /* DEBUG USEEFFECT */
-useEffect(() => {
-  console.log(formik.errors, formik.values)
-}, [formik.errors])
 
   const validationSchemaActuators = Yup.object().shape({
     actuator: Yup.mixed().required(t("requiredField")),
@@ -169,6 +168,35 @@ useEffect(() => {
       }
       setActuatorsProps([...actuatorsProps, values])
       formikActuators.resetForm()
+    },
+  });
+
+  const validationSchemaOtherActivities = Yup.object().shape({
+    otherActivity: Yup.mixed().required(t("requiredField")),
+    probability: Yup.number()
+      .typeError(t("requiredField"))
+      .required(t("requiredField"))
+      .min(0, t("minValue", { min: 0 }))
+      .max(1, t("maxValue", { max: 1 })),
+  });
+  const formikOtherActivities = useFormik({
+    initialValues: {
+      otherActivity: null,
+      probability: "",
+    },
+    validationSchema: validationSchemaOtherActivities,
+    onSubmit: async (values) => {
+      if(values.otherActivity.id == formik.values.activity.id){
+        toast.error("Atividade já selecionada como principal.")
+        return
+      }
+      if (otherActivities.some(a => a.otherActivity.id === values.otherActivity.id)) {
+        toast.error("Esta atividade já foi adicionada.");
+        return;
+      }
+
+      setOtherActivities([...otherActivities, values])
+      formikOtherActivities.resetForm()
     },
   });
 
@@ -210,6 +238,56 @@ useEffect(() => {
           <p className={s.errorValue}>
             {t("errorValue")}: {formik.values.activity.errorValue}
           </p>
+        )}
+        {formik.values.activity && (
+          <form className={s.wrapperAddActuators} onSubmit={formikOtherActivities.handleSubmit}>
+            {otherActivities.length > 0 &&
+              otherActivities.map((activity) => {
+                return(
+                  <div className={s.wrapperEachActuatorSaved}>
+                    <Field
+                      type="text"
+                      fieldName="name"
+                      readOnly={true}
+                      isLogged={true}
+                      value={activity.otherActivity.name}
+                    />
+                    <Field
+                      type="text"
+                      fieldName="name"
+                      readOnly={true}
+                      isLogged={true}
+                      value={activity.probability}
+                    />
+                  </div>
+                )
+              })
+            }
+            <div className={s.otherActivityWrapper}>
+              <DropdownField
+              type="text"
+              fieldName="otherActivity"
+              formik={formikOtherActivities}
+              value={formikOtherActivities.values.activity}
+              options={enumActivities}
+              readOnly={false}
+              />
+              <Field
+                type="number"
+                fieldName="probability"
+                readOnly={false}
+                formik={formikOtherActivities}
+                isLogged={true}
+                value={formikOtherActivities.values.probability}
+              />
+            </div>
+            <button
+              type="button"
+              onClick={() => formikOtherActivities.handleSubmit()}>
+              {t("addOtherActivity")}
+              <IoMdAdd />
+            </button>
+          </form>
         )}
         <DropdownField
           type="text"
