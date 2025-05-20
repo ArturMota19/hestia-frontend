@@ -133,6 +133,7 @@ function CheckValidProps(values) {
         actuators: actuatorsProps,
         otherActivities: otherActivities
       }
+      console.log(data)
       setItems((prevItems) => [
         ...prevItems,
         data
