@@ -136,7 +136,7 @@ export default function RoutineModal({
               </button>
             </div>
           <section className={s.titleRoutine}>
-            <p>{person.name}</p>
+            <p>{person?.peopleName}</p>
             <p>{t(weekDay)}</p>
             <p>{preset.name}</p>
           </section>

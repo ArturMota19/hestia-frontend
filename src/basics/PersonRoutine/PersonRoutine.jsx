@@ -13,7 +13,7 @@ export default function PersonRoutine({ person, setIsModalOpen, setPerson, setWe
   const { t } = useTranslation();
 
   function openModal(day){
-    setPerson(person.person)
+    setPerson(person)
     setWeekDay(day.dayName)
     setIsModalOpen(true)
   }
@@ -57,7 +57,7 @@ export default function PersonRoutine({ person, setIsModalOpen, setPerson, setWe
 
   return (
     <section className={s.wrapperEachPerson}>
-      <h3>{person.person.name}</h3>
+      <h3>{person.peopleName}</h3>
       <div>
         <EachDay day={person.monday} />
         <EachDay day={person.tuesday} />

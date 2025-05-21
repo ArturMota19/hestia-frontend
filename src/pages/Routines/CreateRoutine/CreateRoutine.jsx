@@ -58,22 +58,55 @@ export default function CreateRoutine() {
     },
   });
 
+  async function AddPeopleGraph(array){
+    console.log(array)
+    if(people.length > 0){
+      const filteredPeople = people.filter((person) => person.peopleId === array.peopleId)
+      if(filteredPeople.length > 0 ){
+        return
+      }
+    }
+    setPeople((prevItems) => [
+      ...prevItems,
+      {
+        peopleId: array.peopleId,
+        peopleName: array.peopleName,
+        monday: { dayName: "monday", dayId: array.mondayRoutineId, routine: [] },
+        tuesday: { dayName: "tuesday", dayId: array.tuesdayRoutineId, routine: [] },
+        wednesday: { dayName: "wednesday", dayId: array.wednesdayRoutineId, routine: [] },
+        thursday: { dayName: "thursday", dayId: array.thursdayRoutineId, routine: [] },
+        friday: { dayName: "friday", dayId: array.fridayRoutineId, routine: [] },
+        saturday: { dayName: "saturday", dayId: array.saturdayRoutineId, routine: [] },
+        sunday: { dayName: "sunday", dayId: array.sundayRoutineId, routine: [] },
+      },
+    ]);
+  }
+
   async function GetCreatedRoutines(){
-    if(formikPresets.values.preset == "") return
+    if(formikPresets.values.preset == ""){
+      return
+    }
     const response = await BaseRequest({
       method: "GET",
       url: `routines/getPeopleRoutinesByPresetId/${formikPresets.values.preset.id}`,
       isAuth: true,
       setIsLoading
     })
-    console.log(response)
     if(response.status == 200){
-      console.log(response)
+      if(response.data.length == 0){
+        setPeople([])
+        return
+      }
+      response.data.map((personRoutine) => {
+        AddPeopleGraph(personRoutine)
+      })
+
     }
   }
 
   useEffect(() => {
     GetCreatedRoutines()
+    
   }, [formikPresets.values.preset])
 
   async function GetPeople(){
@@ -102,14 +135,13 @@ export default function CreateRoutine() {
     },
     validationSchema: validationSchemaPerson,
     onSubmit: async (values) => {
-      console.log(values)
       if (people.length > 0) {
         const filteredPerson = people.filter(
-          (people) => people.person.id === values.person.id
+          (people) => people.peopleId === values.person.id
         );
         if (filteredPerson.length > 0) {
           toast.error(
-            `A ${filteredPerson[0].person} já possui uma rotina cadastrada.`,
+            `A ${filteredPerson[0].peopleId} já possui uma rotina cadastrada.`,
             {
               duration: 4000,
               position: "top-center",
@@ -129,20 +161,9 @@ export default function CreateRoutine() {
         setIsLoading,
         isAuth: true
       })
-      console.log(response)
-      // setPeople((prevItems) => [
-      //   ...prevItems,
-      //   {
-      //     person: values.person,
-      //     monday: { dayName: "monday", routine: [] },
-      //     tuesday: { dayName: "tuesday", routine: [] },
-      //     wednesday: { dayName: "wednesday", routine: [] },
-      //     thursday: { dayName: "thursday", routine: [] },
-      //     friday: { dayName: "friday", routine: [] },
-      //     saturday: { dayName: "saturday", routine: [] },
-      //     sunday: { dayName: "sunday", routine: [] },
-      //   },
-      // ]);
+      if(response.status == 201){
+        AddPeopleGraph(response.data.peopleRoutines)
+      }
       
     },
   });
