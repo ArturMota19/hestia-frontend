@@ -57,13 +57,13 @@ export async function BaseRequest({
         toast.error("Informações não encontradas.",{
           toastId: "notFound",
         });
-      } else if (status === 500) {
-        toast.error("Erro interno do servidor.",{
+      } else if (status === 409) {
+        toast.error("Conflito de informações. Essas informações já existem no Banco de Dados.",{
           toastId: "serverError",
         });
-      } else if (error.response.data.error == "failed to delete asset: another asset holds a reference to this one"){
-        toast.error("Erro ao excluir o ativo. Outro ativo possui referência a este.",{
-          toastId: "deleteError",
+      }  else if (status === 500) {
+        toast.error("Erro interno do servidor.",{
+          toastId: "serverError",
         });
       } 
       else {

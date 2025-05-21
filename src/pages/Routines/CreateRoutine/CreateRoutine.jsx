@@ -45,6 +45,37 @@ export default function CreateRoutine() {
     GetPresets()
   },[])
 
+  const validationSchema = Yup.object().shape({
+    preset: Yup.mixed().required(t("requiredField")),
+  });
+  const formikPresets = useFormik({
+    initialValues: {
+      preset: "",
+    },
+    validationSchema: validationSchema,
+    onSubmit: async (values) => {
+      console.log(values);
+    },
+  });
+
+  async function GetCreatedRoutines(){
+    if(formikPresets.values.preset == "") return
+    const response = await BaseRequest({
+      method: "GET",
+      url: `routines/getPeopleRoutinesByPresetId/${formikPresets.values.preset.id}`,
+      isAuth: true,
+      setIsLoading
+    })
+    console.log(response)
+    if(response.status == 200){
+      console.log(response)
+    }
+  }
+
+  useEffect(() => {
+    GetCreatedRoutines()
+  }, [formikPresets.values.preset])
+
   async function GetPeople(){
       const response = await BaseRequest({
       method: "GET",
@@ -59,20 +90,9 @@ export default function CreateRoutine() {
 
   useEffect(() => {
     GetPeople()
-  }, [presets])
+  }, [formikPresets.values.preset])
 
-  const validationSchema = Yup.object().shape({
-    preset: Yup.mixed().required(t("requiredField")),
-  });
-  const formikPresets = useFormik({
-    initialValues: {
-      preset: "",
-    },
-    validationSchema: validationSchema,
-    onSubmit: async (values) => {
-      console.log(values);
-    },
-  });
+
   const validationSchemaPerson = Yup.object().shape({
     person: Yup.mixed().required(t("requiredField")),
   });
@@ -82,9 +102,10 @@ export default function CreateRoutine() {
     },
     validationSchema: validationSchemaPerson,
     onSubmit: async (values) => {
+      console.log(values)
       if (people.length > 0) {
         const filteredPerson = people.filter(
-          (people) => people.person === values.person
+          (people) => people.person.id === values.person.id
         );
         if (filteredPerson.length > 0) {
           toast.error(
@@ -97,19 +118,32 @@ export default function CreateRoutine() {
           return;
         }
       }
-      setPeople((prevItems) => [
-        ...prevItems,
-        {
-          person: values.person,
-          monday: { dayName: "monday", routine: [] },
-          tuesday: { dayName: "tuesday", routine: [] },
-          wednesday: { dayName: "wednesday", routine: [] },
-          thursday: { dayName: "thursday", routine: [] },
-          friday: { dayName: "friday", routine: [] },
-          saturday: { dayName: "saturday", routine: [] },
-          sunday: { dayName: "sunday", routine: [] },
-        },
-      ]);
+      let data = {
+        personId: values.person.id,
+        housePresetId: formikPresets.values.preset.id
+      }
+      const response = await BaseRequest({
+        method: "POST",
+        url: "routines/registerPeopleDayRoutines",
+        data,
+        setIsLoading,
+        isAuth: true
+      })
+      console.log(response)
+      // setPeople((prevItems) => [
+      //   ...prevItems,
+      //   {
+      //     person: values.person,
+      //     monday: { dayName: "monday", routine: [] },
+      //     tuesday: { dayName: "tuesday", routine: [] },
+      //     wednesday: { dayName: "wednesday", routine: [] },
+      //     thursday: { dayName: "thursday", routine: [] },
+      //     friday: { dayName: "friday", routine: [] },
+      //     saturday: { dayName: "saturday", routine: [] },
+      //     sunday: { dayName: "sunday", routine: [] },
+      //   },
+      // ]);
+      
     },
   });
 
