@@ -59,8 +59,30 @@ export default function CreateRoutine() {
   });
 
   async function FetchAllRoutinesDays(){
-    
+    if(!formikPresets.values.preset) return
+    const arrayIds = []
+    for(const person of people){
+      arrayIds.push(person.peopleRoutineId)
+    }
+    const data = {
+      peopleRoutinesIds: arrayIds
+    }
+    const response = await BaseRequest({
+      method: "POST",
+      url: `routines/getAllRoutinesDays`,
+      data,
+      isAuth: true,
+      setIsLoading,
+    })
+    if(response.status == 200){
+      setPeople(response.data)
+    }
+    console.log(response)
   }
+
+  useEffect(() => {
+    FetchAllRoutinesDays()
+  },[formikPresets.values.preset])
 
   async function AddPeopleGraph(array){
     if(people.length > 0){
@@ -72,6 +94,7 @@ export default function CreateRoutine() {
     setPeople((prevItems) => [
       ...prevItems,
       {
+        peopleRoutineId: array.id,
         peopleId: array.peopleId,
         peopleName: array.peopleName,
         monday: { dayName: "monday", dayId: array.mondayRoutineId, routine: [] },
