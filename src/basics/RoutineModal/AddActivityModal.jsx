@@ -22,6 +22,7 @@ export default function AddActivityModal({
   items,
   setItems,
   preset,
+  weekDay
 }) {
   if (!isActivityModalOpen) return null;
   const [enumActivities, setEnumActivities] = useState([]);
@@ -131,14 +132,16 @@ function CheckValidProps(values) {
         duration: 1,
         activity: values.activity,
         actuators: actuatorsProps,
-        otherActivities: otherActivities
+        otherActivities: otherActivities,
+        presetId: preset.id,
+        dayRoutineId: weekDay.dayId
       }
       console.log(data)
-      setItems((prevItems) => [
-        ...prevItems,
-        data
-      ]);
-      setIsActivityModalOpen(false);
+      // setItems((prevItems) => [
+      //   ...prevItems,
+      //   data
+      // ]);
+      // setIsActivityModalOpen(false);
     },
   });
 

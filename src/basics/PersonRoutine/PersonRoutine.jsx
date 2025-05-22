@@ -14,7 +14,7 @@ export default function PersonRoutine({ person, setIsModalOpen, setPerson, setWe
 
   function openModal(day){
     setPerson(person)
-    setWeekDay(day.dayName)
+    setWeekDay(day)
     setIsModalOpen(true)
   }
 

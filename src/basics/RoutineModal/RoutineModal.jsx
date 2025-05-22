@@ -115,8 +115,8 @@ export default function RoutineModal({
       p.person === person
         ? {
           ...p,
-          [weekDay]: {
-          ...p[weekDay],
+          [weekDay.dayName]: {
+          ...p[weekDay.dayName],
           routine: activities,
           },
         }
@@ -137,7 +137,7 @@ export default function RoutineModal({
             </div>
           <section className={s.titleRoutine}>
             <p>{person?.peopleName}</p>
-            <p>{t(weekDay)}</p>
+            <p>{t(weekDay.dayName)}</p>
             <p>{preset.name}</p>
           </section>
           <section className={s.addActivityButton}>
@@ -157,6 +157,7 @@ export default function RoutineModal({
           items={items}
           setItems={setItems}
           preset={preset}
+          weekDay={weekDay}
         />
         {items.length > 0 && (
           <>
