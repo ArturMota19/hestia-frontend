@@ -105,7 +105,6 @@ export default function RoutineModal({
         });
         return;
     }
-    console.log(items)
     const response = await BaseRequest({
       method: "PUT",
       url: `routines/updateRoutineActivities`,
@@ -113,10 +112,11 @@ export default function RoutineModal({
       setIsLoading,
       isAuth: true
     })
-    console.log(response)
+    if(response.status == 200){
+      toast.success("Rotina e Atividades salvas com sucesso.")
+      setIsOpen(false)
+    }
 
-
-    //setIsOpen(false)
     // let activities = items.map((item) => {
     //     const startHours = item.start / 2;
     //     const durationHours = item.duration / 2;

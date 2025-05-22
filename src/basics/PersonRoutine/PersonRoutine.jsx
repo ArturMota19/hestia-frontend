@@ -36,16 +36,15 @@ export default function PersonRoutine({ person, setIsModalOpen, setPerson, setWe
         </div>
       </div>
       <div className={s.routineActions}>
-        {day.routine.map((activity) => {
+        {day.routine.slice(0).reverse().map((activity) => {
         const totalDuration = day.routine.reduce((sum, act) => sum + act.duration, 0);
         const widthPercentage = (activity.duration / totalDuration) * 100;
-
         return (
           <div
           key={activity.id}
           className={s.activityBlock}
           title={activity.title}
-          style={{ width: `${widthPercentage}%`}} // Example color
+          style={{ width: `${widthPercentage}%`, backgroundColor: activity.color}} // Example color
           >
           </div>
         );
