@@ -137,7 +137,6 @@ function CheckValidProps(values) {
         presetId: preset.id,
         dayRoutineId: weekDay.dayId
       }
-      console.log(data)
       const response = await BaseRequest({
         method: "POST",
         url: `routines/register`,
@@ -145,15 +144,10 @@ function CheckValidProps(values) {
         data,
         setIsLoading
       })
-      console.log(response)
       if(response.status == 201){
         toast.success("Atividade criada com sucesso.")
       }
-      // setItems((prevItems) => [
-      //   ...prevItems,
-      //   data
-      // ]);
-      // setIsActivityModalOpen(false);
+      setIsActivityModalOpen(false);
     },
   });
 

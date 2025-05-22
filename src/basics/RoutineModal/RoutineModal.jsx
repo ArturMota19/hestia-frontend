@@ -50,9 +50,7 @@ export default function RoutineModal({
       url: `routines/getRoutine/${weekDay.dayId}`,
       setIsLoading,
     })
-    console.log(items)
     if(response.status == 200){
-      console.log(items)
       setItems(response.data)
     }
   }
@@ -107,38 +105,50 @@ export default function RoutineModal({
         });
         return;
     }
-    let activities = items.map((item) => {
-        const startHours = item.start / 2;
-        const durationHours = item.duration / 2;
-        const endHours = startHours + durationHours;
-        const formatTime = (hours) => {
-            const h = Math.floor(hours);
-            const m = Math.round((hours - h) * 60);
-            return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
-        };
-        return {
-            id: item.id,
-            title: item.title,
-            startTime: formatTime(startHours),
-            endTime: formatTime(endHours),
-            duration: durationHours // em horas, opcional
-        };
-    });
-    people.filter((p) => p.person === person)
-    setPeople((prevPeople) =>
-      prevPeople.map((p) =>
-      p.person === person
-        ? {
-          ...p,
-          [weekDay.dayName]: {
-          ...p[weekDay.dayName],
-          routine: activities,
-          },
-        }
-        : p
-      )
-    );
-    setIsOpen(false)
+    console.log(items)
+    const response = await BaseRequest({
+      method: "PUT",
+      url: `routines/updateRoutineActivities`,
+      data: items,
+      setIsLoading,
+      isAuth: true
+    })
+    console.log(response)
+
+
+    //setIsOpen(false)
+    // let activities = items.map((item) => {
+    //     const startHours = item.start / 2;
+    //     const durationHours = item.duration / 2;
+    //     const endHours = startHours + durationHours;
+    //     const formatTime = (hours) => {
+    //         const h = Math.floor(hours);
+    //         const m = Math.round((hours - h) * 60);
+    //         return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+    //     };
+    //     return {
+    //         id: item.id,
+    //         title: item.title,
+    //         startTime: formatTime(startHours),
+    //         endTime: formatTime(endHours),
+    //         duration: durationHours // em horas, opcional
+    //     };
+    // });
+    // people.filter((p) => p.person === person)
+    // setPeople((prevPeople) =>
+    //   prevPeople.map((p) =>
+    //   p.person === person
+    //     ? {
+    //       ...p,
+    //       [weekDay.dayName]: {
+    //       ...p[weekDay.dayName],
+    //       routine: activities,
+    //       },
+    //     }
+    //     : p
+    //   )
+    // );
+
 }
 
   return (

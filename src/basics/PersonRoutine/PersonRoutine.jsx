@@ -25,7 +25,7 @@ export default function PersonRoutine({ person, setIsModalOpen, setPerson, setWe
         <h4>{t(day.dayName)}</h4>
         <div className={s.internActionsButton}>
         {day.routine.length > 0 ? (
-          <button>
+          <button onClick={() => openModal(day)}>
           <MdModeEdit />
           </button>
         ) : (

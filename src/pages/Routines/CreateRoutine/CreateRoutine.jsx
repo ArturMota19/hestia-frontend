@@ -27,6 +27,7 @@ export default function CreateRoutine() {
   const [people, setPeople] = useState([]);
   const [presets, setPresets] = useState([])
   const [enumPeople, setEnumPeople] = useState([])
+  const [hasToSavePeople, setHasToSavePeople] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
 
   async function GetPresets(){
@@ -59,7 +60,7 @@ export default function CreateRoutine() {
   });
 
   async function FetchAllRoutinesDays(){
-    if(!formikPresets.values.preset) return
+    if(!formikPresets.values.preset || people.length == 0 || hasToSavePeople) return
     const arrayIds = []
     for(const person of people){
       arrayIds.push(person.peopleRoutineId)
@@ -74,15 +75,18 @@ export default function CreateRoutine() {
       isAuth: true,
       setIsLoading,
     })
+    console.log(response)
     if(response.status == 200){
       setPeople(response.data)
+      setHasToSavePeople(true)
     }
-    console.log(response)
   }
 
   useEffect(() => {
-    FetchAllRoutinesDays()
-  },[formikPresets.values.preset])
+    if (formikPresets.values.preset && people.length > 0) {
+      FetchAllRoutinesDays();
+    }
+  },[formikPresets.values.preset, people])
 
   async function AddPeopleGraph(array){
     if(people.length > 0){
