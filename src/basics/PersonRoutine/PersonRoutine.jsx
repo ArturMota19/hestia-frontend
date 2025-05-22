@@ -19,6 +19,9 @@ export default function PersonRoutine({ person, setIsModalOpen, setPerson, setWe
   }
 
   const EachDay = ({ day }) => {
+    // Ordena as atividades pelo campo "start"
+    const sortedRoutine = [...day.routine].sort((a, b) => a.start - b.start);
+
     return (
       <div className={s.eachDayWrapper}>
       <div className={s.dayName}>
@@ -36,15 +39,15 @@ export default function PersonRoutine({ person, setIsModalOpen, setPerson, setWe
         </div>
       </div>
       <div className={s.routineActions}>
-        {day.routine.slice(0).reverse().map((activity) => {
-        const totalDuration = day.routine.reduce((sum, act) => sum + act.duration, 0);
+        {sortedRoutine.map((activity) => {
+        const totalDuration = sortedRoutine.reduce((sum, act) => sum + act.duration, 0);
         const widthPercentage = (activity.duration / totalDuration) * 100;
         return (
           <div
           key={activity.id}
           className={s.activityBlock}
           title={activity.title}
-          style={{ width: `${widthPercentage}%`, backgroundColor: activity.color}} // Example color
+          style={{ width: `${widthPercentage}%`, backgroundColor: activity.color }}
           >
           </div>
         );

@@ -17,7 +17,8 @@ export default function RoutineModal({
   weekDay,
   preset,
   people,
-  setPeople
+  setPeople,
+  setHasToSavePeople
 }) {
   if (!isOpen) return null;
   const { t } = useTranslation();
@@ -57,7 +58,7 @@ export default function RoutineModal({
 
   useEffect(() => {
     GetActivityRoutines()
-  }, [])
+  }, [isActivityModalOpen])
   
 
   const handleDragStop = (e, data, id) => {
@@ -113,42 +114,10 @@ export default function RoutineModal({
       isAuth: true
     })
     if(response.status == 200){
+      setHasToSavePeople(false)
       toast.success("Rotina e Atividades salvas com sucesso.")
       setIsOpen(false)
     }
-
-    // let activities = items.map((item) => {
-    //     const startHours = item.start / 2;
-    //     const durationHours = item.duration / 2;
-    //     const endHours = startHours + durationHours;
-    //     const formatTime = (hours) => {
-    //         const h = Math.floor(hours);
-    //         const m = Math.round((hours - h) * 60);
-    //         return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
-    //     };
-    //     return {
-    //         id: item.id,
-    //         title: item.title,
-    //         startTime: formatTime(startHours),
-    //         endTime: formatTime(endHours),
-    //         duration: durationHours // em horas, opcional
-    //     };
-    // });
-    // people.filter((p) => p.person === person)
-    // setPeople((prevPeople) =>
-    //   prevPeople.map((p) =>
-    //   p.person === person
-    //     ? {
-    //       ...p,
-    //       [weekDay.dayName]: {
-    //       ...p[weekDay.dayName],
-    //       routine: activities,
-    //       },
-    //     }
-    //     : p
-    //   )
-    // );
-
 }
 
   return (
