@@ -131,12 +131,24 @@ function CheckValidProps(values) {
         start: totalDuration,
         duration: 1,
         activity: values.activity,
+        room: values.room,
         actuators: actuatorsProps,
         otherActivities: otherActivities,
         presetId: preset.id,
         dayRoutineId: weekDay.dayId
       }
       console.log(data)
+      const response = await BaseRequest({
+        method: "POST",
+        url: `routines/register`,
+        isAuth: true,
+        data,
+        setIsLoading
+      })
+      console.log(response)
+      if(response.status == 201){
+        toast.success("Atividade criada com sucesso.")
+      }
       // setItems((prevItems) => [
       //   ...prevItems,
       //   data

@@ -8,6 +8,7 @@ import { useTranslation } from "react-i18next";
 import AddActivityModal from "./AddActivityModal";
 import toast from "react-hot-toast";
 import closeIcon from "../../assets/icons/basicIcons/close-icon.svg";
+import { BaseRequest } from "../../services/BaseRequest";
 
 export default function RoutineModal({
   isOpen,
@@ -22,6 +23,7 @@ export default function RoutineModal({
   const { t } = useTranslation();
 
   const [isActivityModalOpen, setIsActivityModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false)
 
   // items array
   const [items, setItems] = useState([]);
@@ -41,9 +43,23 @@ export default function RoutineModal({
     });
   }
 
-  // useEffect(() => {
-  //   console.log(items)
-  // }, [items])
+  async function GetActivityRoutines(){
+    const response = await BaseRequest({
+      method: "GET",
+      isAuth: true,
+      url: `routines/getRoutine/${weekDay.dayId}`,
+      setIsLoading,
+    })
+    console.log(items)
+    if(response.status == 200){
+      console.log(items)
+      setItems(response.data)
+    }
+  }
+
+  useEffect(() => {
+    GetActivityRoutines()
+  }, [])
   
 
   const handleDragStop = (e, data, id) => {
@@ -100,7 +116,6 @@ export default function RoutineModal({
             const m = Math.round((hours - h) * 60);
             return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
         };
-
         return {
             id: item.id,
             title: item.title,
@@ -212,7 +227,7 @@ export default function RoutineModal({
                             onMouseDown={(e) => e.stopPropagation()}
                           />
                         }>
-                        <div className={`${s.eventBox} drag-handle`} style={{background: item.activity.color}}>
+                        <div className={`${s.eventBox} drag-handle`} style={{background: item.color}}>
                           <p>{item.title}</p>
                         </div>
                       </ResizableBox>

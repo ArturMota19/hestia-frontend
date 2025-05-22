@@ -58,8 +58,11 @@ export default function CreateRoutine() {
     },
   });
 
+  async function FetchAllRoutinesDays(){
+    
+  }
+
   async function AddPeopleGraph(array){
-    console.log(array)
     if(people.length > 0){
       const filteredPeople = people.filter((person) => person.peopleId === array.peopleId)
       if(filteredPeople.length > 0 ){
