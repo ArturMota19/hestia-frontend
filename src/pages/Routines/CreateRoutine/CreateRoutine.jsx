@@ -75,6 +75,7 @@ export default function CreateRoutine() {
       isAuth: true,
       setIsLoading,
     })
+    console.log(response.data)
     if(response.status == 200){
       setPeople(response.data)
       setHasToSavePeople(true)
@@ -85,7 +86,7 @@ export default function CreateRoutine() {
     if (formikPresets.values.preset && people.length > 0) {
       FetchAllRoutinesDays();
     }
-  },[formikPresets.values.preset, people, isModalOpen])
+  },[formikPresets.values.preset, people, isModalOpen, hasToSavePeople])
 
   async function AddPeopleGraph(array){
     if(people.length > 0){
@@ -94,6 +95,7 @@ export default function CreateRoutine() {
         return
       }
     }
+    
     setPeople((prevItems) => [
       ...prevItems,
       {
@@ -124,6 +126,7 @@ export default function CreateRoutine() {
     if(response.status == 200){
       if(response.data.length == 0){
         setPeople([])
+            setHasToSavePeople(false)
         return
       }
       response.data.map((personRoutine) => {
@@ -134,7 +137,6 @@ export default function CreateRoutine() {
   }
 
   useEffect(() => {
-    setHasToSavePeople(false)
     GetCreatedRoutines()
     
   }, [formikPresets.values.preset])
