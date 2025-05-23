@@ -120,8 +120,51 @@ export default function RoutineModal({
     }
 }
 
+const [deleteActivity, setDeleteActivity] = useState("")
+const DeleteModal = () => {
+  if(deleteActivity == {} || deleteActivity == "") return null
+  return(
+    <div className={s.deleteModal}>
+      <h5>Deletar Atividade?</h5>
+      <h6>{deleteActivity.title}</h6>
+      <div className={s.wrapperDeleteButtons}>
+        <Button
+          text={t("no")}
+          backgroundColor={"primary"}
+          height={42}
+          doFunction={() => setDeleteActivity("")}
+          isLoading={isLoading}
+        />
+        <Button
+          text={t("yes")}
+          backgroundColor={"delete"}
+          height={42}
+          doFunction={() => DeleteActivityRequest()}
+          isLoading={isLoading}
+        />
+      </div>
+    </div>
+  )
+}
+
+async function DeleteActivityRequest(){
+  const response = await BaseRequest({
+    method: "DELETE",
+    url:`routines/deleteActivity/${deleteActivity.id}`,
+    isAuth: true,
+    setIsLoading,
+  })
+  if(response.status == 200){
+    toast.success("Atividade deletada com sucesso.")
+    setDeleteActivity("")
+    setHasToSavePeople(false)
+    GetActivityRoutines()
+  }
+}
+
   return (
     <section className={s.wrapperModal}>
+      <DeleteModal/>
       <div className={s.timeline}>
         <div className={s.fixedHeader}>
           <div className={s.closeModal}>
@@ -199,6 +242,10 @@ export default function RoutineModal({
                         onResizeStop={(e, data) =>
                           handleResizeStop(e, data, item.id)
                         }
+                        onContextMenu={(e) => {
+                          e.preventDefault();
+                          setDeleteActivity(item);
+                          }}
                         resizeHandles={["e"]}
                         handle={
                           <span
@@ -206,7 +253,7 @@ export default function RoutineModal({
                             onMouseDown={(e) => e.stopPropagation()}
                           />
                         }>
-                        <div className={`${s.eventBox} drag-handle`} style={{background: item.color}}>
+                        <div  className={`${s.eventBox} drag-handle`} style={{background: item.color}}>
                           <p>{item.title}</p>
                         </div>
                       </ResizableBox>
