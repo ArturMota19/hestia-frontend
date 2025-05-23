@@ -8,9 +8,14 @@ import { IoMdAdd } from "react-icons/io";
 // Styles
 import { useTranslation } from "react-i18next";
 import s from "./PersonRoutine.module.scss";
+import Button from "../Button/Button";
+import { useState } from "react";
+import { BaseRequest } from "../../services/BaseRequest";
+import toast from "react-hot-toast";
 
-export default function PersonRoutine({ person, setIsModalOpen, setPerson, setWeekDay }) {
+export default function PersonRoutine({ person, setIsModalOpen, setPerson, setWeekDay, preset, ResetPreset }) {
   const { t } = useTranslation();
+  const [isLoading, setIsLoading] = useState(false)
 
   function openModal(day){
     setPerson(person)
@@ -19,7 +24,6 @@ export default function PersonRoutine({ person, setIsModalOpen, setPerson, setWe
   }
 
   const EachDay = ({ day }) => {
-    // Ordena as atividades pelo campo "start"
     const sortedRoutine = [...day.routine].sort((a, b) => a.start - b.start);
 
     return (
@@ -57,9 +61,36 @@ export default function PersonRoutine({ person, setIsModalOpen, setPerson, setWe
     );
   };
 
+  async function DeletePersonFromPreset(){
+    const response = await BaseRequest({
+      method: "DELETE",
+      url: "routines/deletePersonFromPreset",
+      data:{
+        personId: person.peopleId,
+        housePresetId: preset.id
+      },
+      isAuth: true,
+      setIsLoading,
+    })
+    if(response.status == 200){
+      toast.success("Pessoa deletada com sucesso do Preset.")
+      ResetPreset()
+    }
+
+  }
+
   return (
     <section className={s.wrapperEachPerson}>
-      <h3>{person.peopleName}</h3>
+      <div className={s.wrapperHeaderPerson}>
+        <h3>{person.peopleName}</h3>
+        <Button
+          text={t("remove")}
+          backgroundColor={"delete"}
+          height={32}
+          doFunction={() => DeletePersonFromPreset()}
+          isLoading={isLoading}
+        />
+      </div>
       <div>
         <EachDay day={person.monday} />
         <EachDay day={person.tuesday} />

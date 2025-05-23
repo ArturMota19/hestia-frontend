@@ -261,6 +261,7 @@ export default function CreateRoutine() {
                   setPerson={setPerson}
                   setWeekDay={setWeekDay}
                   preset={formikPresets.values.preset}
+                  ResetPreset={ResetPreset}
                 />
               );
             })}
