@@ -64,6 +64,7 @@ export default function DropdownField({
         optionLabel="name"
         value={formik?.values[fieldName]}
         readOnly={readOnly}
+        disabled={readOnly}
         placeholder={t('select')}
         options={options}
         filter={options.length > 5}

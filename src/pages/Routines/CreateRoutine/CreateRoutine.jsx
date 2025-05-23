@@ -4,6 +4,7 @@ import Field from "../../../basics/Field/Field";
 import DropdownField from "../../../basics/DropdownField/DropdownField";
 import Button from "../../../basics/Button/Button";
 // Images
+import { FaLockOpen, FaLock } from "react-icons/fa6";
 // Imports
 import { Helmet } from "react-helmet";
 import { useNavigate } from "react-router-dom";
@@ -29,6 +30,7 @@ export default function CreateRoutine() {
   const [enumPeople, setEnumPeople] = useState([])
   const [hasToSavePeople, setHasToSavePeople] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [blockPreset, setBlockPreset] = useState(false)
 
   async function GetPresets(){
     const response = await BaseRequest({
@@ -75,7 +77,6 @@ export default function CreateRoutine() {
       isAuth: true,
       setIsLoading,
     })
-    console.log(response.data)
     if(response.status == 200){
       setPeople(response.data)
       setHasToSavePeople(true)
@@ -137,6 +138,9 @@ export default function CreateRoutine() {
   }
 
   useEffect(() => {
+    if(formikPresets.values.preset != ""){
+      setBlockPreset(true)
+    }
     GetCreatedRoutines()
     
   }, [formikPresets.values.preset])
@@ -200,6 +204,18 @@ export default function CreateRoutine() {
     },
   });
 
+
+  async function ResetPreset(){
+    setPeople([])
+    setEnumPeople([])
+    setHasToSavePeople(false)
+    setPerson("")
+    setBlockPreset(false)
+    formikPerson.resetForm()
+    formikPresets.resetForm()
+
+  }
+
   return (
     <main className={s.wrapperCreateRoutine}>
       <Helmet>
@@ -223,18 +239,19 @@ export default function CreateRoutine() {
           <div className={s.titleRoutinesCreate}>
             <h2>{t("personsRoutines")}</h2>
             <div className={s.inputWrapperDropdown}>
+              {blockPreset ? <FaLock style={{cursor: "pointer"}} onClick={() => ResetPreset()} size={25}/> : <FaLockOpen size={28}/>}
               <DropdownField
                 type="text"
                 fieldName="preset"
                 formik={formikPresets}
                 value={formikPresets.values.preset}
                 options={presets}
-                readOnly={false}
+                readOnly={blockPreset}
               />
             </div>
           </div>
         </div>
-        {formikPresets.values.preset ? ( // change this to if true after development
+        {formikPresets.values.preset ? (
           <>
             {people.map((eachPerson) => {
               return (
