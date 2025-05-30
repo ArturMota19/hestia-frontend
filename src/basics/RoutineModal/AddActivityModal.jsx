@@ -263,7 +263,7 @@ function CheckValidProps(values) {
                     />
                     <Field
                       type="text"
-                      fieldName="name"
+                      fieldName="probability"
                       readOnly={true}
                       isLogged={true}
                       value={activity.probability}
@@ -344,6 +344,7 @@ function CheckValidProps(values) {
               value={formikActuators.values.actuator}
               options={formik.values.room.roomactuators}
               readOnly={false}
+              hasTranslation={true}
             />
             <RenderActuatorProps 
               formikParam={formikActuators} 

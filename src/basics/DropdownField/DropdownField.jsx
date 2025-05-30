@@ -18,9 +18,10 @@ export default function DropdownField({
   value = "",
   options = [],
   isMultiSelect = false,
+  hasTranslation=false
 }) {
   const optionTemplate = (option) => {
-    return <div>{option.name}</div>;
+    return <div>{hasTranslation ? t(option.name) : option.name}</div>;
   };
 
   const {t} = useTranslation();
@@ -70,6 +71,9 @@ export default function DropdownField({
         filter={options.length > 5}
         filterPlaceholder="Pesquisar"
         emptyFilterMessage="Sem resultado"
+        valueTemplate={(option) => {
+          return <div>{option ? hasTranslation ? t(option?.name): option?.name : t('select')}</div>;
+        }}
         onChange={(e) => formik.setFieldValue(fieldName, e.value)}
         itemTemplate={optionTemplate}
         panelClassName={s.panelDropdown}

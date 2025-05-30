@@ -1,7 +1,7 @@
 import React, { useEffect, useCallback } from 'react';
 import { useFormikContext } from 'formik';
 import s from "./RoutineModal.module.scss";
-
+import { useTranslation } from "react-i18next";
 
 const actuatorStatusMap = {
   LAMPADA: [
@@ -37,6 +37,8 @@ const actuatorStatusMap = {
     },
   ],
 };
+
+
 
 const RangeInput = React.memo(({ name, value, min, max, onChange }) => (
   <div className={s.inputWrapper}>
@@ -92,6 +94,7 @@ const EnumInput = React.memo(({ name, value, options, onChange }) => (
 ));
 
 const RenderActuatorProps = ({formikParam}) => {
+  const {t} = useTranslation()
   const type = formikParam.values.actuator.name;
   const props = actuatorStatusMap[type];
 
@@ -140,7 +143,7 @@ const RenderActuatorProps = ({formikParam}) => {
             return (
               <BooleanInput
                 key={prop.name}
-                name={prop.name}
+                name={t(prop.name)}
                 checked={fieldValue}
                 onChange={handleChange(idx, "boolean")}
               />
@@ -149,7 +152,7 @@ const RenderActuatorProps = ({formikParam}) => {
             return (
               <RangeInput
                 key={prop.name}
-                name={prop.name}
+                name={t(prop.name)}
                 value={fieldValue}
                 min={prop.min}
                 max={prop.max}
@@ -160,7 +163,7 @@ const RenderActuatorProps = ({formikParam}) => {
             return (
               <EnumInput
                 key={prop.name}
-                name={prop.name}
+                name={t(prop.name)}
                 value={fieldValue}
                 options={prop.options}
                 onChange={handleChange(idx, "enum")}
@@ -168,7 +171,7 @@ const RenderActuatorProps = ({formikParam}) => {
             );
           default:
             return (
-              <div key={prop.name}>
+              <div key={t(prop.name)}>
                 <p>Tipo não suportado: {prop.type}</p>
               </div>
             );
