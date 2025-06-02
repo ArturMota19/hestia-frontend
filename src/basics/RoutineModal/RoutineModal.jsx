@@ -101,6 +101,9 @@ export default function RoutineModal({
       toast.error("Selecione a atividade")
       return
     }
+    if(items.length > 0){
+      SaveRoutine(true)
+    }
     let data = {
       activityPresetParam: formikActivityParam.values.activityPresetParam.id,
       dayRoutineId: weekDay.dayId,
