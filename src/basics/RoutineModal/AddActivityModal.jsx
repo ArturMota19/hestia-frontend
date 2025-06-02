@@ -24,81 +24,107 @@ export default function AddActivityModal({
   const [enumActivities, setEnumActivities] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [actuatorsProps, setActuatorsProps] = useState([]);
-  const [otherActivities, setOtherActivities] = useState([])
+  const [otherActivities, setOtherActivities] = useState([]);
+  const [presets, setPresets] = useState([]);
   const { t } = useTranslation();
 
-const actuatorStatusMap = {
-  LAMPADA: [
-    { name: "switch_led", type: "boolean" },
-    { name: "bright_value_v2", type: "range", min: 0, max: 1000 },
-    { name: "temp_value_v2", type: "range", min: 0, max: 1000 },
-  ],
-  CAFETEIRA: [{ name: "switch", type: "boolean" }],
-  PLUG: [{ name: "switch_1", type: "boolean" }],
-  SOM: [
-    { name: "switch", type: "boolean" },
-    { name: "sound_volume", type: "range", min: 0, max: 100 },
-  ],
-  AR_CONDICIONADO: [
-    { name: "switch", type: "boolean" },
-    { name: "temp_set", type: "range", min: 16, max: 30 },
-    {
-      name: "mode",
-      type: "enum",
-      options: ["COLL", "HOT", "WET", "WIND", "AUTO"],
-    },
-  ],
-  TV: [
-    { name: "switch", type: "boolean" },
-    { name: "sound_volume", type: "range", min: 0, max: 100 },
-  ],
-  SENSOR_PRESENCA: [
-    { name: "presence_state", type: "boolean" },
-    {
-      name: "human_motion_state",
-      type: "enum",
-      options: ["NONE", "SMALL_MOVE", "LARGER_MOVE"],
-    },
-  ],
-};
-
-function CheckValidProps(values) {
-  const actuatorName = values.actuator.name;
-  const statusProps = values.status;
-  const expectedProps = actuatorStatusMap[actuatorName];
-
-  if (!expectedProps) {
-    return { error: "unknownActuator" };
-  }
-
-  for (const prop of statusProps) {
-    const expectedProp = expectedProps.find((p) => p.name === prop.name);
-
-    if (!expectedProp) {
-      return { error: `unknownProp: ${prop.name}` };
-    }
-
-    const inputIntValue = parseInt(prop.value)
-
-    if (expectedProp.type === "boolean") {
-      if (typeof prop.value !== "boolean") {
-        return { error: `invalidType: ${prop.name} should be boolean` };
-      }
-    } else if (expectedProp.type === "range") {
-      if (inputIntValue < expectedProp.min || inputIntValue > expectedProp.max) {
-        return { error: `outOfRange: ${prop.name} should be between ${expectedProp.min} and ${expectedProp.max}` };
-      }
-    } else if (expectedProp.type === "enum") {
-      if (!expectedProp.options.includes(prop.value)) {
-        return { error: `invalidOption: ${prop.name} should be one of ${expectedProp.options.join(", ")}` };
-      }
-    } else {
-      return { error: `unknownType: ${expectedProp.type}` };
+  async function GetPresets() {
+    const response = await BaseRequest({
+      method: "GET",
+      url: `presets/getAllWithoutPage`,
+      isAuth: true,
+      setIsLoading,
+    });
+    if (response.status == 200) {
+      setPresets(response.data.presetData);
     }
   }
 
-  return { valid: true };
-}
+  useEffect(() => {
+    GetPresets();
+  }, []);
+
+  const actuatorStatusMap = {
+    LAMPADA: [
+      { name: "switch_led", type: "boolean" },
+      { name: "bright_value_v2", type: "range", min: 0, max: 1000 },
+      { name: "temp_value_v2", type: "range", min: 0, max: 1000 },
+    ],
+    CAFETEIRA: [{ name: "switch", type: "boolean" }],
+    PLUG: [{ name: "switch_1", type: "boolean" }],
+    SOM: [
+      { name: "switch", type: "boolean" },
+      { name: "sound_volume", type: "range", min: 0, max: 100 },
+    ],
+    AR_CONDICIONADO: [
+      { name: "switch", type: "boolean" },
+      { name: "temp_set", type: "range", min: 16, max: 30 },
+      {
+        name: "mode",
+        type: "enum",
+        options: ["COLL", "HOT", "WET", "WIND", "AUTO"],
+      },
+    ],
+    TV: [
+      { name: "switch", type: "boolean" },
+      { name: "sound_volume", type: "range", min: 0, max: 100 },
+    ],
+    SENSOR_PRESENCA: [
+      { name: "presence_state", type: "boolean" },
+      {
+        name: "human_motion_state",
+        type: "enum",
+        options: ["NONE", "SMALL_MOVE", "LARGER_MOVE"],
+      },
+    ],
+  };
+
+  function CheckValidProps(values) {
+    const actuatorName = values.actuator.name;
+    const statusProps = values.status;
+    const expectedProps = actuatorStatusMap[actuatorName];
+
+    if (!expectedProps) {
+      return { error: "unknownActuator" };
+    }
+
+    for (const prop of statusProps) {
+      const expectedProp = expectedProps.find((p) => p.name === prop.name);
+
+      if (!expectedProp) {
+        return { error: `unknownProp: ${prop.name}` };
+      }
+
+      const inputIntValue = parseInt(prop.value);
+
+      if (expectedProp.type === "boolean") {
+        if (typeof prop.value !== "boolean") {
+          return { error: `invalidType: ${prop.name} should be boolean` };
+        }
+      } else if (expectedProp.type === "range") {
+        if (
+          inputIntValue < expectedProp.min ||
+          inputIntValue > expectedProp.max
+        ) {
+          return {
+            error: `outOfRange: ${prop.name} should be between ${expectedProp.min} and ${expectedProp.max}`,
+          };
+        }
+      } else if (expectedProp.type === "enum") {
+        if (!expectedProp.options.includes(prop.value)) {
+          return {
+            error: `invalidOption: ${
+              prop.name
+            } should be one of ${expectedProp.options.join(", ")}`,
+          };
+        }
+      } else {
+        return { error: `unknownType: ${expectedProp.type}` };
+      }
+    }
+
+    return { valid: true };
+  }
 
   const validationSchema = Yup.object().shape({
     activity: Yup.mixed().required(t("requiredField")),
@@ -121,8 +147,8 @@ function CheckValidProps(values) {
         otherActivities: otherActivities,
         // presetId: preset.id,
         // dayRoutineId: weekDay.dayId
-      }
-      console.log(data)
+      };
+      console.log(data);
       // const response = await BaseRequest({
       //   method: "POST",
       //   url: `routines/register`,
@@ -137,6 +163,19 @@ function CheckValidProps(values) {
     },
   });
 
+    const validationSchemaPresets = Yup.object().shape({
+      preset: Yup.mixed().required(t("requiredField")),
+    });
+    const formikPresets = useFormik({
+      initialValues: {
+        preset: "",
+      },
+      validationSchema: validationSchemaPresets,
+      onSubmit: async (values) => {
+        console.log(values);
+      },
+    });
+
   const validationSchemaActuators = Yup.object().shape({
     actuator: Yup.mixed().required(t("requiredField")),
   });
@@ -147,22 +186,24 @@ function CheckValidProps(values) {
     },
     validationSchema: validationSchemaActuators,
     onSubmit: async (values) => {
-      if(values.status.length < 1){
-        toast.error("Adicione ao menos uma propriedade para o atuador.")
-        return
+      if (values.status.length < 1) {
+        toast.error("Adicione ao menos uma propriedade para o atuador.");
+        return;
       }
-      if (actuatorsProps.some(a => a.actuator.name === values.actuator.name)) {
+      if (
+        actuatorsProps.some((a) => a.actuator.name === values.actuator.name)
+      ) {
         toast.error("Este atuador já foi adicionado.");
         return;
       }
-      const isValid = CheckValidProps(values)
+      const isValid = CheckValidProps(values);
 
-      if(isValid.error){
-        toast.error(isValid.error)
-        return
+      if (isValid.error) {
+        toast.error(isValid.error);
+        return;
       }
-      setActuatorsProps([...actuatorsProps, values])
-      formikActuators.resetForm()
+      setActuatorsProps([...actuatorsProps, values]);
+      formikActuators.resetForm();
     },
   });
 
@@ -181,17 +222,21 @@ function CheckValidProps(values) {
     },
     validationSchema: validationSchemaOtherActivities,
     onSubmit: async (values) => {
-      if(values.otherActivity.id == formik.values.activity.id){
-        toast.error("Atividade já selecionada como principal.")
-        return
+      if (values.otherActivity.id == formik.values.activity.id) {
+        toast.error("Atividade já selecionada como principal.");
+        return;
       }
-      if (otherActivities.some(a => a.otherActivity.id === values.otherActivity.id)) {
+      if (
+        otherActivities.some(
+          (a) => a.otherActivity.id === values.otherActivity.id
+        )
+      ) {
         toast.error("Esta atividade já foi adicionada.");
         return;
       }
 
-      setOtherActivities([...otherActivities, values])
-      formikOtherActivities.resetForm()
+      setOtherActivities([...otherActivities, values]);
+      formikOtherActivities.resetForm();
     },
   });
 
@@ -213,137 +258,145 @@ function CheckValidProps(values) {
 
   useEffect(() => {
     // Every time the field value changes, I reset the actuators
-    setActuatorsProps([])
-    formikActuators.resetForm()
-  },[formik.values.room])
+    setActuatorsProps([]);
+    formikActuators.resetForm();
+  }, [formik.values.room]);
 
   return (
     <form className={s.activityForm} onSubmit={formik.handleSubmit}>
       <h4>{t("addActivity")}</h4>
-      <div className={s.wrapperInputs}>
-        <DropdownField
-          type="text"
-          fieldName="activity"
-          formik={formik}
-          value={formik.values.activity}
-          options={enumActivities}
-          readOnly={false}
-        />
-        {formik.values.activity && (
-          <p className={s.errorValue}>
-            {t("errorValue")}: {formik.values.activity.errorValue}
-          </p>
-        )}
-        {formik.values.activity && (
-          <form className={s.wrapperAddActuators} onSubmit={formikOtherActivities.handleSubmit}>
-            {otherActivities.length > 0 &&
-              otherActivities.map((activity) => {
-                return(
-                  <div className={s.wrapperEachActuatorSaved}>
-                    <Field
-                      type="text"
-                      fieldName="name"
-                      readOnly={true}
-                      isLogged={true}
-                      value={activity.otherActivity.name}
-                    />
-                    <Field
-                      type="text"
-                      fieldName="probability"
-                      readOnly={true}
-                      isLogged={true}
-                      value={activity.probability}
-                    />
-                  </div>
-                )
-              })
-            }
-            <div className={s.otherActivityWrapper}>
+      <DropdownField
+        type="text"
+        fieldName="preset"
+        formik={formikPresets}
+        value={formikPresets.values.preset}
+        options={presets}
+      />
+      {formikPresets.values.preset && (
+        <div className={s.wrapperInputs}>
+          <DropdownField
+            type="text"
+            fieldName="activity"
+            formik={formik}
+            value={formik.values.activity}
+            options={enumActivities}
+            readOnly={false}
+          />
+          {formik.values.activity && (
+            <p className={s.errorValue}>
+              {t("errorValue")}: {formik.values.activity.errorValue}
+            </p>
+          )}
+          {formik.values.activity && (
+            <form
+              className={s.wrapperAddActuators}
+              onSubmit={formikOtherActivities.handleSubmit}>
+              {otherActivities.length > 0 &&
+                otherActivities.map((activity) => {
+                  return (
+                    <div className={s.wrapperEachActuatorSaved}>
+                      <Field
+                        type="text"
+                        fieldName="name"
+                        readOnly={true}
+                        isLogged={true}
+                        value={activity.otherActivity.name}
+                      />
+                      <Field
+                        type="text"
+                        fieldName="probability"
+                        readOnly={true}
+                        isLogged={true}
+                        value={activity.probability}
+                      />
+                    </div>
+                  );
+                })}
+              <div className={s.otherActivityWrapper}>
+                <DropdownField
+                  type="text"
+                  fieldName="otherActivity"
+                  formik={formikOtherActivities}
+                  value={formikOtherActivities.values.activity}
+                  options={enumActivities}
+                  readOnly={false}
+                />
+                <Field
+                  type="number"
+                  fieldName="probability"
+                  readOnly={false}
+                  formik={formikOtherActivities}
+                  isLogged={true}
+                  value={formikOtherActivities.values.probability}
+                />
+              </div>
+              <button
+                type="button"
+                onClick={() => formikOtherActivities.handleSubmit()}>
+                {t("addOtherActivity")}
+                <IoMdAdd />
+              </button>
+            </form>
+          )}
+          <DropdownField
+            type="text"
+            fieldName="room"
+            formik={formik}
+            value={formik.values.room}
+            options={preset.houserooms}
+            readOnly={false}
+            isMultiSelect={false}
+          />
+          {formik.values.room && (
+            <form
+              className={s.wrapperAddActuators}
+              onSubmit={formikActuators.handleSubmit}>
+              {actuatorsProps.length > 0 &&
+                actuatorsProps.map((actuator) => {
+                  return (
+                    <div className={s.wrapperEachActuatorSaved}>
+                      <Field
+                        type="text"
+                        fieldName="name"
+                        readOnly={true}
+                        isLogged={true}
+                        value={actuator.actuator.name}
+                      />
+                      {actuator.status.length > 0 &&
+                        actuator.status.map((prop) => {
+                          return (
+                            <Field
+                              type="text"
+                              fieldName={prop.name}
+                              readOnly={true}
+                              isLogged={true}
+                              value={prop.value}
+                            />
+                          );
+                        })}
+                    </div>
+                  );
+                })}
               <DropdownField
-              type="text"
-              fieldName="otherActivity"
-              formik={formikOtherActivities}
-              value={formikOtherActivities.values.activity}
-              options={enumActivities}
-              readOnly={false}
-              />
-              <Field
-                type="number"
-                fieldName="probability"
+                type="text"
+                fieldName="actuator"
+                formik={formikActuators}
+                value={formikActuators.values.actuator}
+                options={formik.values.room.roomactuators}
                 readOnly={false}
-                formik={formikOtherActivities}
-                isLogged={true}
-                value={formikOtherActivities.values.probability}
+                hasTranslation={true}
               />
-            </div>
-            <button
-              type="button"
-              onClick={() => formikOtherActivities.handleSubmit()}>
-              {t("addOtherActivity")}
-              <IoMdAdd />
-            </button>
-          </form>
-        )}
-        <DropdownField
-          type="text"
-          fieldName="room"
-          formik={formik}
-          value={formik.values.room}
-          options={preset.houserooms}
-          readOnly={false}
-          isMultiSelect={false}
-        />
-        {formik.values.room && (
-          <form className={s.wrapperAddActuators} onSubmit={formikActuators.handleSubmit}>
-            {actuatorsProps.length > 0 &&
-              actuatorsProps.map((actuator) => {
-                return(
-                  <div className={s.wrapperEachActuatorSaved}>
-                    <Field
-                      type="text"
-                      fieldName="name"
-                      readOnly={true}
-                      isLogged={true}
-                      value={actuator.actuator.name}
-                    />
-                    {actuator.status.length > 0 &&
-                      actuator.status.map((prop) => {
-                        return(
-                          <Field
-                            type="text"
-                            fieldName={prop.name}
-                            readOnly={true}
-                            isLogged={true}
-                            value={prop.value}
-                          />
-                        )
-                      })
-                    }
-                  </div>
-                )
-              })
-            }
-            <DropdownField
-              type="text"
-              fieldName="actuator"
-              formik={formikActuators}
-              value={formikActuators.values.actuator}
-              options={formik.values.room.roomactuators}
-              readOnly={false}
-              hasTranslation={true}
-            />
-            <RenderActuatorProps 
-              formikParam={formikActuators} 
-            />
-            <button
-              type="button"
-              onClick={() => formikActuators.handleSubmit()}>
-              {t("addActuator")}
-              <IoMdAdd />
-            </button>
-          </form>
-        )}
-      </div>
+              <RenderActuatorProps formikParam={formikActuators} />
+              <button
+                type="button"
+                onClick={() => formikActuators.handleSubmit()}>
+                {t("addActuator")}
+                <IoMdAdd />
+              </button>
+            </form>
+          )}
+        </div>
+      )}
       <div className={s.arrayButtons}>
         <Button
           type="button"
