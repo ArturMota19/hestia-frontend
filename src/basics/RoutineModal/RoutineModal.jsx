@@ -36,7 +36,6 @@ export default function RoutineModal({
       setIsLoading,
     });
     if (response.status == 200) {
-      console.log(response.data)
       setActivitiesParam(response.data);
     }
   }
@@ -53,11 +52,11 @@ export default function RoutineModal({
   const rowHeight = 50;
 
   const validationSchemaActivityParam = Yup.object().shape({
-    activityParam: Yup.mixed().required(t("requiredField")),
+    activityPresetParam: Yup.mixed().required(t("requiredField")),
   });
   const formikActivityParam = useFormik({
     initialValues: {
-      activityParam: "",
+      activityPresetParam: "",
     },
     validationSchema: validationSchemaActivityParam,
     onSubmit: async (values) => {
@@ -83,6 +82,7 @@ export default function RoutineModal({
       url: `routines/getRoutine/${weekDay.dayId}`,
       setIsLoading,
     });
+    console.log(response)
     if (response.status == 200) {
       setItems(response.data);
     }
@@ -91,6 +91,30 @@ export default function RoutineModal({
   useEffect(() => {
     GetActivityRoutines();
   }, [isActivityModalOpen]);
+
+  async function RegisterRoutineActivity(){
+    if(formikActivityParam.values.activityPresetParam == "") {
+      toast.error("Selecione a atividade")
+      return
+    }
+    let data = {
+      activityPresetParam: formikActivityParam.values.activityPresetParam.id,
+      dayRoutineId: weekDay.dayId,
+      start: items.length > 0 ? items.reduce((max, item) => Math.max(max, item.start + item.duration), 0) : 0,
+      duration: 1,
+    }
+    const response = await BaseRequest({
+      method: "POST",
+      isAuth: true,
+      url: `routines/registerEachRoutineActivity`,
+      data,
+      setIsLoading,
+    });
+    if(response.status == 201){
+      toast.success("Atividade adicionada com sucesso.")
+      formikActivityParam.resetForm()
+    }
+  }
 
   const handleDragStop = (e, data, id) => {
     setItems((prevItems) => {
@@ -226,7 +250,7 @@ export default function RoutineModal({
               backgroundColor={"primary"}
               height={42}
               doFunction={() => {
-                setIsActivityModalOpen(true);
+                RegisterRoutineActivity(true);
               }}
             />
           </section>

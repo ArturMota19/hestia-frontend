@@ -161,7 +161,7 @@ export default function AddActivityModal({
       };
       const response = await BaseRequest({
         method: "POST",
-        url: `routines/registerAcitivyPresetParam`,
+        url: `routines/registerActivyPresetParam`,
         isAuth: true,
         data,
         setIsLoading
