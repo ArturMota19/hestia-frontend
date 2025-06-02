@@ -82,7 +82,6 @@ export default function RoutineModal({
       url: `routines/getRoutine/${weekDay.dayId}`,
       setIsLoading,
     });
-    console.log(response)
     if (response.status == 200) {
       setItems(response.data);
     }
