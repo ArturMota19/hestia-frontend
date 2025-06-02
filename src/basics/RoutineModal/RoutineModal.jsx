@@ -188,14 +188,14 @@ async function DeleteActivityRequest(){
             />
           </section>
         </div>
-        <AddActivityModal
+        {/* <AddActivityModal
           isActivityModalOpen={isActivityModalOpen}
           setIsActivityModalOpen={setIsActivityModalOpen}
           items={items}
           setItems={setItems}
           preset={preset}
           weekDay={weekDay}
-        />
+        /> */}
         {items.length > 0 && (
           <>
             <div className={s.scrollContainer}>

@@ -15,10 +15,12 @@ import { useEffect, useState } from "react";
 //Styles
 import s from "./CreateParams.module.scss";
 import ModalCreateParams from "../../../basics/ModalCreateParams/ModalCreateParams";
+import AddActivityModal from "../../../basics/RoutineModal/AddActivityModal";
 
 export default function CreateParams() {
   const { t } = useTranslation();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isActivityModalOpen, setIsActivityModalOpen] = useState(false)
   const [type, setType] = useState("");
 
   function handleOpenModal(type) {
@@ -49,6 +51,10 @@ export default function CreateParams() {
       </Helmet>
       <Header />
       <ModalCreateParams isOpen={isModalOpen} setIsOpen={setIsModalOpen} type={type}/>
+      <AddActivityModal
+        isActivityModalOpen={isActivityModalOpen}
+        setIsActivityModalOpen={setIsActivityModalOpen}
+      />
       <section className={s.hestiaInfoWrapper}>
         <h1>{t("createParams")}</h1>
         <div className={s.wrapperInternForm}>
@@ -56,6 +62,16 @@ export default function CreateParams() {
           <ItemParam img={actuatorParam} text={t("actuator")} type={"actuator"}  noCreate={true} />
           <ItemParam img={roomParam} text={t("room")} type={"room"}/>
           <ItemParam img={activityParam} text={t("activity")} type={"activity"}/>
+          <div className={s.itemParam}>
+            <h3>{t("activityToPreset")}</h3>
+            <img src={activityParam} alt={t("activityToPreset")} />
+            <Button
+              text={t("create")}
+              backgroundColor={"secondary"}
+              height={48}
+              doFunction={() => setIsActivityModalOpen(true)}
+            />
+          </div>
         </div>
       </section>
     </main>

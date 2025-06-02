@@ -19,17 +19,12 @@ import toast from "react-hot-toast";
 export default function AddActivityModal({
   isActivityModalOpen,
   setIsActivityModalOpen,
-  items,
-  setItems,
-  preset,
-  weekDay
 }) {
   if (!isActivityModalOpen) return null;
   const [enumActivities, setEnumActivities] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [actuatorsProps, setActuatorsProps] = useState([]);
   const [otherActivities, setOtherActivities] = useState([])
-  const totalDuration = items.reduce((sum, item) => sum + item.duration, 0);
   const { t } = useTranslation();
 
 const actuatorStatusMap = {
@@ -66,16 +61,6 @@ const actuatorStatusMap = {
     },
   ],
 };
-
-/*
-LAMPADA: switch_led (ON/OFF), bright_value_v2 (0–1000), temp_value_v2 (0–1000)
-CAFETEIRA: switch (ON/OFF)
-PLUG: switch_1 (ON/OFF)
-SOM: switch (ON/OFF), sound_volume (0–100)
-AR_CONDICIONADO: switch (ON/OFF), temp_set (16–30), mode (COLL/HOT/WET/WIND/AUTO)
-TV: switch (ON/OFF), sound_volume (0–100)
-SENSOR_PRESENCA: presence_state (ON/OFF), human_motion_state (NONE/SMALL_MOVE/LARGER_MOVE)
-*/
 
 function CheckValidProps(values) {
   const actuatorName = values.actuator.name;
@@ -134,20 +119,21 @@ function CheckValidProps(values) {
         room: values.room,
         actuators: actuatorsProps,
         otherActivities: otherActivities,
-        presetId: preset.id,
-        dayRoutineId: weekDay.dayId
+        // presetId: preset.id,
+        // dayRoutineId: weekDay.dayId
       }
-      const response = await BaseRequest({
-        method: "POST",
-        url: `routines/register`,
-        isAuth: true,
-        data,
-        setIsLoading
-      })
-      if(response.status == 201){
-        toast.success("Atividade criada com sucesso.")
-      }
-      setIsActivityModalOpen(false);
+      console.log(data)
+      // const response = await BaseRequest({
+      //   method: "POST",
+      //   url: `routines/register`,
+      //   isAuth: true,
+      //   data,
+      //   setIsLoading
+      // })
+      // if(response.status == 201){
+      //   toast.success("Atividade criada com sucesso.")
+      // }
+      // setIsActivityModalOpen(false);
     },
   });
 
