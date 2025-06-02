@@ -153,26 +153,23 @@ export default function AddActivityModal({
       let data = {
         id: values.activity.id,
         activityPresetName: values.activityPresetName,
-        title: values.activity.name,
         activity: values.activity,
         room: values.room,
         actuators: actuatorsProps,
         otherActivities: otherActivities,
         presetId: formikPresets.values.preset.id,
-        // dayRoutineId: weekDay.dayId
       };
-      console.log(data);
-      // const response = await BaseRequest({
-      //   method: "POST",
-      //   url: `routines/register`,
-      //   isAuth: true,
-      //   data,
-      //   setIsLoading
-      // })
-      // if(response.status == 201){
-      //   toast.success("Atividade criada com sucesso.")
-      // }
-      // setIsActivityModalOpen(false);
+      const response = await BaseRequest({
+        method: "POST",
+        url: `routines/registerAcitivyPresetParam`,
+        isAuth: true,
+        data,
+        setIsLoading
+      })
+      if(response.status == 201){
+        toast.success("Parâmetro para atividade preset criada com sucesso.")
+      }
+      setIsActivityModalOpen(false);
     },
   });
 
