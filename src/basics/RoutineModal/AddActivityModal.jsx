@@ -79,18 +79,18 @@ export default function AddActivityModal({
     ],
   };
 
-    const validationSchemaPresets = Yup.object().shape({
-      preset: Yup.mixed().required(t("requiredField")),
-    });
-    const formikPresets = useFormik({
-      initialValues: {
-        preset: "",
-      },
-      validationSchema: validationSchemaPresets,
-      onSubmit: async (values) => {
-        console.log(values);
-      },
-    });
+  const validationSchemaPresets = Yup.object().shape({
+    preset: Yup.mixed().required(t("requiredField")),
+  });
+  const formikPresets = useFormik({
+    initialValues: {
+      preset: "",
+    },
+    validationSchema: validationSchemaPresets,
+    onSubmit: async (values) => {
+      console.log(values);
+    },
+  });
 
   function CheckValidProps(values) {
     const actuatorName = values.actuator.name;
@@ -152,7 +152,7 @@ export default function AddActivityModal({
     onSubmit: async (values) => {
       let data = {
         id: values.activity.id,
-        activityPresetName: values.activityPresetName,
+        name: values.activityPresetName,
         activity: values.activity,
         room: values.room,
         actuators: actuatorsProps,
