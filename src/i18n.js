@@ -140,6 +140,8 @@ const resources = {
       human_motion_state: "Sensor de Movimento",
       mode: "Modo",
       someDayIsIncomplete: "Algum dia está com tempo incompleto (menos de 24h). Corrija para ser possível gerar o arquivo final.",
+      deleteActivities: "Clique com o botão direito para deletar atividades adicionadas.",
+      activityPresetParam: "Atividade com Preset",
       // Devices
       AR_CONDICIONADO: "Ar Condicionado",
       LAMPADA: "Lâmpada",
@@ -280,6 +282,8 @@ const resources = {
       human_motion_state: "Motion Sensor",
       mode: "Mode",
       someDayIsIncomplete: "Some day has incomplete time (less than 24h). Please correct it to generate the final file.",
+      deleteActivities: "Right-click to delete added activities.",
+      activityPresetParam: "Activity with Preset",
       // Devices
       AR_CONDICIONADO: "Air Conditioner",
       LAMPADA: "Light Bulb",

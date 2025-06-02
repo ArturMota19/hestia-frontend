@@ -173,7 +173,9 @@ export default function RoutineModal({
     });
     if (response.status == 200) {
       setHasToSavePeople(false);
-      // toast.success("Rotina e Atividades salvas com sucesso.");
+      if(!notClose){
+        toast.success("Rotina e Atividades salvas com sucesso.");
+      }
       setIsOpen(notClose ? true : false);
     }
   }
@@ -320,6 +322,9 @@ export default function RoutineModal({
                   </Draggable>
                 ))}
               </div>
+            </div>
+            <div className={s.deleteActivities}>
+              <p>{t('deleteActivities')}</p>
             </div>
             <div className={s.arrayButtons}>
               <Button

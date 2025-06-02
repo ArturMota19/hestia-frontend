@@ -63,8 +63,8 @@ export default function CreateParams() {
           <ItemParam img={roomParam} text={t("room")} type={"room"}/>
           <ItemParam img={activityParam} text={t("activity")} type={"activity"}/>
           <div className={s.itemParam}>
-            <h3>{t("activityToPreset")}</h3>
-            <img src={activityParam} alt={t("activityToPreset")} />
+            <h3>{t("activityPresetParam")}</h3>
+            <img src={activityParam} alt={t("activityPresetParam")} />
             <Button
               text={t("create")}
               backgroundColor={"secondary"}
