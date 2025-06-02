@@ -8,55 +8,121 @@ import { IoMdAdd } from "react-icons/io";
 // Styles
 import { useTranslation } from "react-i18next";
 import s from "./PersonRoutine.module.scss";
+import Button from "../Button/Button";
+import { useState } from "react";
+import { BaseRequest } from "../../services/BaseRequest";
+import toast from "react-hot-toast";
 
-export default function PersonRoutine({ person, setIsModalOpen, setPerson, setWeekDay }) {
+export default function PersonRoutine({ person, setIsModalOpen, setPerson, setWeekDay, preset, ResetPreset }) {
   const { t } = useTranslation();
+  const [isLoading, setIsLoading] = useState(false)
+
   function openModal(day){
-    setPerson(person.person)
-    setWeekDay(day.dayName)
+    setPerson(person)
+    setWeekDay(day)
     setIsModalOpen(true)
   }
 
-  const EachDay = ({ day }) => {
-    return (
-      <div className={s.eachDayWrapper}>
+const EachDay = ({ day }) => {
+  const sortedRoutine = [...day.routine].sort((a, b) => a.start - b.start);
+  const totalDuration = sortedRoutine.reduce((sum, act) => sum + act.duration, 0);
+  const remainingDuration = 48 - totalDuration;
+  const isIncomplete = totalDuration < 48;
+
+  return (
+    <div className={s.eachDayWrapper}>
       <div className={s.dayName}>
-        <h4>{t(day.dayName)}</h4>
+        <h4 className={isIncomplete ? s.incompleteDay : ""}>{t(day.dayName)}</h4>
         <div className={s.internActionsButton}>
-        {day.routine.length > 0 ? (
-          <button>
-          <MdModeEdit />
-          </button>
-        ) : (
           <button onClick={() => openModal(day)}>
-          <IoMdAdd />
+            {day.routine.length > 0 ? <MdModeEdit /> : <IoMdAdd />}
           </button>
-        )}
         </div>
       </div>
-      <div className={s.routineActions}>
-        {day.routine.map((activity) => {
-        const totalDuration = day.routine.reduce((sum, act) => sum + act.duration, 0);
-        const widthPercentage = (activity.duration / totalDuration) * 100;
 
-        return (
-          <div
-          key={activity.id}
-          className={s.activityBlock}
-          title={activity.title}
-          style={{ width: `${widthPercentage}%`}} // Example color
-          >
-          </div>
-        );
+      <div className={s.routineActions}>
+        {sortedRoutine.map((activity) => {
+          const widthPercentage = (activity.duration / 48) * 100;
+          return (
+            <div
+              key={activity.id}
+              className={s.activityBlock}
+              title={activity.title}
+              style={{
+                width: `${widthPercentage}%`,
+                backgroundColor: activity.color,
+              }}
+            />
+          );
         })}
+
+        {remainingDuration > 0 && (
+          <div
+            className={s.activityBlock}
+            style={{
+              width: `${(remainingDuration / 48) * 100}%`,
+              backgroundColor: "#ccc",
+              opacity: 0.5,
+              cursor: "not-allowed",
+            }}
+            title={`${remainingDuration * 30}min livres`}
+          />
+        )}
       </div>
-      </div>
-    );
-  };
+    </div>
+  );
+};
+
+
+  async function DeletePersonFromPreset(){
+    const response = await BaseRequest({
+      method: "DELETE",
+      url: "routines/deletePersonFromPreset",
+      data:{
+        personId: person.peopleId,
+        housePresetId: preset.id
+      },
+      isAuth: true,
+      setIsLoading,
+    })
+    if(response.status == 200){
+      toast.success("Pessoa deletada com sucesso do Preset.")
+      ResetPreset()
+    }
+
+  }
+
+  const days = [
+    person.monday,
+    person.tuesday,
+    person.wednesday,
+    person.thursday,
+    person.friday,
+    person.saturday,
+    person.sunday,
+  ];
+
+  const hasIncompleteDay = days.some((day) =>
+    day.routine.reduce((sum, act) => sum + act.duration, 0) < 48
+  );
 
   return (
     <section className={s.wrapperEachPerson}>
-      <h3>{person.person}</h3>
+      <div className={s.wrapperHeaderPerson}>
+        <h3>{person.peopleName}</h3>
+        <Button
+          text={t("remove")}
+          backgroundColor={"delete"}
+          height={32}
+          doFunction={() => DeletePersonFromPreset()}
+          isLoading={isLoading}
+        />
+      </div>
+        {hasIncompleteDay && (
+          <div className={s.incompleteMessage}>
+            <p>⚠️ {t("someDayIsIncomplete")}</p>
+          </div>
+        )}
       <div>
         <EachDay day={person.monday} />
         <EachDay day={person.tuesday} />

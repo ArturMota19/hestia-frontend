@@ -2,95 +2,407 @@
 import Button from "../Button/Button";
 import DropdownField from "../DropdownField/DropdownField";
 import { useTranslation } from "react-i18next";
+import RenderActuatorProps from "./RenderActuatorProps";
 // Images
-
+import { IoMdAdd } from "react-icons/io";
 // Imports
 
 import * as Yup from "yup";
 import { useFormik } from "formik";
+import Field from "../Field/Field";
 // Styles
-import s from './RoutineModal.module.scss'
+import s from "./RoutineModal.module.scss";
+import { useEffect, useState } from "react";
+import { BaseRequest } from "../../services/BaseRequest";
+import toast from "react-hot-toast";
+
+export default function AddActivityModal({
+  isActivityModalOpen,
+  setIsActivityModalOpen,
+}) {
+  if (!isActivityModalOpen) return null;
+  const [enumActivities, setEnumActivities] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [actuatorsProps, setActuatorsProps] = useState([]);
+  const [otherActivities, setOtherActivities] = useState([]);
+  const [presets, setPresets] = useState([]);
+  const { t } = useTranslation();
+
+  async function GetPresets() {
+    const response = await BaseRequest({
+      method: "GET",
+      url: `presets/getAllWithoutPage`,
+      isAuth: true,
+      setIsLoading,
+    });
+    if (response.status == 200) {
+      setPresets(response.data.presetData);
+    }
+  }
+
+  useEffect(() => {
+    GetPresets();
+  }, []);
+
+  const actuatorStatusMap = {
+    LAMPADA: [
+      { name: "switch_led", type: "boolean" },
+      { name: "bright_value_v2", type: "range", min: 0, max: 1000 },
+      { name: "temp_value_v2", type: "range", min: 0, max: 1000 },
+    ],
+    CAFETEIRA: [{ name: "switch", type: "boolean" }],
+    PLUG: [{ name: "switch_1", type: "boolean" }],
+    SOM: [
+      { name: "switch", type: "boolean" },
+      { name: "sound_volume", type: "range", min: 0, max: 100 },
+    ],
+    AR_CONDICIONADO: [
+      { name: "switch", type: "boolean" },
+      { name: "temp_set", type: "range", min: 16, max: 30 },
+      {
+        name: "mode",
+        type: "enum",
+        options: ["COLL", "HOT", "WET", "WIND", "AUTO"],
+      },
+    ],
+    TV: [
+      { name: "switch", type: "boolean" },
+      { name: "sound_volume", type: "range", min: 0, max: 100 },
+    ],
+    SENSOR_PRESENCA: [
+      { name: "presence_state", type: "boolean" },
+      {
+        name: "human_motion_state",
+        type: "enum",
+        options: ["NONE", "SMALL_MOVE", "LARGER_MOVE"],
+      },
+    ],
+  };
+
+  const validationSchemaPresets = Yup.object().shape({
+    preset: Yup.mixed().required(t("requiredField")),
+  });
+  const formikPresets = useFormik({
+    initialValues: {
+      preset: "",
+    },
+    validationSchema: validationSchemaPresets,
+    onSubmit: async (values) => {
+      console.log(values);
+    },
+  });
+
+  function CheckValidProps(values) {
+    const actuatorName = values.actuator.name;
+    const statusProps = values.status;
+    const expectedProps = actuatorStatusMap[actuatorName];
+
+    if (!expectedProps) {
+      return { error: "unknownActuator" };
+    }
+
+    for (const prop of statusProps) {
+      const expectedProp = expectedProps.find((p) => p.name === prop.name);
+
+      if (!expectedProp) {
+        return { error: `unknownProp: ${prop.name}` };
+      }
+
+      const inputIntValue = parseInt(prop.value);
+
+      if (expectedProp.type === "boolean") {
+        if (typeof prop.value !== "boolean") {
+          return { error: `invalidType: ${prop.name} should be boolean` };
+        }
+      } else if (expectedProp.type === "range") {
+        if (
+          inputIntValue < expectedProp.min ||
+          inputIntValue > expectedProp.max
+        ) {
+          return {
+            error: `outOfRange: ${prop.name} should be between ${expectedProp.min} and ${expectedProp.max}`,
+          };
+        }
+      } else if (expectedProp.type === "enum") {
+        if (!expectedProp.options.includes(prop.value)) {
+          return {
+            error: `invalidOption: ${
+              prop.name
+            } should be one of ${expectedProp.options.join(", ")}`,
+          };
+        }
+      } else {
+        return { error: `unknownType: ${expectedProp.type}` };
+      }
+    }
+
+    return { valid: true };
+  }
+
+  const validationSchema = Yup.object().shape({
+    activity: Yup.mixed().required(t("requiredField")),
+  });
+  const formik = useFormik({
+    initialValues: {
+      activityPresetName: "",
+      activity: "",
+      room: "",
+    },
+    validationSchema,
+    onSubmit: async (values) => {
+      let data = {
+        id: values.activity.id,
+        name: values.activityPresetName,
+        activity: values.activity,
+        room: values.room,
+        actuators: actuatorsProps,
+        otherActivities: otherActivities,
+        presetId: formikPresets.values.preset.id,
+      };
+      const response = await BaseRequest({
+        method: "POST",
+        url: `routines/registerActivyPresetParam`,
+        isAuth: true,
+        data,
+        setIsLoading
+      })
+      if(response.status == 201){
+        toast.success("Parâmetro para atividade preset criada com sucesso.")
+      }
+      setIsActivityModalOpen(false);
+    },
+  });
 
 
-export default function AddActivityModal({isActivityModalOpen, setIsActivityModalOpen, items, setItems, preset}) {
-  console.log(items)
-    if(!isActivityModalOpen) return null;
-    const totalDuration = items.reduce((sum, item) => sum + item.duration, 0);
-    const {t} = useTranslation()
-    const validationSchema = Yup.object().shape({
-      activity: Yup.mixed().required(t('requiredField')),
+
+  const validationSchemaActuators = Yup.object().shape({
+    actuator: Yup.mixed().required(t("requiredField")),
+  });
+  const formikActuators = useFormik({
+    initialValues: {
+      actuator: {},
+      status: [],
+    },
+    validationSchema: validationSchemaActuators,
+    onSubmit: async (values) => {
+      if (values.status.length < 1) {
+        toast.error("Adicione ao menos uma propriedade para o atuador.");
+        return;
+      }
+      if (
+        actuatorsProps.some((a) => a.actuator.name === values.actuator.name)
+      ) {
+        toast.error("Este atuador já foi adicionado.");
+        return;
+      }
+      const isValid = CheckValidProps(values);
+
+      if (isValid.error) {
+        toast.error(isValid.error);
+        return;
+      }
+      setActuatorsProps([...actuatorsProps, values]);
+      formikActuators.resetForm();
+    },
+  });
+
+  const validationSchemaOtherActivities = Yup.object().shape({
+    otherActivity: Yup.mixed().required(t("requiredField")),
+    probability: Yup.number()
+      .typeError(t("requiredField"))
+      .required(t("requiredField"))
+      .min(0, t("minValue", { min: 0 }))
+      .max(1, t("maxValue", { max: 1 })),
+  });
+  const formikOtherActivities = useFormik({
+    initialValues: {
+      otherActivity: null,
+      probability: "",
+    },
+    validationSchema: validationSchemaOtherActivities,
+    onSubmit: async (values) => {
+      if (values.otherActivity.id == formik.values.activity.id) {
+        toast.error("Atividade já selecionada como principal.");
+        return;
+      }
+      if (
+        otherActivities.some(
+          (a) => a.otherActivity.id === values.otherActivity.id
+        )
+      ) {
+        toast.error("Esta atividade já foi adicionada.");
+        return;
+      }
+
+      setOtherActivities([...otherActivities, values]);
+      formikOtherActivities.resetForm();
+    },
+  });
+
+  async function GetActivities() {
+    const response = await BaseRequest({
+      method: "GET",
+      url: `activities/getAllWithoutPage`,
+      isAuth: true,
+      setIsLoading,
     });
-    const formik = useFormik({
-      initialValues: {
-        activity: "",
-        actuators: "",
-      },
-      validationSchema,
-      onSubmit: async (values) => {
-        console.log(values)
-        setItems((prevItems) => [
-          ...prevItems,
-          {
-            id: prevItems.length + 1,
-            title: values.activity,
-            start: totalDuration,
-            duration: 1,
-          },
-        ]);
-        console.log(items, values)
-        setIsActivityModalOpen(false);
-      },
-    });
-    const fakeEnumActivities = [
-      { id: 1, name: "Dormir", errorRate: 0.1, color: "#F34DDD" },
-      { id: 2, name: "Tomar Banho", errorRate: 0.05, color: "#4DA6FF" },
-      { id: 3, name: "Ver televisão", errorRate: 0.2, color: "#FFD700" },
-      { id: 4, name: "Fazer tal Coisa", errorRate: 0.15, color: "#32CD32" },
-      { id: 5, name: "Ler um Livro", errorRate: 0.08, color: "#FF4500" },
-      { id: 6, name: "Cozinhar", errorRate: 0.12, color: "#8A2BE2" },
-      { id: 7, name: "Estudar", errorRate: 0.07, color: "#00CED1" },
-      { id: 8, name: "Exercitar-se", errorRate: 0.09, color: "#FF6347" },
-      { id: 9, name: "Meditar", errorRate: 0.03, color: "#6A5ACD" },
-      { id: 10, name: "Jogar Video Game", errorRate: 0.18, color: "#FF69B4" },
-      { id: 11, name: "Fazer Compras", errorRate: 0.11, color: "#20B2AA" },
-      { id: 12, name: "Passear com o Cachorro", errorRate: 0.06, color: "#FFDAB9" },
-    ];
-  
-    let fakeEnumAtuators = [{
-      name: 'Cafeteira',
-      id: 'atuador1',
-    },
-    {
-      name: 'Lâmpada',
-      id: 'atuador3',
-    },
-    {
-      name: 'Ar Condicionado',
-      id: 'atuador2',
-    },
-    ]
+    if (response.status == 200) {
+      setEnumActivities(response.data.activitieData);
+    }
+  }
+
+  useEffect(() => {
+    GetActivities();
+  }, []);
+
+  useEffect(() => {
+    // Every time the field value changes, I reset the actuators
+    setActuatorsProps([]);
+    formikActuators.resetForm();
+  }, [formik.values.room]);
+
   return (
     <form className={s.activityForm} onSubmit={formik.handleSubmit}>
       <h4>{t("addActivity")}</h4>
-      <div className={s.wrapperInputs}>
-        <DropdownField
-          type="text"
-          fieldName="activity"
-          formik={formik}
-          value={formik.values.activity}
-          options={fakeEnumActivities}
-          readOnly={false}
-        />
-        <DropdownField
-          type="text"
-          fieldName="actuators"
-          formik={formik}
-          value={formik.values.actuators}
-          options={fakeEnumAtuators}
-          readOnly={false}
-          isMultiSelect={true}
-        />
-      </div>
+      <DropdownField
+        type="text"
+        fieldName="preset"
+        formik={formikPresets}
+        value={formikPresets.values.preset}
+        options={presets}
+      />
+      {formikPresets.values.preset && (
+        <div className={s.wrapperInputs}>
+          <Field
+            type="text"
+            fieldName="activityPresetName"
+            formik={formik}
+            isLogged={true}
+            value={formik.values.activityPresetName}
+          />
+          <DropdownField
+            type="text"
+            fieldName="activity"
+            formik={formik}
+            value={formik.values.activity}
+            options={enumActivities}
+            readOnly={false}
+          />
+          {formik.values.activity && (
+            <p className={s.errorValue}>
+              {t("errorValue")}: {formik.values.activity.errorValue}
+            </p>
+          )}
+          {formik.values.activity && (
+            <form
+              className={s.wrapperAddActuators}
+              onSubmit={formikOtherActivities.handleSubmit}>
+              {otherActivities.length > 0 &&
+                otherActivities.map((activity) => {
+                  return (
+                    <div className={s.wrapperEachActuatorSaved}>
+                      <Field
+                        type="text"
+                        fieldName="name"
+                        readOnly={true}
+                        isLogged={true}
+                        value={activity.otherActivity.name}
+                      />
+                      <Field
+                        type="text"
+                        fieldName="probability"
+                        readOnly={true}
+                        isLogged={true}
+                        value={activity.probability}
+                      />
+                    </div>
+                  );
+                })}
+              <div className={s.otherActivityWrapper}>
+                <DropdownField
+                  type="text"
+                  fieldName="otherActivity"
+                  formik={formikOtherActivities}
+                  value={formikOtherActivities.values.activity}
+                  options={enumActivities}
+                  readOnly={false}
+                />
+                <Field
+                  type="number"
+                  fieldName="probability"
+                  readOnly={false}
+                  formik={formikOtherActivities}
+                  isLogged={true}
+                  value={formikOtherActivities.values.probability}
+                />
+              </div>
+              <button
+                type="button"
+                onClick={() => formikOtherActivities.handleSubmit()}>
+                {t("addOtherActivity")}
+                <IoMdAdd />
+              </button>
+            </form>
+          )}
+          <DropdownField
+            type="text"
+            fieldName="room"
+            formik={formik}
+            value={formik.values.room}
+            options={formikPresets.values.preset.houserooms}
+            readOnly={false}
+            isMultiSelect={false}
+          />
+          {formik.values.room && (
+            <form
+              className={s.wrapperAddActuators}
+              onSubmit={formikActuators.handleSubmit}>
+              {actuatorsProps.length > 0 &&
+                actuatorsProps.map((actuator) => {
+                  return (
+                    <div className={s.wrapperEachActuatorSaved}>
+                      <Field
+                        type="text"
+                        fieldName="name"
+                        readOnly={true}
+                        isLogged={true}
+                        value={actuator.actuator.name}
+                      />
+                      {actuator.status.length > 0 &&
+                        actuator.status.map((prop) => {
+                          return (
+                            <Field
+                              type="text"
+                              fieldName={prop.name}
+                              readOnly={true}
+                              isLogged={true}
+                              value={prop.value}
+                            />
+                          );
+                        })}
+                    </div>
+                  );
+                })}
+              <DropdownField
+                type="text"
+                fieldName="actuator"
+                formik={formikActuators}
+                value={formikActuators.values.actuator}
+                options={formik.values.room.roomactuators}
+                readOnly={false}
+                hasTranslation={true}
+              />
+              <RenderActuatorProps formikParam={formikActuators} />
+              <button
+                type="button"
+                onClick={() => formikActuators.handleSubmit()}>
+                {t("addActuator")}
+                <IoMdAdd />
+              </button>
+            </form>
+          )}
+        </div>
+      )}
       <div className={s.arrayButtons}>
         <Button
           type="button"
@@ -102,7 +414,7 @@ export default function AddActivityModal({isActivityModalOpen, setIsActivityModa
           }}
         />
         <Button
-          type="button"
+          type="submit"
           text={t("save")}
           backgroundColor={"primary"}
           height={42}
