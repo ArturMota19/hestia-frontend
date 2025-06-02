@@ -21,6 +21,16 @@
       font-size: 1rem;
     }
   }
+
+  .incompleteDay{
+    color: var(--text-field-error-color);
+  }
+  .incompleteMessage{
+    p{
+      @include font-regular-2;
+      color: var(--text-field-error-color);
+    }
+  }
   
 
   .eachDayWrapper{

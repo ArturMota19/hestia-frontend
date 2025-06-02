@@ -136,6 +136,7 @@ export default function RoutineModal({
         item.id === id ? { ...item, start: newStart } : item
       );
     });
+    SaveRoutine(true)
   };
 
   const handleResizeStop = (event, { size }, id) => {
@@ -155,22 +156,10 @@ export default function RoutineModal({
         item.id === id ? { ...item, duration: newDuration } : item
       );
     });
+    SaveRoutine(true)
   };
 
-  async function SaveRoutine() {
-    const totalDuration = items.reduce((sum, item) => sum + item.duration, 0);
-    if (totalDuration !== 48) {
-      toast.error(
-        `A duração total das atividades deve ser 24h. Atualmente é ${
-          totalDuration / 2
-        }h.`,
-        {
-          duration: 4000,
-          position: "top-center",
-        }
-      );
-      return;
-    }
+  async function SaveRoutine(notClose=false) {
     const response = await BaseRequest({
       method: "PUT",
       url: `routines/updateRoutineActivities`,
@@ -180,8 +169,8 @@ export default function RoutineModal({
     });
     if (response.status == 200) {
       setHasToSavePeople(false);
-      toast.success("Rotina e Atividades salvas com sucesso.");
-      setIsOpen(false);
+      // toast.success("Rotina e Atividades salvas com sucesso.");
+      setIsOpen(notClose ? true : false);
     }
   }
 
