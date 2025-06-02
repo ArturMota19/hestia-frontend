@@ -79,6 +79,19 @@ export default function AddActivityModal({
     ],
   };
 
+    const validationSchemaPresets = Yup.object().shape({
+      preset: Yup.mixed().required(t("requiredField")),
+    });
+    const formikPresets = useFormik({
+      initialValues: {
+        preset: "",
+      },
+      validationSchema: validationSchemaPresets,
+      onSubmit: async (values) => {
+        console.log(values);
+      },
+    });
+
   function CheckValidProps(values) {
     const actuatorName = values.actuator.name;
     const statusProps = values.status;
@@ -131,6 +144,7 @@ export default function AddActivityModal({
   });
   const formik = useFormik({
     initialValues: {
+      activityPresetName: "",
       activity: "",
       room: "",
     },
@@ -138,14 +152,13 @@ export default function AddActivityModal({
     onSubmit: async (values) => {
       let data = {
         id: values.activity.id,
+        activityPresetName: values.activityPresetName,
         title: values.activity.name,
-        start: totalDuration,
-        duration: 1,
         activity: values.activity,
         room: values.room,
         actuators: actuatorsProps,
         otherActivities: otherActivities,
-        // presetId: preset.id,
+        presetId: formikPresets.values.preset.id,
         // dayRoutineId: weekDay.dayId
       };
       console.log(data);
@@ -163,18 +176,7 @@ export default function AddActivityModal({
     },
   });
 
-    const validationSchemaPresets = Yup.object().shape({
-      preset: Yup.mixed().required(t("requiredField")),
-    });
-    const formikPresets = useFormik({
-      initialValues: {
-        preset: "",
-      },
-      validationSchema: validationSchemaPresets,
-      onSubmit: async (values) => {
-        console.log(values);
-      },
-    });
+
 
   const validationSchemaActuators = Yup.object().shape({
     actuator: Yup.mixed().required(t("requiredField")),
@@ -274,6 +276,13 @@ export default function AddActivityModal({
       />
       {formikPresets.values.preset && (
         <div className={s.wrapperInputs}>
+          <Field
+            type="text"
+            fieldName="activityPresetName"
+            formik={formik}
+            isLogged={true}
+            value={formik.values.activityPresetName}
+          />
           <DropdownField
             type="text"
             fieldName="activity"
@@ -343,7 +352,7 @@ export default function AddActivityModal({
             fieldName="room"
             formik={formik}
             value={formik.values.room}
-            options={preset.houserooms}
+            options={formikPresets.values.preset.houserooms}
             readOnly={false}
             isMultiSelect={false}
           />
