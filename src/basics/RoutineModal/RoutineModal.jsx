@@ -136,7 +136,6 @@ export default function RoutineModal({
         item.id === id ? { ...item, start: newStart } : item
       );
     });
-    SaveRoutine(true)
   };
 
   const handleResizeStop = (event, { size }, id) => {
@@ -156,7 +155,6 @@ export default function RoutineModal({
         item.id === id ? { ...item, duration: newDuration } : item
       );
     });
-    SaveRoutine(true)
   };
 
   async function SaveRoutine(notClose=false) {
