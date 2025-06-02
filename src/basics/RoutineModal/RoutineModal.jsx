@@ -92,6 +92,11 @@ export default function RoutineModal({
   }, [isActivityModalOpen]);
 
   async function RegisterRoutineActivity(){
+    const totalDuration = items.reduce((sum, item) => sum + item.duration, 0);
+    if (totalDuration >= 48) {
+      toast.error("A rotina já está completa. Não é possível adicionar mais atividades.");
+      return;
+    }
     if(formikActivityParam.values.activityPresetParam == "") {
       toast.error("Selecione a atividade")
       return
@@ -112,6 +117,7 @@ export default function RoutineModal({
     if(response.status == 201){
       toast.success("Atividade adicionada com sucesso.")
       formikActivityParam.resetForm()
+      GetActivityRoutines()
     }
   }
 
