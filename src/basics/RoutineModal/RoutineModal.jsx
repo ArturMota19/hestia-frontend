@@ -138,7 +138,7 @@ export default function RoutineModal({
     });
   };
 
-  const handleResizeStop = (event, { size }, id) => {
+  const handleResizeStop = (_, { size }, id) => {
     setItems((prevItems) => {
       const newDuration = Math.max(1, Math.round(size.width / gridSize));
       const currentItem = prevItems.find((item) => item.id === id);
@@ -148,7 +148,10 @@ export default function RoutineModal({
         toast.error(
           "Não é possível redimensionar para sobrepor outra atividade!"
         );
-        return prevItems;
+        // Revert to original duration
+        return prevItems.map((item) =>
+          item.id === id ? { ...item, duration: currentItem.duration } : item
+        );
       }
 
       return prevItems.map((item) =>
