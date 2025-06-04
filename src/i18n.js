@@ -153,6 +153,8 @@ const resources = {
       SOM: "Som",
       TV: "TV",
       SENSOR_PRESENCA: "Sensor de Presença",
+      // Final File
+      createFinalFile: "Criar Arquivo Final"
       },
       },
       en: {
