@@ -89,25 +89,73 @@ export default function FinalFile() {
       const duration = calcularDuracaoEmMinutos(scheduledActivity.startTime, scheduledActivity.endTime);
       const activityKey = `${activityBaseName}_${roomFormattedName}_${duration}MIN${index}`;
       if (!ATIVIDADES[activityKey]) {
-        const atuadoresAtividade = {};
-        assoc.actuatorsActivity.forEach(actuatorDetail => {
-          const actuatorName = actuatorDetail.actuator.name.toUpperCase();
-          let estado = "OFF";
-          if (actuatorDetail.hasOwnProperty('switch_1') && actuatorDetail.switch_1 === "ON") estado = "ON";
-          else if (actuatorDetail.hasOwnProperty('switch') && actuatorDetail.switch === "ON") estado = "ON";
-          else if (actuatorDetail.hasOwnProperty('switch_led') && actuatorDetail.switch_led === "ON") estado = "ON";
-          atuadoresAtividade[actuatorName] = [estado, "P"];
-        });
-        ATIVIDADES[activityKey] = {
-          nome: activityKey,
+      const atuadoresAtividade = {};
+      assoc.actuatorsActivity.forEach(actuatorDetail => {
+        const actuatorName = actuatorDetail.actuator.name.toUpperCase();
+        let estado = "OFF";
+        if (actuatorDetail.hasOwnProperty('switch_1') && actuatorDetail.switch_1 === "ON") estado = "ON";
+        else if (actuatorDetail.hasOwnProperty('switch') && actuatorDetail.switch === "ON") estado = "ON";
+        else if (actuatorDetail.hasOwnProperty('switch_led') && actuatorDetail.switch_led === "ON") estado = "ON";
+        atuadoresAtividade[actuatorName] = [estado, "P"];
+      });
+      // Preenche os detalhes do atuador conforme os campos disponíveis
+      ATIVIDADES[activityKey] = {
+        nome: activityKey,
+        inicio_ocorrencia: null,
+        fim_ocorrencia: null,
+        duracao: duration,
+        taxa_erro: assoc.activity.errorValue,
+        local_atividade: roomFormattedName,
+        atividades_associadas: {},
+        lista_atuadores_atividade: {}
+      };
+
+      assoc.actuatorsActivity.forEach(actuatorDetail => {
+        const actuatorName = actuatorDetail.actuator.name.toUpperCase();
+        const actuatorData = {};
+
+        if (actuatorDetail.hasOwnProperty('switch') && actuatorDetail.switch !== null)
+        actuatorData.switch = actuatorDetail.switch;
+        if (actuatorDetail.hasOwnProperty('switch_1') && actuatorDetail.switch_1 !== null)
+        actuatorData.switch_1 = actuatorDetail.switch_1;
+        if (actuatorDetail.hasOwnProperty('switch_led') && actuatorDetail.switch_led !== null)
+        actuatorData.switch_led = actuatorDetail.switch_led;
+        if (actuatorDetail.hasOwnProperty('bright_value_v2') && actuatorDetail.bright_value_v2 !== null)
+        actuatorData.bright_value_v2 = actuatorDetail.bright_value_v2;
+        if (actuatorDetail.hasOwnProperty('temp_value_v2') && actuatorDetail.temp_value_v2 !== null)
+        actuatorData.temp_value_v2 = actuatorDetail.temp_value_v2;
+        if (actuatorDetail.hasOwnProperty('sound_volume') && actuatorDetail.sound_volume !== null)
+        actuatorData.sound_volume = actuatorDetail.sound_volume;
+        if (actuatorDetail.hasOwnProperty('temp_set') && actuatorDetail.temp_set !== null)
+        actuatorData.temp_set = actuatorDetail.temp_set;
+        if (actuatorDetail.hasOwnProperty('mode') && actuatorDetail.mode !== null)
+        actuatorData.mode = actuatorDetail.mode;
+        if (actuatorDetail.hasOwnProperty('presence_state') && actuatorDetail.presence_state !== null)
+        actuatorData.presence_state = actuatorDetail.presence_state;
+        if (actuatorDetail.hasOwnProperty('human_motion_state') && actuatorDetail.human_motion_state !== null)
+        actuatorData.human_motion_state = actuatorDetail.human_motion_state;
+
+        ATIVIDADES[activityKey].lista_atuadores_atividade[actuatorName] = actuatorData;
+      });
+      }
+
+      if (assoc.otherActivities && Array.isArray(assoc.otherActivities)) {
+      assoc.otherActivities.forEach(otherAct => {
+        const otherActName = otherAct.activity.name.toUpperCase().replace(/\s+/g, '_');
+        if (!ATIVIDADES[otherActName]) {
+        ATIVIDADES[otherActName] = {
+          nome: otherActName,
           inicio_ocorrencia: null,
           fim_ocorrencia: null,
-          duracao: duration,
-          taxa_erro: assoc.activity.errorValue,
-          local_atividade: roomFormattedName,
+          duracao: Math.floor(Math.random() * 41) + 10,
+          taxa_erro: 0.1,
+          local_atividade: null,
           atividades_associadas: {},
-          lista_atuadores_atividade: atuadoresAtividade
+          lista_atuadores_atividade: {}
         };
+        }
+        ATIVIDADES[activityKey].atividades_associadas[otherActName] = otherAct.probability;
+      });
       }
     });
 
