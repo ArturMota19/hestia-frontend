@@ -138,7 +138,11 @@ export default function ModalCreateParams({ isOpen, setIsOpen, type, formik }) {
     case "activity":
       const validationSchemaActivity = Yup.object().shape({
         nameParam: Yup.string().required(t('requiredField')),
-        errorValue: Yup.number().required(t('requiredField')).min(0, t('invalidErrorValue')).max(100, t('invalidErrorValue')),
+        errorValue: Yup.number()
+      .typeError(t("requiredField"))
+      .required(t("requiredField"))
+      .min(0, t("minValue", { min: 0 }))
+      .max(1, t("maxValue", { max: 1 })),
         color: Yup.string().required(t('requiredField')),
       });
       const formikActivity = useFormik({

@@ -12,6 +12,30 @@
   justify-content: center;
 }
 
+.wrapperActivityColors{
+  margin: 16px 0 16px;
+  padding: .75rem;
+  background-color: var(--quaternary-color);
+
+  h5{
+    width: 100%;
+    text-align: center;
+    @include font-bold-5;
+    color: var(--tertiary-color);
+  }
+}
+.wrapperRoomsColor{
+  margin: 16px 0 16px;
+  padding: .75rem;
+  background-color: var(--quaternary-color);
+    h5{
+    width: 100%;
+    text-align: center;
+    @include font-bold-5;
+    color: var(--tertiary-color);
+  }
+}
+
 .deleteActivities{
   @include font-regular-2;
   display: flex;
@@ -338,6 +362,7 @@
   transform: translate(-50%, -50%);
   position: absolute !important;
   background-color: var(--tertiary-color);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
   border-radius: 8px;
   display: flex;
   flex-direction: column;

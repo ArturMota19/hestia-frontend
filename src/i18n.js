@@ -77,6 +77,8 @@ const resources = {
       addGraph: "Adicionar Grafo",
       removeGraph: "Remover Grafo",
       addMoreRooms: "Adicione ao menos dois cômodos para construir um grafo",
+      activityPresetName: "Atividade com Preset",
+      activityPresetNamePlaceholder: "Adicione a Atividade relacionada com Preset",
       // View Preset Page
       viewHousePreset: "Visualização de Presets",
       noPresets: "Sem Presets cadastrados",
@@ -142,6 +144,7 @@ const resources = {
       someDayIsIncomplete: "Algum dia está com tempo incompleto (menos de 24h). Corrija para ser possível gerar o arquivo final.",
       deleteActivities: "Clique com o botão direito para deletar atividades adicionadas.",
       activityPresetParam: "Atividade com Preset",
+      addActuator: "Adicionar Atuador",
       // Devices
       AR_CONDICIONADO: "Ar Condicionado",
       LAMPADA: "Lâmpada",
@@ -284,6 +287,9 @@ const resources = {
       someDayIsIncomplete: "Some day has incomplete time (less than 24h). Please correct it to generate the final file.",
       deleteActivities: "Right-click to delete added activities.",
       activityPresetParam: "Activity with Preset",
+      addActuator: "Add Actuator",
+      activityPresetName: "Activity with Preset",
+      activityPresetNamePlaceholder: "Add the Activity related to the Preset",
       // Devices
       AR_CONDICIONADO: "Air Conditioner",
       LAMPADA: "Light Bulb",

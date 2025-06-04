@@ -9,6 +9,8 @@ import createRoutinesIcon from "../../assets/icons/dashboard/create-routines.svg
 import viewParamsIcon from "../../assets/icons/dashboard/see-params.svg";
 import viewPresetsIcon from "../../assets/icons/dashboard/see-presets.svg";
 import viewRoutinesIcon from "../../assets/icons/dashboard/see-routines.svg";
+import howToUseIcon from "../../assets/icons/dashboard/how-to-use.svg"
+import finalFileIcon from "../../assets/icons/dashboard/final-file.svg"
 // Imports
 import { Helmet } from "react-helmet";
 import { useNavigate } from "react-router-dom";
@@ -72,6 +74,16 @@ export default function Home() {
             icon={viewRoutinesIcon}
             url="/view-routines"
             text={t("viewRoutines")}
+          />
+          <ItemGrid
+            icon={finalFileIcon}
+            url="/final-file"
+            text={t("finalFile")}
+          />
+          <ItemGrid
+            icon={howToUseIcon}
+            url="/how-to-use"
+            text={t("howToUse")}
           />
         </div>
       </section>
