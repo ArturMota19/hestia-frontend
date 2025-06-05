@@ -20,6 +20,7 @@ export default function FinalFile() {
   const { t } = useTranslation();
 
   function transformToSimulator(responseData) {
+    setIsLoading(true)
     try {
       if(!responseData){
         toast.error("Houve um problema ao tratar os dados iniciais.");
@@ -166,7 +167,7 @@ export default function FinalFile() {
     } catch (e) {
       toast.error(e)
     } finally {
-      console.log("finalizou")
+      setIsLoading(false)
     }
   }
 

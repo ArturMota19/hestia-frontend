@@ -154,7 +154,8 @@ const resources = {
       TV: "TV",
       SENSOR_PRESENCA: "Sensor de Presença",
       // Final File
-      createFinalFile: "Criar Arquivo Final"
+      createFinalFile: "Criar Arquivo Final",
+      generateFinalFile: "Gerar Arquivo"
       },
       },
       en: {
@@ -300,6 +301,9 @@ const resources = {
       SOM: "Sound System",
       TV: "TV",
       SENSOR_PRESENCA: "Presence Sensor",
+      // Final File
+      createFinalFile: "Create Final File",
+      generateFinalFile: "Generate File"
 
       
     },
