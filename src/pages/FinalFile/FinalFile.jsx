@@ -65,6 +65,79 @@ export default function FinalFile() {
         GRAFO_COMODOS.push([originName, destinationName, connection.distance]);
       });
 
+      // 4. ATIVIDADES
+      const ATIVIDADES = {};
+      const scheduledActivities = (responseData.find(item => item.activities)?.activities) || [];
+      const calcularDuracaoEmMinutos = (startTime, endTime) => {
+        const [sH, sM, sS] = startTime.split(':').map(Number);
+        const [eH, eM, eS] = endTime.split(':').map(Number);
+        let startTotalMinutes = sH * 60 + sM + sS / 60;
+        let endTotalMinutes = eH * 60 + eM + eS / 60;
+        if (endTotalMinutes < startTotalMinutes) {
+          endTotalMinutes = 24 * 60;
+        }
+        if (endTime === "24:00:00") {
+          endTotalMinutes = 24 * 60;
+        }
+        return Math.round(endTotalMinutes - startTotalMinutes);
+      };
+
+      scheduledActivities.forEach((scheduledActivity, index) => {
+        const assoc = scheduledActivity.activityPresetParamAssociation;
+        const activityBaseName = assoc.activity.name.toUpperCase().replace(/\s+/g, '_');
+        const roomOriginalName = assoc.houserooms.room.name;
+        const roomFormattedName = roomOriginalName.toUpperCase().replace(/\s+/g, '_');
+        const duration = calcularDuracaoEmMinutos(scheduledActivity.startTime, scheduledActivity.endTime);
+        const activityKey = `${activityBaseName}_${roomFormattedName}_${duration}MIN${index}`;
+
+        // Monta lista_atuadores_atividade
+        const atuadoresAtividade = {};
+        assoc.actuatorsActivity.forEach(actuatorDetail => {
+          const actuatorName = actuatorDetail.actuator.name.toUpperCase();
+          let estado = "OFF";
+          if (actuatorDetail.hasOwnProperty('switch_1') && actuatorDetail.switch_1 === "ON") estado = "ON";
+          else if (actuatorDetail.hasOwnProperty('switch') && actuatorDetail.switch === "ON") estado = "ON";
+          else if (actuatorDetail.hasOwnProperty('switch_led') && actuatorDetail.switch_led === "ON") estado = "ON";
+          // 50% chance de ser "P" ou "D"
+          const comportamento = Math.random() < 0.5 ? "P" : "D";
+          atuadoresAtividade[actuatorName] = [estado, comportamento];
+        });
+
+        // Monta atividades_associadas
+        const atividadesAssociadas = {};
+        if (assoc.otherActivities && Array.isArray(assoc.otherActivities)) {
+          assoc.otherActivities.forEach(otherAct => {
+        const otherActName = otherAct.activity.name.toUpperCase().replace(/\s+/g, '_');
+        atividadesAssociadas[otherActName] = otherAct.probability;
+
+        // Se a atividade associada não existe, cria uma default
+        if (!ATIVIDADES[otherActName]) {
+            ATIVIDADES[otherActName] = {
+            nome: otherActName,
+            inicio_ocorrencia: null,
+            fim_ocorrencia: null,
+            duracao: Math.floor(Math.random() * (200 - 50 + 1)) + 50,
+            taxa_erro: otherAct.probability,
+            local_atividade: "",
+            atividades_associadas: {},
+            lista_atuadores_atividade: {}
+            };
+        }
+          });
+        }
+
+        ATIVIDADES[activityKey] = {
+          nome: activityKey,
+          inicio_ocorrencia: null,
+          fim_ocorrencia: null,
+          duracao: duration,
+          taxa_erro: assoc.activity.errorValue,
+          local_atividade: roomFormattedName,
+          atividades_associadas: atividadesAssociadas,
+          lista_atuadores_atividade: atuadoresAtividade
+        };
+      });
+
       // 6. AUTOMACAO
       const AUTOMACAO = [];
 
@@ -73,23 +146,23 @@ export default function FinalFile() {
       const finalData = {
         ATUADORES,
         COMODOS,
-        //GRAFO_COMODOS,
-        //ATIVIDADES,
+        GRAFO_COMODOS,
+        ATIVIDADES,
         // USUARIOS,
         AUTOMACAO
       };
       console.log(finalData)
 
-      // // Cria o blob e dispara o download
-      // const blob = new Blob([JSON.stringify(finalData, null, 2)], { type: "application/json" });
-      // const url = URL.createObjectURL(blob);
-      // const a = document.createElement("a");
-      // a.href = url;
-      // a.download = "finalFile.json";
-      // document.body.appendChild(a);
-      // a.click();
-      // document.body.removeChild(a);
-      // URL.revokeObjectURL(url);
+      // Cria o blob e dispara o download
+      const blob = new Blob([JSON.stringify(finalData, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "finalFile.json";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
     } catch (e) {
       toast.error(e)
     } finally {
