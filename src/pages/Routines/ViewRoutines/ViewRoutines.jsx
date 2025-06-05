@@ -10,53 +10,40 @@ import { useTranslation } from "react-i18next";
 import ViewComponent from "../../../basics/ViewComponent/ViewComponent";
 import { useState } from "react";
 import Button from "../../../basics/Button/Button";
+import { useEffect } from "react";
+import { BaseRequest } from "../../../services/BaseRequest";
 
 export default function ViewRoutines() {
-	const { t } = useTranslation();
+		const { t } = useTranslation();
   const [currentPage, setCurrentPage] = useState(1);
+  const [isLoading, setIsLoading] = useState(false)
+  const [housePresets, setHousePresets] = useState([])
+  const [itemsCount, setItemsCount] = useState(1)
   const itemsPerPage = 6;
 
-  let fakeData = [
-    {
-      paramName: "Preset 01",
-      people: ["Artur", "Fernando"],
-    },
-    {
-      paramName: "Preset 02",
-      people: ["Maria", "João"],
-    },
-    {
-      paramName: "Preset 03",
-      people: ["Carlos", "Ana"],
-    },
-    {
-      paramName: "Preset 04",
-      people: ["Pedro", "Clara"],
-    },
-    {
-      paramName: "Preset 05",
-      people: ["Lucas", "Sofia"],
-    },
-    {
-      paramName: "Preset 06",
-      people: ["Gabriel", "Beatriz"],
-    },
-    {
-      paramName: "Preset 07",
-      people: ["Rafael", "Isabela"],
-    },
-    {
-      paramName: "Preset 08",
-      people: ["Thiago", "Camila"],
-    },
-  ];
+  async function FetchData(){
+    const response = await BaseRequest({
+      method: "GET",
+      url: `routines/getAllPeopleRoutines/${currentPage}`,
+      isAuth: true,
+      setIsLoading
+    })
+    if (response.status === 200) {
+      setItemsCount(response.data.count);
+      setHousePresets(response.data.peopleRoutines);
+      console.log(response.data.peopleRoutines)
+    }
+  }
 
-  const totalPages = Math.ceil(fakeData.length / itemsPerPage);
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const currentItems = fakeData.slice(startIndex, startIndex + itemsPerPage);
+  useEffect(() => {
+    FetchData()
+  },[])
+
+  const totalPages = Math.ceil(itemsCount / itemsPerPage);
 
   const handlePrev = () => setCurrentPage(prev => Math.max(prev - 1, 1));
   const handleNext = () => setCurrentPage(prev => Math.min(prev + 1, totalPages));
+
 
 	return (
 		<main className={s.wrapperViewRoutines}>
@@ -68,12 +55,12 @@ export default function ViewRoutines() {
 			<section className={s.hestiaInfoWrapper}>
 				<h1>{t("viewRoutines")}</h1>
 				<section className={s.gridWrapper}>
-					{currentItems.length > 0 ? (
-						currentItems.map((item, index) => (
+					{housePresets.length > 0 ? (
+						housePresets.map((item, index) => (
 							<ViewComponent
 								index={index}
-								title={item.paramName}
-								people={item.people}
+								title={item.housePreset}
+								people={[item.peopleName]}
 								type={"routine"}
 								hasActions={true}
                 image={houseIcon}
