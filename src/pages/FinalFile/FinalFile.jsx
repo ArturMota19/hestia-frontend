@@ -3,6 +3,7 @@ import Header from "../../basics/Header/Header";
 import DropdownField from "../../basics/DropdownField/DropdownField";
 import Button from "../../basics/Button/Button";
 // Images
+import { IoMdAdd } from "react-icons/io";
 // Imports
 import { Helmet } from "react-helmet";
 import { useTranslation } from "react-i18next";
@@ -13,11 +14,99 @@ import toast from "react-hot-toast";
 import { BaseRequest } from "../../services/BaseRequest";
 //Styles
 import s from "./FinalFile.module.scss";
+import Field from "../../basics/Field/Field";
 
 export default function FinalFile() {
   const [isLoading, setIsLoading] = useState(false);
   const [presets, setPresets] = useState([]);
+  const [peopleRoutines, setPeopleRoutines] = useState([])
+  const [preferenceData, setPreferenceData] = useState([])
+  const [enumActivities, setEnumActivities] = useState([]);
+  const [actuatorsProps, setActuatorsProps] = useState([]);
+  const [otherActivities, setOtherActivities] = useState([]);
   const { t } = useTranslation();
+
+    const actuatorStatusMap = {
+    LAMPADA: [
+      { name: "switch_led", type: "boolean" },
+      { name: "bright_value_v2", type: "range", min: 0, max: 1000 },
+      { name: "temp_value_v2", type: "range", min: 0, max: 1000 },
+    ],
+    CAFETEIRA: [{ name: "switch", type: "boolean" }],
+    PLUG: [{ name: "switch_1", type: "boolean" }],
+    SOM: [
+      { name: "switch", type: "boolean" },
+      { name: "sound_volume", type: "range", min: 0, max: 100 },
+    ],
+    AR_CONDICIONADO: [
+      { name: "switch", type: "boolean" },
+      { name: "temp_set", type: "range", min: 16, max: 30 },
+      {
+        name: "mode",
+        type: "enum",
+        options: ["COLL", "HOT", "WET", "WIND", "AUTO"],
+      },
+    ],
+    TV: [
+      { name: "switch", type: "boolean" },
+      { name: "sound_volume", type: "range", min: 0, max: 100 },
+    ],
+    SENSOR_PRESENCA: [
+      { name: "presence_state", type: "boolean" },
+      {
+        name: "human_motion_state",
+        type: "enum",
+        options: ["NONE", "SMALL_MOVE", "LARGER_MOVE"],
+      },
+    ],
+  };
+
+    function CheckValidProps(values) {
+    const actuatorName = values.actuator.name;
+    const statusProps = values.status;
+    const expectedProps = actuatorStatusMap[actuatorName];
+
+    if (!expectedProps) {
+      return { error: "unknownActuator" };
+    }
+
+    for (const prop of statusProps) {
+      const expectedProp = expectedProps.find((p) => p.name === prop.name);
+
+      if (!expectedProp) {
+        return { error: `unknownProp: ${prop.name}` };
+      }
+
+      const inputIntValue = parseInt(prop.value);
+
+      if (expectedProp.type === "boolean") {
+        if (typeof prop.value !== "boolean") {
+          return { error: `invalidType: ${prop.name} should be boolean` };
+        }
+      } else if (expectedProp.type === "range") {
+        if (
+          inputIntValue < expectedProp.min ||
+          inputIntValue > expectedProp.max
+        ) {
+          return {
+            error: `outOfRange: ${prop.name} should be between ${expectedProp.min} and ${expectedProp.max}`,
+          };
+        }
+      } else if (expectedProp.type === "enum") {
+        if (!expectedProp.options.includes(prop.value)) {
+          return {
+            error: `invalidOption: ${
+              prop.name
+            } should be one of ${expectedProp.options.join(", ")}`,
+          };
+        }
+      } else {
+        return { error: `unknownType: ${expectedProp.type}` };
+      }
+    }
+
+    return { valid: true };
+  }
 
   function transformToSimulator(responseData) {
     setIsLoading(true)
@@ -143,7 +232,6 @@ export default function FinalFile() {
       const AUTOMACAO = [];
 
       // 7. Retorno final
-      // Monta o objeto final
       const finalData = {
         ATUADORES,
         COMODOS,
@@ -208,6 +296,95 @@ export default function FinalFile() {
     },
   });
 
+  async function GetCreatedRoutines(){
+    if(formikPresets.values.preset == ""){
+      return
+    }
+    const response = await BaseRequest({
+      method: "GET",
+      url: `routines/getPeopleRoutinesByPresetId/${formikPresets.values.preset.id}`,
+      isAuth: true,
+      setIsLoading
+    })
+    if(response.status == 200){
+      console.log(response)
+      setPeopleRoutines(response.data)
+    }
+  }
+
+  useEffect(() => {
+    if(formikPresets.values.preset != ""){
+      GetCreatedRoutines()
+    }
+  },[formikPresets.values.preset])
+
+    async function GetActivities() {
+    const response = await BaseRequest({
+      method: "GET",
+      url: `activities/getAllWithoutPage`,
+      isAuth: true,
+      setIsLoading,
+    });
+    if (response.status == 200) {
+      setEnumActivities(response.data.activitieData);
+    }
+  }
+
+  useEffect(() => {
+    GetActivities();
+  }, []);
+
+
+  const PeoplePreferences = ({person, index}) => {
+    const [preferencesToThisPerson, setPreferencesToThisPerson] = useState([])
+    const validationSchemaPreferences = Yup.object().shape({
+      priority: Yup.number().min(1, "Min 1").required(t("requiredField")),
+    });
+    const formikPreferences = useFormik({
+      initialValues: {
+          priority: "",
+        },
+        validationSchema: validationSchemaPreferences,
+        onSubmit: async (values) => {
+          console.log(values)
+        },
+      });
+    const validationSchemaPreferencesRooms = Yup.object().shape({
+      priority: Yup.number().min(1, "Min 1").required(t("requiredField")),
+    });
+
+    const formikPreferencesRooms = useFormik({
+      initialValues: {
+          priority: "",
+        },
+        validationSchema: validationSchemaPreferencesRooms,
+        onSubmit: async (values) => {
+          console.log(values)
+        },
+    });
+    
+
+    return (
+      <form onSubmit={formikPreferences.handleSubmit} key={index}>
+        <h3>{person.peopleName}</h3>
+        <Field
+          type="number"
+          fieldName="priority"
+          formik={formikPreferences}
+          isLogged={true}
+        />
+        <Button
+          type="button"
+          doFunction={formikPreferences.handleSubmit}
+          text={t("saveThisPerson")}
+          backgroundColor={"secondary"}
+          height={42}
+        />
+      </form>
+    )
+  }
+
+
   return (
     <main className={s.wrapperFinalFile}>
       <Helmet>
@@ -226,6 +403,13 @@ export default function FinalFile() {
               value={formikPresets.values.preset}
               options={presets}
             />
+            <section>
+              <p>Defina as preferências e prioridades para cada pessoa da rotina.</p>
+              <p>Não é necessário definir preferências para todos os cômodos.</p>
+              {peopleRoutines.map((person, index) => (
+                <PeoplePreferences person={person} index={index}/>
+              ))}
+            </section>
             <Button
               type="submit"
               text={t("generateFinalFile")}
