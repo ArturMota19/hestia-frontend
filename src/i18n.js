@@ -155,7 +155,14 @@ const resources = {
       SENSOR_PRESENCA: "Sensor de Presença",
       // Final File
       createFinalFile: "Criar Arquivo Final",
-      generateFinalFile: "Gerar Arquivo"
+      generateFinalFile: "Gerar Arquivo",
+      definePreferences: "Defina as prioridades para cada pessoa da rotina.",
+      preferencesAdvice: "Não é necessário definir preferências para todos os cômodos.",
+      priority: "Prioridade",
+      priorityPlaceholder: "Defina uma prioridade",
+      savePerson: "Restam salvar",
+      personGenerateFile: "pessoa(s) para gerar o arquivo final.",
+      saveThisPerson: "Salvar Pessoa"
       },
       },
       en: {
@@ -303,7 +310,14 @@ const resources = {
       SENSOR_PRESENCA: "Presence Sensor",
       // Final File
       createFinalFile: "Create Final File",
-      generateFinalFile: "Generate File"
+      generateFinalFile: "Generate File",
+      definePreferences: "Set the priorities for each person in the routine.",
+      preferencesAdvice: "It is not necessary to set preferences for all rooms.",
+      priority: "Priority",
+      priorityPlaceholder: "Set a priority",
+      savePerson: "People left to save",
+      personGenerateFile: "person(s) to generate the final file.",
+      saveThisPerson: "Save Person"
 
       
     },

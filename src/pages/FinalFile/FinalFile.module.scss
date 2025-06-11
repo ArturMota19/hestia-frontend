@@ -143,4 +143,14 @@
             }
         }
     }
+
+    .textPreferences{
+        @include font-regular-2;
+        text-align: center;
+    }
+    .savePersonGenerate{
+        @include font-regular-3;
+        color: var(--text-field-error-color)
+    }
+
 }

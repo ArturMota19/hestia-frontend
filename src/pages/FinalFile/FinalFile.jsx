@@ -25,6 +25,27 @@ export default function FinalFile() {
 
   const { t } = useTranslation();
 
+    const validationSchemaPresets = Yup.object().shape({
+    preset: Yup.mixed().required(t("requiredField")),
+  });
+  const formikPresets = useFormik({
+    initialValues: {
+      preset: "",
+    },
+    validationSchema: validationSchemaPresets,
+    onSubmit: async (values) => {
+      const response = await BaseRequest({
+        method: "GET",
+        url: `/final-file/generateFinalFile/${values.preset.id}`,
+        setIsLoading,
+        isAuth: true,
+      });
+      if (response.status == 200) {
+        transformToSimulator(response.data.finalData);
+      }
+    },
+  });
+
   const actuatorStatusMap = {
     LAMPADA: [
       { name: "switch_led", type: "boolean" },
@@ -108,7 +129,6 @@ export default function FinalFile() {
   }
 
   function transformToSimulator(responseData) {
-    console.log(responseData);
     if (peopleRoutines.length - preferenceData.length != 0) {
       toast.error("Salve todas as preferências para continuar.");
       return;
@@ -377,14 +397,15 @@ export default function FinalFile() {
         AUTOMACAO,
       };
 
-      // Cria o blob e dispara o download
       const blob = new Blob([JSON.stringify(finalData, null, 2)], {
         type: "application/json",
       });
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = "finalFile.json";
+      let id = Date.now()
+      const presetNameWithUnderscores = formikPresets.values.preset.name.replace(/\s+/g, "_");
+      a.download = `${presetNameWithUnderscores}${id}.json`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
@@ -412,27 +433,6 @@ export default function FinalFile() {
     GetPresets();
   }, []);
 
-  const validationSchemaPresets = Yup.object().shape({
-    preset: Yup.mixed().required(t("requiredField")),
-  });
-  const formikPresets = useFormik({
-    initialValues: {
-      preset: "",
-    },
-    validationSchema: validationSchemaPresets,
-    onSubmit: async (values) => {
-      const response = await BaseRequest({
-        method: "GET",
-        url: `/final-file/generateFinalFile/${values.preset.id}`,
-        setIsLoading,
-        isAuth: true,
-      });
-      if (response.status == 200) {
-        transformToSimulator(response.data.finalData);
-      }
-    },
-  });
-
   async function GetCreatedRoutines() {
     if (formikPresets.values.preset == "") {
       return;
@@ -444,7 +444,6 @@ export default function FinalFile() {
       setIsLoading,
     });
     if (response.status == 200) {
-      console.log(response);
       setPeopleRoutines(response.data);
     }
   }
@@ -672,18 +671,16 @@ export default function FinalFile() {
             <section className={s.formPreferencesWrapper}>
               {peopleRoutines.length > 0 && (
                 <>
-                  <p>
-                    Defina as preferências e prioridades para cada pessoa da
-                    rotina.
+                  <p className={s.textPreferences}>
+                    {t("definePreferences")}
                     <br />
-                    Não é necessário definir preferências para todos os cômodos.
+                    {t("preferencesAdvice")}
                   </p>
                   {peopleRoutines.length - preferenceData.length ===
                   0 ? null : (
-                    <h6>
-                      Restam salvar{" "}
-                      {peopleRoutines.length - preferenceData.length} pessoa(s)
-                      para gerar o arquivo final.
+                    <h6 className={s.savePersonGenerate}>
+                      {t("savePerson")}{" "}
+                      {peopleRoutines.length - preferenceData.length} {t("personGenerateFile")}
                     </h6>
                   )}
                 </>
