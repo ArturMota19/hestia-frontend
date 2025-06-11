@@ -108,10 +108,10 @@ export default function FinalFile() {
   }
 
   function transformToSimulator(responseData) {
-    console.log(preferenceData)
-    if(peopleRoutines.length - preferenceData.length != 0){
-      toast.error("Salve todas as preferências para continuar.")
-      return
+    console.log(responseData);
+    if (peopleRoutines.length - preferenceData.length != 0) {
+      toast.error("Salve todas as preferências para continuar.");
+      return;
     }
     setIsLoading(true);
     try {
@@ -266,18 +266,89 @@ export default function FinalFile() {
 
       // 5. USUARIOS
       const USUARIOS = {};
+      const sourceDays = responseData.find((item) => item.days)?.days || [];
+
       preferenceData.forEach((preferenceEntry) => {
         const personName = Object.keys(preferenceEntry)[0];
         const personData = preferenceEntry[personName];
-        
+
         const userKey = personName.toLowerCase().replace(/\s+/g, "_");
-        
+
+        const personRoutine = sourceDays.find(
+          (routine) =>
+            routine.person &&
+            routine.person.person &&
+            routine.person.person.name === personName
+        );
+
+        const rotina_semana = [];
+
+        if (personRoutine && personRoutine.days) {
+          const daysOrder = [
+            "monday",
+            "tuesday",
+            "wednesday",
+            "thursday",
+            "friday",
+            "saturday",
+            "sunday",
+          ];
+
+          daysOrder.forEach((day) => {
+            if (
+              personRoutine.days[day] &&
+              Array.isArray(personRoutine.days[day])
+            ) {
+              const dayActivities = [];
+
+              personRoutine.days[day].forEach((activity) => {
+                const activityAssoc = activity.activityPresetParamAssociation;
+                if (activityAssoc) {
+                  const duration = calcularDuracaoEmMinutos(
+                    activity.startTime,
+                    activity.endTime
+                  );
+                  const activityBaseName = activityAssoc.activity.name
+                    .toUpperCase()
+                    .replace(/\s+/g, "_");
+                  const roomFormattedName = activityAssoc.houserooms.room.name
+                    .toUpperCase()
+                    .replace(/\s+/g, "_");
+
+                  const matchingActivityKey = Object.keys(ATIVIDADES).find(
+                    (key) => {
+                      const activityData = ATIVIDADES[key];
+                      return (
+                        activityData.duracao === duration &&
+                        activityData.local_atividade === roomFormattedName &&
+                        key.includes(activityBaseName)
+                      );
+                    }
+                  );
+
+                  if (matchingActivityKey) {
+                    dayActivities.push(matchingActivityKey);
+                  }
+                }
+              });
+
+              rotina_semana.push(dayActivities);
+            } else {
+              rotina_semana.push([]);
+            }
+          });
+        } else {
+          for (let i = 0; i < 7; i++) {
+            rotina_semana.push([]);
+          }
+        }
+
         USUARIOS[userKey] = {
           nome: personData.nome,
           prioridade: personData.prioridade,
           comodo_atual: personData.comodo_atual,
           preferencia: personData.preferencia,
-          rotina_semana: []
+          rotina_semana: rotina_semana,
         };
       });
 
@@ -562,12 +633,12 @@ export default function FinalFile() {
     );
   };
 
-function CheckPersonArray(person) {
-  return !preferenceData.some((entry) => {
-    const key = Object.keys(entry)[0];
-    return key === person;
-  });
-}
+  function CheckPersonArray(person) {
+    return !preferenceData.some((entry) => {
+      const key = Object.keys(entry)[0];
+      return key === person;
+    });
+  }
 
   return (
     <main className={s.wrapperFinalFile}>
@@ -591,21 +662,31 @@ function CheckPersonArray(person) {
               {peopleRoutines.length > 0 && (
                 <>
                   <p>
-                    Defina as preferências e prioridades para cada pessoa da rotina.
-                    <br/>
+                    Defina as preferências e prioridades para cada pessoa da
+                    rotina.
+                    <br />
                     Não é necessário definir preferências para todos os cômodos.
                   </p>
-                  {(peopleRoutines.length - preferenceData.length) === 0 ? null : (
-                    <h6>Restam salvar {peopleRoutines.length - preferenceData.length} pessoa(s) para gerar o arquivo final.</h6>
+                  {peopleRoutines.length - preferenceData.length ===
+                  0 ? null : (
+                    <h6>
+                      Restam salvar{" "}
+                      {peopleRoutines.length - preferenceData.length} pessoa(s)
+                      para gerar o arquivo final.
+                    </h6>
                   )}
                 </>
               )}
-            {peopleRoutines.map(
-              (person, index) =>
-                CheckPersonArray(person.peopleName) && (
-                  <PeoplePreferences person={person} index={index} key={index} />
-                )
-            )}
+              {peopleRoutines.map(
+                (person, index) =>
+                  CheckPersonArray(person.peopleName) && (
+                    <PeoplePreferences
+                      person={person}
+                      index={index}
+                      key={index}
+                    />
+                  )
+              )}
             </section>
             <Button
               type="submit"
