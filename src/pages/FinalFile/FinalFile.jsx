@@ -108,6 +108,10 @@ export default function FinalFile() {
   }
 
   function transformToSimulator(responseData) {
+    if(peopleRoutines.length - preferenceData.length != 0){
+      toast.error("Salve todas as preferências para continuar.")
+      return
+    }
     setIsLoading(true);
     try {
       if (!responseData) {
@@ -362,19 +366,15 @@ export default function FinalFile() {
       },
       validationSchema: validationSchemaPreferences,
       onSubmit: async (values) => {
-        console.log(values);
-        console.log(actuatorsProps);
         let finalData = {
-          [person['peopleName']]: {
+          [person["peopleName"]]: {
             nome: person.peopleName,
             prioridade: values.priority,
             comodo_atual: "RUA",
-            preferencia: {
-
-            }
-          }
-        }
-        actuatorsProps.forEach(item => {
+            preferencia: {},
+          },
+        };
+        actuatorsProps.forEach((item) => {
           const comodo = item.room.name.toUpperCase();
           const atuador = item.actuator.name.toUpperCase();
 
@@ -385,14 +385,13 @@ export default function FinalFile() {
           if (!finalData[person.peopleName].preferencia[comodo][atuador]) {
             finalData[person.peopleName].preferencia[comodo][atuador] = {};
           }
-
-          // status pode conter chaves e valores, ex: switch_led, bright_value_v2, etc.
-          console.log(item)
-          item.status.forEach(statusItem => {
-            finalData[person.peopleName].preferencia[comodo][atuador][statusItem.name] = statusItem.value;
+          item.status.forEach((statusItem) => {
+            finalData[person.peopleName].preferencia[comodo][atuador][
+              statusItem.name
+            ] = statusItem.value;
           });
         });
-        console.log(finalData)
+        setPreferenceData([...preferenceData, finalData]);
       },
     });
 
@@ -422,7 +421,11 @@ export default function FinalFile() {
           return;
         }
         if (
-          actuatorsProps.some((a) => (a.actuator.name === values.actuator.name && a.room.id === formik.values.room.id))
+          actuatorsProps.some(
+            (a) =>
+              a.actuator.name === values.actuator.name &&
+              a.room.id === formik.values.room.id
+          )
         ) {
           toast.error("Este atuador já foi adicionado.");
           return;
@@ -444,7 +447,10 @@ export default function FinalFile() {
     });
 
     return (
-      <form onSubmit={formikPreferences.handleSubmit} className={s.formWrapperIntern} key={index}>
+      <form
+        onSubmit={formikPreferences.handleSubmit}
+        className={s.formWrapperIntern}
+        key={index}>
         <h3>{person.peopleName}</h3>
         <Field
           type="number"
@@ -458,7 +464,9 @@ export default function FinalFile() {
               <div className={s.wrapperEachActuatorSaved}>
                 <h5>{t("savedPreferences")}</h5>
                 {actuatorsProps.map((actuator, index) => (
-                  <section className={s.internEachActuator} key={`${actuator.actuator.name}${index}`}>
+                  <section
+                    className={s.internEachActuator}
+                    key={`${actuator.actuator.name}${index}`}>
                     <Field
                       type="text"
                       fieldName="room"
@@ -513,7 +521,6 @@ export default function FinalFile() {
                     hasTranslation={true}
                   />
                   <RenderActuatorProps formikParam={formikActuators} />
-
                 </form>
               )}
             </div>
@@ -537,6 +544,13 @@ export default function FinalFile() {
     );
   };
 
+function CheckPersonArray(person) {
+  return !preferenceData.some((entry) => {
+    const key = Object.keys(entry)[0];
+    return key === person;
+  });
+}
+
   return (
     <main className={s.wrapperFinalFile}>
       <Helmet>
@@ -556,15 +570,24 @@ export default function FinalFile() {
               options={presets}
             />
             <section className={s.formPreferencesWrapper}>
-              <p>
-                Defina as preferências e prioridades para cada pessoa da rotina.
-              </p>
-              <p>
-                Não é necessário definir preferências para todos os cômodos.
-              </p>
-              {peopleRoutines.map((person, index) => (
-                <PeoplePreferences person={person} index={index} />
-              ))}
+              {peopleRoutines.length > 0 && (
+                <>
+                  <p>
+                    Defina as preferências e prioridades para cada pessoa da rotina.
+                    <br/>
+                    Não é necessário definir preferências para todos os cômodos.
+                  </p>
+                  {(peopleRoutines.length - preferenceData.length) === 0 ? null : (
+                    <h6>Restam salvar {peopleRoutines.length - preferenceData.length} pessoa(s) para gerar o arquivo final.</h6>
+                  )}
+                </>
+              )}
+            {peopleRoutines.map(
+              (person, index) =>
+                CheckPersonArray(person.peopleName) && (
+                  <PeoplePreferences person={person} index={index} key={index} />
+                )
+            )}
             </section>
             <Button
               type="submit"
