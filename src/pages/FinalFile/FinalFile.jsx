@@ -352,6 +352,18 @@ export default function FinalFile() {
         };
       });
 
+      const usersWithEmptyDays = Object.entries(USUARIOS).filter(
+        ([, user]) =>
+          Array.isArray(user.rotina_semana) &&
+          user.rotina_semana.some((day) => !day || day.length === 0)
+      );
+      if (usersWithEmptyDays.length > 0) {
+        toast.error(
+          "Existe(m) usuário(s) com dias sem atividades na rotina. Verifique antes de gerar o arquivo."
+        );
+        setIsLoading(false);
+        return;
+      }
       // 6. AUTOMACAO
       const AUTOMACAO = [];
 
@@ -364,7 +376,6 @@ export default function FinalFile() {
         USUARIOS,
         AUTOMACAO,
       };
-      console.log(finalData);
 
       // Cria o blob e dispara o download
       const blob = new Blob([JSON.stringify(finalData, null, 2)], {
