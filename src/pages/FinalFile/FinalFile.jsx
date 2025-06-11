@@ -474,7 +474,7 @@ export default function FinalFile() {
           },
         };
         actuatorsProps.forEach((item) => {
-          const comodo = item.room.name.toUpperCase();
+          const comodo = item.room.name.toLowerCase().replace(/\s+/g, "_");
           const atuador = item.actuator.name.toUpperCase();
 
           if (!finalData[person.peopleName].preferencia[comodo]) {

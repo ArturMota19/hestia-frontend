@@ -154,6 +154,7 @@ const resources = {
       TV: "TV",
       SENSOR_PRESENCA: "Sensor de Presença",
       // Final File
+      finalFile: "Arquivo Final",
       createFinalFile: "Criar Arquivo Final",
       generateFinalFile: "Gerar Arquivo",
       definePreferences: "Defina as prioridades para cada pessoa da rotina.",
@@ -162,7 +163,10 @@ const resources = {
       priorityPlaceholder: "Defina uma prioridade",
       savePerson: "Restam salvar",
       personGenerateFile: "pessoa(s) para gerar o arquivo final.",
-      saveThisPerson: "Salvar Pessoa"
+      saveThisPerson: "Salvar Pessoa",
+      savedPreferences: "Preferências Salvas",
+      // How To Use
+      howToUse: "Como Usar"
       },
       },
       en: {
@@ -309,6 +313,7 @@ const resources = {
       TV: "TV",
       SENSOR_PRESENCA: "Presence Sensor",
       // Final File
+      finalFile: "Final File",
       createFinalFile: "Create Final File",
       generateFinalFile: "Generate File",
       definePreferences: "Set the priorities for each person in the routine.",
@@ -317,7 +322,10 @@ const resources = {
       priorityPlaceholder: "Set a priority",
       savePerson: "People left to save",
       personGenerateFile: "person(s) to generate the final file.",
-      saveThisPerson: "Save Person"
+      saveThisPerson: "Save Person",
+      savedPreferences: "Saved Preferences",
+      // How To Use
+      howToUse: "How To Use"
 
       
     },
