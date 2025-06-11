@@ -108,6 +108,7 @@ export default function FinalFile() {
   }
 
   function transformToSimulator(responseData) {
+    console.log(preferenceData)
     if(peopleRoutines.length - preferenceData.length != 0){
       toast.error("Salve todas as preferências para continuar.")
       return
@@ -263,6 +264,23 @@ export default function FinalFile() {
         };
       });
 
+      // 5. USUARIOS
+      const USUARIOS = {};
+      preferenceData.forEach((preferenceEntry) => {
+        const personName = Object.keys(preferenceEntry)[0];
+        const personData = preferenceEntry[personName];
+        
+        const userKey = personName.toLowerCase().replace(/\s+/g, "_");
+        
+        USUARIOS[userKey] = {
+          nome: personData.nome,
+          prioridade: personData.prioridade,
+          comodo_atual: personData.comodo_atual,
+          preferencia: personData.preferencia,
+          rotina_semana: []
+        };
+      });
+
       // 6. AUTOMACAO
       const AUTOMACAO = [];
 
@@ -272,7 +290,7 @@ export default function FinalFile() {
         COMODOS,
         GRAFO_COMODOS,
         ATIVIDADES,
-        // USUARIOS,
+        USUARIOS,
         AUTOMACAO,
       };
       console.log(finalData);
