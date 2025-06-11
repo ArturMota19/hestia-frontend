@@ -392,9 +392,8 @@ export default function FinalFile() {
           toast.error("Adicione ao menos uma propriedade para o atuador.");
           return;
         }
-        console.log(actuatorsProps)
         if (
-          actuatorsProps.some((a) => a.actuator.name === values.actuator.name)
+          actuatorsProps.some((a) => (a.actuator.name === values.actuator.name && a.room.id === formik.values.room.id))
         ) {
           toast.error("Este atuador já foi adicionado.");
           return;
@@ -429,8 +428,8 @@ export default function FinalFile() {
             {actuatorsProps.length > 0 && (
               <div className={s.wrapperEachActuatorSaved}>
                 <h5>{t("savedPreferences")}</h5>
-                {actuatorsProps.map((actuator) => (
-                  <section className={s.internEachActuator} key={actuator.actuator.name}>
+                {actuatorsProps.map((actuator, index) => (
+                  <section className={s.internEachActuator} key={`${actuator.actuator.name}${index}`}>
                     <Field
                       type="text"
                       fieldName="room"
@@ -461,9 +460,7 @@ export default function FinalFile() {
                 ))}
               </div>
             )}
-              
             <div className={s.wrapperRoomsColor}>
-              {/* <h5>{t("room")}</h5> */}
               <DropdownField
                 type="text"
                 fieldName="room"
