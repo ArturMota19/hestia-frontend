@@ -392,6 +392,7 @@ export default function FinalFile() {
           toast.error("Adicione ao menos uma propriedade para o atuador.");
           return;
         }
+        console.log(actuatorsProps)
         if (
           actuatorsProps.some((a) => a.actuator.name === values.actuator.name)
         ) {
@@ -415,7 +416,7 @@ export default function FinalFile() {
     });
 
     return (
-      <form onSubmit={formikPreferences.handleSubmit} key={index}>
+      <form onSubmit={formikPreferences.handleSubmit} className={s.formWrapperIntern} key={index}>
         <h3>{person.peopleName}</h3>
         <Field
           type="number"
@@ -425,10 +426,11 @@ export default function FinalFile() {
         />
         {formikPresets.values.preset && (
           <div className={s.wrapperInputs}>
-            {actuatorsProps.length > 0 &&
-              actuatorsProps.map((actuator) => {
-                return (
-                  <div className={s.wrapperEachActuatorSaved}>
+            {actuatorsProps.length > 0 && (
+              <div className={s.wrapperEachActuatorSaved}>
+                <h5>{t("savedPreferences")}</h5>
+                {actuatorsProps.map((actuator) => (
+                  <section className={s.internEachActuator} key={actuator.actuator.name}>
                     <Field
                       type="text"
                       fieldName="room"
@@ -455,11 +457,13 @@ export default function FinalFile() {
                           />
                         );
                       })}
-                  </div>
-                );
-              })}
+                  </section>
+                ))}
+              </div>
+            )}
+              
             <div className={s.wrapperRoomsColor}>
-              <h5>{t("room")}</h5>
+              {/* <h5>{t("room")}</h5> */}
               <DropdownField
                 type="text"
                 fieldName="room"
@@ -483,17 +487,19 @@ export default function FinalFile() {
                     hasTranslation={true}
                   />
                   <RenderActuatorProps formikParam={formikActuators} />
-                  <button
-                    type="button"
-                    onClick={() => formikActuators.handleSubmit()}>
-                    {t("addActuator")}
-                    <IoMdAdd />
-                  </button>
+
                 </form>
               )}
             </div>
           </div>
         )}
+        <button
+          type="button"
+          className={s.addActuatorButton}
+          onClick={() => formikActuators.handleSubmit()}>
+          {t("addActuator")}
+          <IoMdAdd />
+        </button>
         <Button
           type="button"
           doFunction={formikPreferences.handleSubmit}
@@ -523,7 +529,7 @@ export default function FinalFile() {
               value={formikPresets.values.preset}
               options={presets}
             />
-            <section>
+            <section className={s.formPreferencesWrapper}>
               <p>
                 Defina as preferências e prioridades para cada pessoa da rotina.
               </p>
