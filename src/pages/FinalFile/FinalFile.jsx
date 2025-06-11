@@ -353,7 +353,6 @@ export default function FinalFile() {
 
   const PeoplePreferences = ({ person, index }) => {
     const [actuatorsProps, setActuatorsProps] = useState([]);
-    const [preferencesToThisPerson, setPreferencesToThisPerson] = useState([]);
     const validationSchemaPreferences = Yup.object().shape({
       priority: Yup.number().min(1, "Min 1").required(t("requiredField")),
     });
@@ -364,6 +363,7 @@ export default function FinalFile() {
       validationSchema: validationSchemaPreferences,
       onSubmit: async (values) => {
         console.log(values);
+        console.log(actuatorsProps);
       },
     });
 
@@ -404,16 +404,15 @@ export default function FinalFile() {
           toast.error(isValid.error);
           return;
         }
-        setActuatorsProps([...actuatorsProps, values]);
+        let data = {
+          actuator: values.actuator,
+          status: values.status,
+          room: formik.values.room,
+        };
+        setActuatorsProps([...actuatorsProps, data]);
         formikActuators.resetForm();
       },
     });
-
-    // useEffect(() => {
-    //   // Every time the field value changes, I reset the actuators
-    //   setActuatorsProps([]);
-    //   formikActuators.resetForm();
-    // }, [formik.values.room]);
 
     return (
       <form onSubmit={formikPreferences.handleSubmit} key={index}>
@@ -426,6 +425,39 @@ export default function FinalFile() {
         />
         {formikPresets.values.preset && (
           <div className={s.wrapperInputs}>
+            {actuatorsProps.length > 0 &&
+              actuatorsProps.map((actuator) => {
+                return (
+                  <div className={s.wrapperEachActuatorSaved}>
+                    <Field
+                      type="text"
+                      fieldName="room"
+                      readOnly={true}
+                      isLogged={true}
+                      value={actuator.room.name}
+                    />
+                    <Field
+                      type="text"
+                      fieldName="name"
+                      readOnly={true}
+                      isLogged={true}
+                      value={actuator.actuator.name}
+                    />
+                    {actuator.status.length > 0 &&
+                      actuator.status.map((prop) => {
+                        return (
+                          <Field
+                            type="text"
+                            fieldName={prop.name}
+                            readOnly={true}
+                            isLogged={true}
+                            value={prop.value}
+                          />
+                        );
+                      })}
+                  </div>
+                );
+              })}
             <div className={s.wrapperRoomsColor}>
               <h5>{t("room")}</h5>
               <DropdownField
@@ -441,32 +473,6 @@ export default function FinalFile() {
                 <form
                   className={s.wrapperAddActuators}
                   onSubmit={formikActuators.handleSubmit}>
-                  {actuatorsProps.length > 0 &&
-                    actuatorsProps.map((actuator) => {
-                      return (
-                        <div className={s.wrapperEachActuatorSaved}>
-                          <Field
-                            type="text"
-                            fieldName="name"
-                            readOnly={true}
-                            isLogged={true}
-                            value={actuator.actuator.name}
-                          />
-                          {actuator.status.length > 0 &&
-                            actuator.status.map((prop) => {
-                              return (
-                                <Field
-                                  type="text"
-                                  fieldName={prop.name}
-                                  readOnly={true}
-                                  isLogged={true}
-                                  value={prop.value}
-                                />
-                              );
-                            })}
-                        </div>
-                      );
-                    })}
                   <DropdownField
                     type="text"
                     fieldName="actuator"
@@ -488,12 +494,6 @@ export default function FinalFile() {
             </div>
           </div>
         )}
-        <button
-          type="button"
-          onClick={() => formikOtherActivities.handleSubmit()}>
-          {t("addPreferences")}
-          <IoMdAdd />
-        </button>
         <Button
           type="button"
           doFunction={formikPreferences.handleSubmit}
