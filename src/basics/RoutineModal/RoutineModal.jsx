@@ -106,6 +106,7 @@ export default function RoutineModal({
     }
     let data = {
       activityPresetParam: formikActivityParam.values.activityPresetParam.id,
+      presetId: preset.id,
       dayRoutineId: weekDay.dayId,
       start: items.length > 0 ? items.reduce((max, item) => Math.max(max, item.start + item.duration), 0) : 0,
       duration: 1,

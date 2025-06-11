@@ -28,6 +28,7 @@ function App() {
     import("./pages/Routines/CreateRoutine/CreateRoutine")
   );
   const ViewRoutines = lazy(() => import("./pages/Routines/ViewRoutines/ViewRoutines"))
+  const FinalFile = lazy(() => import("./pages/FinalFile/FinalFile"))
 
   return (
     <ScreenGuard>
@@ -50,6 +51,8 @@ function App() {
             {/* Routines Routes */}
             <Route path="/create-routines" element={<ProtectedRoute requiresAuth={true} component={CreateRoutine}/>} />
             <Route path="/view-routines" element={<ProtectedRoute requiresAuth={true} component={ViewRoutines}/>} />
+            {/* Final File Routes */}
+            <Route path="/final-file" element={<ProtectedRoute requiresAuth={true} component={FinalFile}/>} />
           </Routes>
         </Suspense>
       </BrowserRouter>

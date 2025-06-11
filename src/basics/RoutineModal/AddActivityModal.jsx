@@ -140,7 +140,9 @@ export default function AddActivityModal({
   }
 
   const validationSchema = Yup.object().shape({
+    activityPresetName: Yup.string().required(t("requiredField")),
     activity: Yup.mixed().required(t("requiredField")),
+    room: Yup.mixed().required(t("requiredField")),
   });
   const formik = useFormik({
     initialValues: {
@@ -280,127 +282,133 @@ export default function AddActivityModal({
             isLogged={true}
             value={formik.values.activityPresetName}
           />
-          <DropdownField
-            type="text"
-            fieldName="activity"
-            formik={formik}
-            value={formik.values.activity}
-            options={enumActivities}
-            readOnly={false}
-          />
-          {formik.values.activity && (
-            <p className={s.errorValue}>
-              {t("errorValue")}: {formik.values.activity.errorValue}
-            </p>
-          )}
-          {formik.values.activity && (
-            <form
-              className={s.wrapperAddActuators}
-              onSubmit={formikOtherActivities.handleSubmit}>
-              {otherActivities.length > 0 &&
-                otherActivities.map((activity) => {
-                  return (
-                    <div className={s.wrapperEachActuatorSaved}>
-                      <Field
-                        type="text"
-                        fieldName="name"
-                        readOnly={true}
-                        isLogged={true}
-                        value={activity.otherActivity.name}
-                      />
-                      <Field
-                        type="text"
-                        fieldName="probability"
-                        readOnly={true}
-                        isLogged={true}
-                        value={activity.probability}
-                      />
-                    </div>
-                  );
-                })}
-              <div className={s.otherActivityWrapper}>
+          <div className={s.wrapperActivityColors}>
+            <h5>{t("activity")}</h5>
+            <DropdownField
+              type="text"
+              fieldName="activity"
+              formik={formik}
+              value={formik.values.activity}
+              options={enumActivities}
+              readOnly={false}
+            />
+            {formik.values.activity && (
+              <p className={s.errorValue}>
+                {t("errorValue")}: {formik.values.activity.errorValue}
+              </p>
+            )}
+            {formik.values.activity && (
+              <form
+                className={s.wrapperAddActuators}
+                onSubmit={formikOtherActivities.handleSubmit}>
+                {otherActivities.length > 0 &&
+                  otherActivities.map((activity) => {
+                    return (
+                      <div className={s.wrapperEachActuatorSaved}>
+                        <Field
+                          type="text"
+                          fieldName="name"
+                          readOnly={true}
+                          isLogged={true}
+                          value={activity.otherActivity.name}
+                        />
+                        <Field
+                          type="text"
+                          fieldName="probability"
+                          readOnly={true}
+                          isLogged={true}
+                          value={activity.probability}
+                        />
+                      </div>
+                    );
+                  })}
+                <div className={s.otherActivityWrapper}>
+                  <DropdownField
+                    type="text"
+                    fieldName="otherActivity"
+                    formik={formikOtherActivities}
+                    value={formikOtherActivities.values.activity}
+                    options={enumActivities}
+                    readOnly={false}
+                  />
+                  <Field
+                    type="number"
+                    fieldName="probability"
+                    readOnly={false}
+                    formik={formikOtherActivities}
+                    isLogged={true}
+                    value={formikOtherActivities.values.probability}
+                  />
+                </div>
+                <button
+                  type="button"
+                  onClick={() => formikOtherActivities.handleSubmit()}>
+                  {t("addOtherActivity")}
+                  <IoMdAdd />
+                </button>
+              </form>
+            )}
+          </div>
+          <div className={s.wrapperRoomsColor}>
+            <h5>{t("room")}</h5>
+            <DropdownField
+              type="text"
+              fieldName="room"
+              formik={formik}
+              value={formik.values.room}
+              options={formikPresets.values.preset.houserooms}
+              readOnly={false}
+              isMultiSelect={false}
+            />
+            {formik.values.room && (
+              <form
+                className={s.wrapperAddActuators}
+                onSubmit={formikActuators.handleSubmit}>
+                {actuatorsProps.length > 0 &&
+                  actuatorsProps.map((actuator) => {
+                    return (
+                      <div className={s.wrapperEachActuatorSaved}>
+                        <Field
+                          type="text"
+                          fieldName="name"
+                          readOnly={true}
+                          isLogged={true}
+                          value={actuator.actuator.name}
+                        />
+                        {actuator.status.length > 0 &&
+                          actuator.status.map((prop) => {
+                            return (
+                              <Field
+                                type="text"
+                                fieldName={prop.name}
+                                readOnly={true}
+                                isLogged={true}
+                                value={prop.value}
+                              />
+                            );
+                          })}
+                      </div>
+                    );
+                  })}
                 <DropdownField
                   type="text"
-                  fieldName="otherActivity"
-                  formik={formikOtherActivities}
-                  value={formikOtherActivities.values.activity}
-                  options={enumActivities}
+                  fieldName="actuator"
+                  formik={formikActuators}
+                  value={formikActuators.values.actuator}
+                  options={formik.values.room.roomactuators}
                   readOnly={false}
+                  hasTranslation={true}
                 />
-                <Field
-                  type="number"
-                  fieldName="probability"
-                  readOnly={false}
-                  formik={formikOtherActivities}
-                  isLogged={true}
-                  value={formikOtherActivities.values.probability}
-                />
-              </div>
-              <button
-                type="button"
-                onClick={() => formikOtherActivities.handleSubmit()}>
-                {t("addOtherActivity")}
-                <IoMdAdd />
-              </button>
-            </form>
-          )}
-          <DropdownField
-            type="text"
-            fieldName="room"
-            formik={formik}
-            value={formik.values.room}
-            options={formikPresets.values.preset.houserooms}
-            readOnly={false}
-            isMultiSelect={false}
-          />
-          {formik.values.room && (
-            <form
-              className={s.wrapperAddActuators}
-              onSubmit={formikActuators.handleSubmit}>
-              {actuatorsProps.length > 0 &&
-                actuatorsProps.map((actuator) => {
-                  return (
-                    <div className={s.wrapperEachActuatorSaved}>
-                      <Field
-                        type="text"
-                        fieldName="name"
-                        readOnly={true}
-                        isLogged={true}
-                        value={actuator.actuator.name}
-                      />
-                      {actuator.status.length > 0 &&
-                        actuator.status.map((prop) => {
-                          return (
-                            <Field
-                              type="text"
-                              fieldName={prop.name}
-                              readOnly={true}
-                              isLogged={true}
-                              value={prop.value}
-                            />
-                          );
-                        })}
-                    </div>
-                  );
-                })}
-              <DropdownField
-                type="text"
-                fieldName="actuator"
-                formik={formikActuators}
-                value={formikActuators.values.actuator}
-                options={formik.values.room.roomactuators}
-                readOnly={false}
-                hasTranslation={true}
-              />
-              <RenderActuatorProps formikParam={formikActuators} />
-              <button
-                type="button"
-                onClick={() => formikActuators.handleSubmit()}>
-                {t("addActuator")}
-                <IoMdAdd />
-              </button>
-            </form>
-          )}
+                <RenderActuatorProps formikParam={formikActuators} />
+                <button
+                  type="button"
+                  onClick={() => formikActuators.handleSubmit()}>
+                  {t("addActuator")}
+                  <IoMdAdd />
+                </button>
+              </form>
+            )}
+          </div>
         </div>
       )}
       <div className={s.arrayButtons}>

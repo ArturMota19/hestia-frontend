@@ -77,6 +77,8 @@ const resources = {
       addGraph: "Adicionar Grafo",
       removeGraph: "Remover Grafo",
       addMoreRooms: "Adicione ao menos dois cômodos para construir um grafo",
+      activityPresetName: "Atividade com Preset",
+      activityPresetNamePlaceholder: "Adicione a Atividade relacionada com Preset",
       // View Preset Page
       viewHousePreset: "Visualização de Presets",
       noPresets: "Sem Presets cadastrados",
@@ -142,6 +144,7 @@ const resources = {
       someDayIsIncomplete: "Algum dia está com tempo incompleto (menos de 24h). Corrija para ser possível gerar o arquivo final.",
       deleteActivities: "Clique com o botão direito para deletar atividades adicionadas.",
       activityPresetParam: "Atividade com Preset",
+      addActuator: "Adicionar Atuador",
       // Devices
       AR_CONDICIONADO: "Ar Condicionado",
       LAMPADA: "Lâmpada",
@@ -150,6 +153,20 @@ const resources = {
       SOM: "Som",
       TV: "TV",
       SENSOR_PRESENCA: "Sensor de Presença",
+      // Final File
+      finalFile: "Arquivo Final",
+      createFinalFile: "Criar Arquivo Final",
+      generateFinalFile: "Gerar Arquivo",
+      definePreferences: "Defina as prioridades para cada pessoa da rotina.",
+      preferencesAdvice: "Não é necessário definir preferências para todos os cômodos.",
+      priority: "Prioridade",
+      priorityPlaceholder: "Defina uma prioridade",
+      savePerson: "Restam salvar",
+      personGenerateFile: "pessoa(s) para gerar o arquivo final.",
+      saveThisPerson: "Salvar Pessoa",
+      savedPreferences: "Preferências Salvas",
+      // How To Use
+      howToUse: "Como Usar"
       },
       },
       en: {
@@ -284,6 +301,9 @@ const resources = {
       someDayIsIncomplete: "Some day has incomplete time (less than 24h). Please correct it to generate the final file.",
       deleteActivities: "Right-click to delete added activities.",
       activityPresetParam: "Activity with Preset",
+      addActuator: "Add Actuator",
+      activityPresetName: "Activity with Preset",
+      activityPresetNamePlaceholder: "Add the Activity related to the Preset",
       // Devices
       AR_CONDICIONADO: "Air Conditioner",
       LAMPADA: "Light Bulb",
@@ -292,6 +312,20 @@ const resources = {
       SOM: "Sound System",
       TV: "TV",
       SENSOR_PRESENCA: "Presence Sensor",
+      // Final File
+      finalFile: "Final File",
+      createFinalFile: "Create Final File",
+      generateFinalFile: "Generate File",
+      definePreferences: "Set the priorities for each person in the routine.",
+      preferencesAdvice: "It is not necessary to set preferences for all rooms.",
+      priority: "Priority",
+      priorityPlaceholder: "Set a priority",
+      savePerson: "People left to save",
+      personGenerateFile: "person(s) to generate the final file.",
+      saveThisPerson: "Save Person",
+      savedPreferences: "Saved Preferences",
+      // How To Use
+      howToUse: "How To Use"
 
       
     },
