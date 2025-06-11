@@ -364,6 +364,35 @@ export default function FinalFile() {
       onSubmit: async (values) => {
         console.log(values);
         console.log(actuatorsProps);
+        let finalData = {
+          [person['peopleName']]: {
+            nome: person.peopleName,
+            prioridade: values.priority,
+            comodo_atual: "RUA",
+            preferencia: {
+
+            }
+          }
+        }
+        actuatorsProps.forEach(item => {
+          const comodo = item.room.name.toUpperCase();
+          const atuador = item.actuator.name.toUpperCase();
+
+          if (!finalData[person.peopleName].preferencia[comodo]) {
+            finalData[person.peopleName].preferencia[comodo] = {};
+          }
+
+          if (!finalData[person.peopleName].preferencia[comodo][atuador]) {
+            finalData[person.peopleName].preferencia[comodo][atuador] = {};
+          }
+
+          // status pode conter chaves e valores, ex: switch_led, bright_value_v2, etc.
+          console.log(item)
+          item.status.forEach(statusItem => {
+            finalData[person.peopleName].preferencia[comodo][atuador][statusItem.name] = statusItem.value;
+          });
+        });
+        console.log(finalData)
       },
     });
 
