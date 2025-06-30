@@ -79,6 +79,7 @@ const resources = {
       addMoreRooms: "Adicione ao menos dois cômodos para construir um grafo",
       activityPresetName: "Atividade com Preset",
       activityPresetNamePlaceholder: "Adicione a Atividade relacionada com Preset",
+      noActuatorsRegistered: "Cômodo sem atuadores",
       // View Preset Page
       viewHousePreset: "Visualização de Presets",
       noPresets: "Sem Presets cadastrados",
@@ -238,6 +239,7 @@ const resources = {
       removeGraph: "Remove Graph",
       graph: "Graph of Rooms",
       addMoreRooms: "Add at least two rooms to build a graph",
+      noActuatorsRegistered: "Room without actuators",
       // View Preset Page
       viewHousePreset: "View Presets",
       noPresets: "No Presets registered",

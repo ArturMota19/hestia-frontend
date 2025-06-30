@@ -75,7 +75,7 @@ export default function CreatePreset() {
   const validationSchemaRooms = Yup.object().shape({
     roomName: Yup.object().nullable().required("Campo obrigatório"),
     roomCapacity: Yup.number().required(t("requiredField")),
-    atuators: Yup.array().min(1, t("requiredField")),
+    // atuators: Yup.array().min(1, t("requiredField")),
   });
   const formikRooms = useFormik({
     initialValues: {
@@ -204,9 +204,9 @@ export default function CreatePreset() {
                     fieldName="atuators"
                     isLogged={true}
                     readOnly={true}
-                    value={room.atuators
+                    value={room.atuators.length > 0 ? room.atuators
                       .map((atuator) => atuator.name)
-                      .join(", ")}
+                      .join(", ") : t("noActuatorsRegistered") }
                   />
                 </div>
               ))}
@@ -261,7 +261,7 @@ export default function CreatePreset() {
               {graph &&
                 graph.length > 0 &&
                 graph.map((graph, index) => (
-                  <div className={s.wrapperThreeInputs}>
+                  <div key={index} className={s.wrapperThreeInputs}>
                     <Field
                       type="text"
                       fieldName="room1"
