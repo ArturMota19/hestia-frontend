@@ -191,12 +191,12 @@ export default function AddActivityModal({
         toast.error("Adicione ao menos uma propriedade para o atuador.");
         return;
       }
-      if (
-        actuatorsProps.some((a) => a.actuator.name === values.actuator.name)
-      ) {
-        toast.error("Este atuador já foi adicionado.");
-        return;
-      }
+      // if (
+      //   actuatorsProps.some((a) => a.actuator.name === values.actuator.name)
+      // ) {
+      //   toast.error("Este atuador já foi adicionado.");
+      //   return;
+      // }
       const isValid = CheckValidProps(values);
 
       if (isValid.error) {
@@ -337,6 +337,7 @@ export default function AddActivityModal({
                     readOnly={false}
                     formik={formikOtherActivities}
                     isLogged={true}
+                    hasStep={true}
                     value={formikOtherActivities.values.probability}
                   />
                 </div>
