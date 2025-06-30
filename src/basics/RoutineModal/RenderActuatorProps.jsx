@@ -50,7 +50,7 @@ const RangeInput = React.memo(({ name, value, min, max, onChange }) => (
         className={s.field}
         min={min}
         max={max}
-        value={value}
+        value={value === 0 ? max/2 : value}
         onChange={onChange}
       />
     </label>
