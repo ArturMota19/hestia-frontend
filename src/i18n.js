@@ -115,6 +115,7 @@ const resources = {
       addActivity: "Adicionar Atividade",
       actuators: "Atuadores",
       addPerson: "Adicionar Pessoa",
+      removeActuator: "Remover Atuador",
       // View Routine Page
       people: "Pessoas",
       noRoutines: "Sem Rotinas cadastradas",
@@ -273,6 +274,7 @@ const resources = {
       addActivity: "Add Activity",
       actuators: "Actuators",
       addPerson: "Add Person",
+      removeActuator: "Remove Actuator",
       // View Routine Page
       people: "People",
       noRoutines: "No Routines registered",
