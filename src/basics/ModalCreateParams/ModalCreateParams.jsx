@@ -192,6 +192,7 @@ export default function ModalCreateParams({ isOpen, setIsOpen, type, formik }) {
                 fieldName="errorValue"
                 formik={formikActivity}
                 isLogged={true}
+                hasStep={true}
               />
               <Field
                 type="color"

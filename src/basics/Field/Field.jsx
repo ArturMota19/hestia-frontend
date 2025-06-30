@@ -12,6 +12,7 @@ export default function Field({
   formik,
   value = "",
   isLogged = false,
+  hasStep = false,
 }) {
   const { t } = useTranslation();
 
@@ -55,6 +56,7 @@ export default function Field({
             ? s.fieldError
             : s.field
         }
+        step={hasStep ? 0.01 : undefined}
       />
       {formik.touched[fieldName] && formik.errors[fieldName] && (
         <p className={s.textError}>{formik.errors[fieldName]}</p>
