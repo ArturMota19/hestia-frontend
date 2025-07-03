@@ -61,6 +61,10 @@ export async function BaseRequest({
         toast.error("Conflito de informações. Essas informações já existem no Banco de Dados.",{
           toastId: "serverError",
         });
+      }else if (status === 423) {
+        toast.error("Este objeto não pode ser deletado porque está sendo utilizado em outra tabela.",{
+          toastId: "serverError",
+        });
       }  else if (status === 500) {
         toast.error("Erro interno do servidor.",{
           toastId: "serverError",

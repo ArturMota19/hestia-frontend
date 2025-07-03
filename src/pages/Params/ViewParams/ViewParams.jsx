@@ -17,6 +17,7 @@ import Button from "../../../basics/Button/Button";
 import { PuffLoader } from "react-spinners";
 import ModalCreateParams from "../../../basics/ModalCreateParams/ModalCreateParams";
 import AddActivityModal from "../../../basics/RoutineModal/AddActivityModal";
+import toast from "react-hot-toast";
 
 export default function ViewParams() {
 	const { t } = useTranslation();
@@ -37,12 +38,27 @@ export default function ViewParams() {
       isAuth: true,
       setIsLoading
     })
+    console.log(response.data)
     setData(response.data[paramType])
     setItemsCount(response.data.count)
   }
   useEffect(() => {
     FetchData()
   },[currentPage, paramType])
+
+  async function DeleteData(id){
+    console.log(id)
+    const response = await BaseRequest({
+      method: "DELETE",
+      url: `/${paramType}/deleteById/${id}`,
+      isAuth: true,
+      setIsLoading
+    })
+    if(response.status == 200){
+      toast.success("Parâmetro deletado com sucesso.")
+      FetchData()
+    }
+  }
 
   const totalPages = Math.ceil(itemsCount / itemsPerPage);
 
@@ -133,6 +149,8 @@ export default function ViewParams() {
 								type={item.type}
 								hasActions={item.type == "actuators"}
                 image={item.type === "person" ? peopleParam : item.type === "actuator" ? actuatorParam : item.type === "room" ? roomParam : activityParam}
+                id={item.id}
+                DeleteData={DeleteData}
 							/>
 						))
 					}
@@ -140,7 +158,6 @@ export default function ViewParams() {
         {data.length <= 0 && !isLoading &&
           <div className={s.noParamsDiv}>
             <h4>{t("noParams")} {t(paramType)}</h4>
-            <a href="/create-params">{t('createParams')}</a>
           </div>
         }
         {data.length <= 0 && isLoading &&

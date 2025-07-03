@@ -84,7 +84,7 @@ const resources = {
       viewHousePreset: "Visualização de Presets",
       noPresets: "Sem Presets cadastrados",
       // View Params Page
-      viewHouseParams: "Visualização de Parâmetros",
+      viewHouseParams: "Gerenciamento de Parâmetros",
       noParams: "Sem Parâmetros cadastrados para",
       // Create Params Page
       person: "Pessoa",
@@ -246,7 +246,7 @@ const resources = {
       viewHousePreset: "View Presets",
       noPresets: "No Presets registered",
       // View Params Page
-      viewHouseParams: "View Parameters",
+      viewHouseParams: "Manage Parameters",
       noParams: "No Parameters registered for",
       // Create Params Page
       person: "Person",
