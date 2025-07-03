@@ -6,6 +6,7 @@ import Button from "../../basics/Button/Button";
 import { useTranslation } from "react-i18next";
 //Styles
 import s from "./ViewComponent.module.scss";
+import { useNavigate } from "react-router-dom";
 
 export default function ViewComponent({
 	index,
@@ -17,6 +18,7 @@ export default function ViewComponent({
 	type, 
 	image="/",
 	hasActions = false,
+	id=""
 }) {
   const { t } = useTranslation();
   const columns = 2;
@@ -25,6 +27,8 @@ export default function ViewComponent({
 	const isEvenRow = row % 2 === 0;
 
 	const isColorA = (isEvenRow && col === 0) || (!isEvenRow && col === 1);
+
+	const navigate = useNavigate()
 
 	return (
 		<div
@@ -58,7 +62,7 @@ export default function ViewComponent({
             text={t('edit')} 
             backgroundColor={"secondary"} 
             height={36}
-            doFunction={() => console.log("edit")}/>
+            doFunction={() => type == "routine" ? navigate("/create-routines?edit=true") : type == "preset" ? navigate(`/create-presets?id=${id}`) : console.log("edit")}/>
             <Button 
             text={t('delete')} 
             backgroundColor={"delete"} 

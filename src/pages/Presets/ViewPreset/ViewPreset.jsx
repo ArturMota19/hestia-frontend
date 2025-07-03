@@ -44,6 +44,7 @@ export default function ViewPreset() {
         rooms.push(finalString);
       });
       return {
+        id: preset.id,
         paramName: preset.name,
         rooms,
         type: "preset",
@@ -76,6 +77,7 @@ export default function ViewPreset() {
 						housePresets.map((item, index) => (
 							<ViewComponent
 								index={index}
+                id={item.id}
 								title={item.paramName}
 								room={item.rooms}
 								type={"preset"}

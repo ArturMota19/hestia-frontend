@@ -18,6 +18,7 @@ import { useEffect, useState } from "react";
 import PersonRoutine from "../../../basics/PersonRoutine/PersonRoutine";
 import toast from "react-hot-toast";
 import { BaseRequest } from "../../../services/BaseRequest";
+import { useLocation } from "react-router-dom";
 
 export default function CreateRoutine() {
   const { t, i18n } = useTranslation();
@@ -31,6 +32,18 @@ export default function CreateRoutine() {
   const [hasToSavePeople, setHasToSavePeople] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [blockPreset, setBlockPreset] = useState(false)
+
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const isEditMode = searchParams.get("edit") === "true";
+
+  useEffect(() => {
+    if(isEditMode){
+      toast('Selecione o preset da rotina que deseja editar.', {
+        id: "edit-mode"
+      });
+    }
+  }, [isEditMode])
 
   async function GetPresets(){
     const response = await BaseRequest({
