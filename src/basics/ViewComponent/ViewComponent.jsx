@@ -56,7 +56,7 @@ export default function ViewComponent({
 					})
 				}
 				{people.length > 0 && <p>{t("people")}: {people.join(", ")}</p>}
-        {hasActions &&
+        {hasActions && type !== "preset" &&
           <div className={s.buttonsDiv}>
             <Button 
             text={t('edit')} 
