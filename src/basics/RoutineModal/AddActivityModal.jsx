@@ -19,6 +19,7 @@ import toast from "react-hot-toast";
 export default function AddActivityModal({
     isActivityModalOpen,
     setIsActivityModalOpen,
+    FetchData
 }) {
     if (!isActivityModalOpen) return null;
     const [enumActivities, setEnumActivities] = useState([]);
@@ -167,7 +168,7 @@ export default function AddActivityModal({
             };
             const response = await BaseRequest({
                 method: "POST",
-                url: `routines/registerActivyPresetParam`,
+                url: `activitiesPresetParamRoutes/register`,
                 isAuth: true,
                 data,
                 setIsLoading,
@@ -176,6 +177,7 @@ export default function AddActivityModal({
                 toast.success(
                     "Parâmetro para atividade preset criada com sucesso."
                 );
+                FetchData()
             }
             setIsActivityModalOpen(false);
         },

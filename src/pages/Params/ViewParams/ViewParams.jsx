@@ -37,7 +37,6 @@ export default function ViewParams() {
       isAuth: true,
       setIsLoading
     })
-    console.log(response)
     setData(response.data[paramType])
     setItemsCount(response.data.count)
   }
@@ -75,10 +74,11 @@ export default function ViewParams() {
 				<title>HESTIA | View Params</title>
 			</Helmet>
 			<Header />
-      <ModalCreateParams isOpen={isModalOpen} setIsOpen={setIsModalOpen} type={type}/>
+      <ModalCreateParams isOpen={isModalOpen} setIsOpen={setIsModalOpen} type={type} FetchData={FetchData}/>
       <AddActivityModal
         isActivityModalOpen={isActivityModalOpen}
         setIsActivityModalOpen={setIsActivityModalOpen}
+        FetchData={FetchData}
       />
 			<section className={s.hestiaInfoWrapper}>
 				<h1>{t("viewHouseParams")}</h1>

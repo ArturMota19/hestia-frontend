@@ -16,7 +16,7 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 
 
-export default function ModalCreateParams({ isOpen, setIsOpen, type, formik }) {
+export default function ModalCreateParams({ isOpen, setIsOpen, type, formik, FetchData }) {
   if (!isOpen) return null;
   const navigate = useNavigate();
   const { t } = useTranslation();
@@ -42,6 +42,7 @@ export default function ModalCreateParams({ isOpen, setIsOpen, type, formik }) {
           })
           if(response.status == 201){
             toast.success("Pessoa criada com sucesso.")
+            FetchData()
             setIsOpen(false)
           }
         },
@@ -98,6 +99,7 @@ export default function ModalCreateParams({ isOpen, setIsOpen, type, formik }) {
           })
           if(response.status == 201){
             toast.success("Cômodo criado com sucesso.")
+            FetchData()
             setIsOpen(false)
           }
         },
@@ -167,6 +169,7 @@ export default function ModalCreateParams({ isOpen, setIsOpen, type, formik }) {
           })
           if(response.status == 201){
             toast.success("Atividade criada com sucesso.")
+            FetchData()
             setIsOpen(false)
           }
         },
