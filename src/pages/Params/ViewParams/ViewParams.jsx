@@ -38,7 +38,6 @@ export default function ViewParams() {
       isAuth: true,
       setIsLoading
     })
-    console.log(response.data)
     setData(response.data[paramType])
     setItemsCount(response.data.count)
   }
@@ -47,7 +46,6 @@ export default function ViewParams() {
   },[currentPage, paramType])
 
   async function DeleteData(id){
-    console.log(id)
     const response = await BaseRequest({
       method: "DELETE",
       url: `/${paramType}/deleteById/${id}`,
