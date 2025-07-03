@@ -23,7 +23,7 @@ export default function ModalCreateParams({ isOpen, setIsOpen, type, formik }) {
   const [isLoading, setIsLoading] = useState(false)
 
   switch (type) {
-    case "person":
+    case "people":
       const validationSchemaPeople = Yup.object().shape({
         nameParam: Yup.string().required(t('requiredField')),
       });
@@ -73,7 +73,7 @@ export default function ModalCreateParams({ isOpen, setIsOpen, type, formik }) {
           </div>
         </section>
       );
-    case "room":      
+    case "rooms":      
       const validationSchemaRoom = Yup.object().shape({
         nameParam: Yup.string().required(t('requiredField')),
         capacity: Yup.number().required(t('requiredField')).positive(t('invalidCapacity')),
@@ -135,7 +135,7 @@ export default function ModalCreateParams({ isOpen, setIsOpen, type, formik }) {
           </div>
         </section>
       );
-    case "activity":
+    case "activities":
       const validationSchemaActivity = Yup.object().shape({
         nameParam: Yup.string().required(t('requiredField')),
         errorValue: Yup.number()

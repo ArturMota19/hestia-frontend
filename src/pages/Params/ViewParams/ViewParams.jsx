@@ -15,6 +15,8 @@ import ViewComponent from "../../../basics/ViewComponent/ViewComponent";
 import { useEffect, useState } from "react";
 import Button from "../../../basics/Button/Button";
 import { PuffLoader } from "react-spinners";
+import ModalCreateParams from "../../../basics/ModalCreateParams/ModalCreateParams";
+import AddActivityModal from "../../../basics/RoutineModal/AddActivityModal";
 
 export default function ViewParams() {
 	const { t } = useTranslation();
@@ -24,6 +26,9 @@ export default function ViewParams() {
   const [itemsCount, setItemsCount] = useState(1)
   const itemsPerPage = 6;
   const [isLoading, setIsLoading] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isActivityModalOpen, setIsActivityModalOpen] = useState(false)
+  const [type, setType] = useState("");
 
   async function FetchData(){
     const response = await BaseRequest({
@@ -44,6 +49,24 @@ export default function ViewParams() {
   const handlePrev = () => setCurrentPage(prev => Math.max(prev - 1, 1));
   const handleNext = () => setCurrentPage(prev => Math.min(prev + 1, totalPages));
 
+    function handleOpenModal(type) {
+      setIsModalOpen(true);
+      setType(type);
+    }
+    
+    const ItemParam = ({ noCreate = false, img, text, type }) => {
+      return (
+        <div className={s.itemParam}>
+          <Button
+            text={!noCreate ? t("create") : t("view")}
+            backgroundColor={"secondary"}
+            height={48}
+            doFunction={() => handleOpenModal(type)}
+          />
+        </div>
+      );
+    };
+
 	return (
 		<main className={s.wrapperViewParams}>
 			<Helmet>
@@ -51,6 +74,11 @@ export default function ViewParams() {
 				<title>HESTIA | View Params</title>
 			</Helmet>
 			<Header />
+      <ModalCreateParams isOpen={isModalOpen} setIsOpen={setIsModalOpen} type={type}/>
+      <AddActivityModal
+        isActivityModalOpen={isActivityModalOpen}
+        setIsActivityModalOpen={setIsActivityModalOpen}
+      />
 			<section className={s.hestiaInfoWrapper}>
 				<h1>{t("viewHouseParams")}</h1>
         <section className={s.wrapperButtons}>
@@ -74,7 +102,15 @@ export default function ViewParams() {
           backgroundColor={paramType == "actuators" ? "primary" : "secondary"} 
           height={36}
           doFunction={() => {setParamType("actuators");setCurrentPage(1)}}/>
+          <Button 
+          text={t('presetActivities')} 
+          backgroundColor={paramType == "presetActivities" ? "primary" : "secondary"}
+          height={36}
+          doFunction={() => {setParamType("presetActivities");setCurrentPage(1)}}/>
         </section>
+        <div>
+          <ItemParam img={peopleParam} text={t(paramType)} type={paramType} />
+        </div>
 				<section className={s.gridWrapper}>
 					{data.length > 0 && !isLoading &&
 						data.map((item, index) => (
