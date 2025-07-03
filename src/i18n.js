@@ -45,7 +45,7 @@ const resources = {
       invalidEmail: "Email inválido",
       passwordMismatch: "As senhas não coincidem",
       //Home
-      createParams: "Criar Parâmetros",
+      manageParams: "Gerenciar Parâmetros",
       viewParams: "Visualizar Parâmetros",
       createPresets: "Criar Presets",
       viewPresets: "Visualizar Presets",
@@ -101,6 +101,7 @@ const resources = {
       errorValuePlaceholder: "Digite a taxa de erro",
       invalidErrorValue: "A taxa de erro deve estar entre 0 e 100",
       color: "Cor",
+      activitiesPresetParamRoutes: "Atividade Com Preset",
       // Create Routine Page
       personsRoutines: "Pessoas e Atividades",
       selectOnePreset: "Selecione um Preset para continuar",
@@ -208,7 +209,7 @@ const resources = {
       invalidEmail: "Invalid email",
       passwordMismatch: "Passwords do not match",
       //Home
-      createParams: "Create Parameters",
+      manageParams: "Manage Parameters",
       viewParams: "View Parameters",
       createPresets: "Create Presets",
       viewPresets: "View Presets",
@@ -260,6 +261,7 @@ const resources = {
       errorValuePlaceholder: "Enter the error rate",
       invalidErrorValue: "Error rate must be between 0 and 100",
       color: "Color",
+      activitiesPresetParamRoutes: "Activity With Preset",
       // Create Routine Page
       personsRoutines: "People and Activities",
       selectOnePreset: "Select a Preset to continue",

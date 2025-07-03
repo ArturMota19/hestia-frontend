@@ -45,15 +45,15 @@ export default function Home() {
       <section className={s.hestiaInfoWrapper}>
         <h1>HESTIA</h1>
         <div className={s.gridItems}>
-          <ItemGrid
+          {/* <ItemGrid
             icon={createParamsIcon}
             url="/create-params"
             text={t("createParams")}
-          />
+          /> */}
           <ItemGrid
-            icon={viewParamsIcon}
+            icon={createParamsIcon}
             url="/view-params"
-            text={t("viewParams")}
+            text={t("manageParams")}
           />
           <ItemGrid
             icon={createPresetsIcon}
