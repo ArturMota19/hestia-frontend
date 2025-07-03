@@ -66,6 +66,9 @@ export async function BaseRequest({
           toastId: "serverError",
         });
       } 
+        else if(error.response.data.error == "Cannot edit preset: there are routines using this preset."){
+        toast.error("Este preset não pode ser editado porque está sendo utilizado em uma rotina existente.")
+      }
       else {
         toast.error("Houve um erro. Consulte as informações enviadas e tente novamente.",{
           toastId: "genericError",

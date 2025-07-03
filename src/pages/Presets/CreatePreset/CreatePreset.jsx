@@ -171,7 +171,6 @@ export default function CreatePreset() {
             isAuth: true,
             setIsLoading,
         });
-        console.log(response);
         if(response.status == 200){
           formik.setFieldValue("presetName", response.data.preset.name)
           setRooms(
@@ -189,7 +188,6 @@ export default function CreatePreset() {
               distance: item.distance,
             }))
           );
-
         }
     }
 
@@ -198,6 +196,39 @@ export default function CreatePreset() {
             GetPresetEdit(idEditMode);
         }
     }, [idEditMode]);
+
+    async function EditPreset(){
+      if (rooms.length === 0) {
+          toast.error("Cadastre ao menos um cômodo para continuar!", {
+              duration: 4000,
+              position: "top-center",
+          });
+          return;
+      }
+      if (graph.length === 0) {
+          toast.error("Cadastre ao menos um cômodo para continuar!", {
+              duration: 4000,
+              position: "top-center",
+          });
+          return;
+      }
+      let data = {
+          name: formik.values.presetName,
+          rooms: rooms,
+          graphRooms: graph,
+      };
+      const response = await BaseRequest({
+          method: "PUT",
+          url: `/presets/editById/${idEditMode}`,
+          data,
+          isAuth: true,
+          setIsLoading,
+      });
+      if (response.status == 200) {
+          toast.success("Preset editado com sucesso");
+      }
+
+    }
 
     return (
         <main className={s.wrapperCreatePreset}>
@@ -395,7 +426,7 @@ export default function CreatePreset() {
                         backgroundColor={"primary"}
                         height={48}
                         doFunction={() => {
-                            formik.handleSubmit();
+                            idEditMode !== null ? EditPreset() : formik.handleSubmit();
                         }}
                         isLoading={isLoading}
                     />
