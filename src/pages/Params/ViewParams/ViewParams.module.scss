@@ -9,6 +9,16 @@
     justify-content: center;
     background-color: var(--tertiary-color);
 
+    .wrapperCreateParams{
+        margin: 0 auto;
+        width: 50%;
+
+        button{
+            background-color: var(--primary-color);
+            color: var(--tertiary-color);
+        }
+    }
+
     .wrapperButtons{
         display: flex;
         gap: 16px;

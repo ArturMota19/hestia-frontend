@@ -37,6 +37,7 @@ export default function ViewParams() {
       isAuth: true,
       setIsLoading
     })
+    console.log(response)
     setData(response.data[paramType])
     setItemsCount(response.data.count)
   }
@@ -103,13 +104,23 @@ export default function ViewParams() {
           height={36}
           doFunction={() => {setParamType("actuators");setCurrentPage(1)}}/>
           <Button 
-          text={t('presetActivities')} 
-          backgroundColor={paramType == "presetActivities" ? "primary" : "secondary"}
+          text={t('activitiesPresetParamRoutes')} 
+          backgroundColor={paramType == "activitiesPresetParamRoutes" ? "primary" : "secondary"}
           height={36}
-          doFunction={() => {setParamType("presetActivities");setCurrentPage(1)}}/>
+          doFunction={() => {setParamType("activitiesPresetParamRoutes");setCurrentPage(1)}}/>
         </section>
-        <div>
-          <ItemParam img={peopleParam} text={t(paramType)} type={paramType} />
+        <div className={s.wrapperCreateParams}>
+          {paramType == "activitiesPresetParamRoutes" ? 
+          <Button
+              text={t("create")}
+              backgroundColor={"secondary"}
+              height={48}
+              doFunction={() => setIsActivityModalOpen(true)}
+            />
+            :
+            <ItemParam img={peopleParam} text={t(paramType)} type={paramType} />
+          }
+
         </div>
 				<section className={s.gridWrapper}>
 					{data.length > 0 && !isLoading &&
