@@ -133,6 +133,41 @@ export default function FinalFile() {
       toast.error("Salve todas as preferências para continuar.");
       return;
     }
+    function checkIfHas24() {
+      const data = responseData[4].days;
+
+      for (const day of data) {
+        const daysKeys = Object.keys(day.days); 
+        for (const key of daysKeys) {
+          const intervals = day.days[key];
+          let totalMinutes = 0;
+
+          for (const interval of intervals) {
+            const start = interval.startTime.split(':').map(Number);
+            const end = interval.endTime.split(':').map(Number);
+
+            const startInMinutes = start[0] * 60 + start[1];
+            const endInMinutes = end[0] * 60 + end[1];
+
+            let diff = endInMinutes - startInMinutes;
+            if (diff < 0) {
+              diff += 24 * 60;
+            }
+
+            totalMinutes += diff;
+          }
+          if (totalMinutes !== 1440) { 
+            toast.error(`Não foi possível gerar o arquivo. Dia ${key} não possui 24 horas: Total de ${totalMinutes / 60}h`)
+            return false;
+          }
+        }
+      }
+
+      return true;
+    }
+    if (!checkIfHas24()) {
+      return
+    } 
     setIsLoading(true);
     try {
       if (!responseData) {
