@@ -29,6 +29,7 @@ export default function AddActivityModal({
     const [actuatorsProps, setActuatorsProps] = useState([]);
     const [otherActivities, setOtherActivities] = useState([]);
     const [presets, setPresets] = useState([]);
+    const [isProgrammaticallySettingRoom, setIsProgrammaticallySettingRoom] = useState(false);
     const { t } = useTranslation();
 
 
@@ -263,12 +264,14 @@ export default function AddActivityModal({
     }, []);
 
     useEffect(() => {
-        // Every time the field value changes, I reset the actuators
-        setActuatorsProps([]);
-        formikActuators.resetForm();
+        if (!isProgrammaticallySettingRoom) {
+            setActuatorsProps([]);
+            formikActuators.resetForm();
+        }
     }, [formik.values.room]);
 
-        async function GetById(){
+    async function GetById(){
+        setIsProgrammaticallySettingRoom(true);
         const response = await BaseRequest({
             method: "GET",
             url: `activitiesPresetParamRoutes/getById/${dataIsEditing}`,
@@ -276,15 +279,26 @@ export default function AddActivityModal({
             setIsLoading,
         });
         if (response.status == 200) {
-            // fill with values
+            setIsLoading(true)
             const preset = presets.find(p => p.id === response.data.presetId);
             formikPresets.setFieldValue("preset", preset || "");
             formik.setFieldValue("activityPresetName", response.data.name || "");
+
             formik.setFieldValue("activity", response.data.activity || "");
-            formik.setFieldValue("room", response.data.room || "");
-            setActuatorsProps(response.data.actuators || []);
-            setOtherActivities(response.data.otherActivities || []);
+            const room = preset.houserooms.find(r => r.id === response.data.activityRoomId)
+            formik.setFieldValue("room", room || "");
+
+            setActuatorsProps(
+                (response.data.actuators || []).map(actuator => ({
+                    actuator: actuator.actuator,
+                    status: actuator.status || []
+                }))
+            );
+            // setOtherActivities(response.data.otherActivities || []);
         }
+            setTimeout(() => {
+                setIsProgrammaticallySettingRoom(false); 
+            }, 500);
     }
 
     useEffect(() => {
