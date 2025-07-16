@@ -170,20 +170,38 @@ export default function AddActivityModal({
                 otherActivities: otherActivities,
                 presetId: formikPresets.values.preset.id,
             };
-            const response = await BaseRequest({
-                method: "POST",
-                url: `activitiesPresetParamRoutes/register`,
-                isAuth: true,
-                data,
-                setIsLoading,
-            });
-            if (response.status == 201) {
-                toast.success(
-                    "Parâmetro para atividade preset criada com sucesso."
-                );
-                FetchData()
+            if(!isEditing){
+                const response = await BaseRequest({
+                    method: "POST",
+                    url: `activitiesPresetParamRoutes/register`,
+                    isAuth: true,
+                    data,
+                    setIsLoading,
+                });
+                if (response.status == 201) {
+                    toast.success(
+                        "Parâmetro para atividade preset criada com sucesso."
+                    );
+                    FetchData()
+                    setIsActivityModalOpen(false);
+                }
+            }else{
+                const response = await BaseRequest({
+                    method: "PUT",
+                    url: `activitiesPresetParamRoutes/updateById/${dataIsEditing}`,
+                    isAuth: true,
+                    data,
+                    setIsLoading,
+                });
+                if(response.status == 200){
+                    toast.success("Parâmetro editado com sucesso.")
+                    FetchData()
+                    setIsActivityModalOpen(false);
+                }
+                console.log(response)
             }
-            setIsActivityModalOpen(false);
+
+            
         },
     });
 
@@ -515,7 +533,7 @@ export default function AddActivityModal({
                 />
                 <Button
                     type="submit"
-                    text={t("save")}
+                    text={isEditing ? t("edit") : t("save")}
                     backgroundColor={"primary"}
                     height={42}
                 />
