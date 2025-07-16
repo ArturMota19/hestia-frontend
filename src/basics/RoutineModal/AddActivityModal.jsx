@@ -19,7 +19,9 @@ import toast from "react-hot-toast";
 export default function AddActivityModal({
     isActivityModalOpen,
     setIsActivityModalOpen,
-    FetchData
+    FetchData,
+    isEditing=false,
+    dataIsEditing=false
 }) {
     if (!isActivityModalOpen) return null;
     const [enumActivities, setEnumActivities] = useState([]);
@@ -28,6 +30,8 @@ export default function AddActivityModal({
     const [otherActivities, setOtherActivities] = useState([]);
     const [presets, setPresets] = useState([]);
     const { t } = useTranslation();
+
+    console.log(isEditing, dataIsEditing)
 
     async function GetPresets() {
         const response = await BaseRequest({

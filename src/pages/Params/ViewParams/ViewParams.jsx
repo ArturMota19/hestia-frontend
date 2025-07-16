@@ -22,7 +22,7 @@ import toast from "react-hot-toast";
 export default function ViewParams() {
 	const { t } = useTranslation();
   const [currentPage, setCurrentPage] = useState(1);
-  const [paramType, setParamType] = useState("people") // people, activity, room
+  const [paramType, setParamType] = useState("activitiesPresetParamRoutes") // people, activity, room
   const [data, setData] = useState([])
   const [itemsCount, setItemsCount] = useState(1)
   const itemsPerPage = 6;
@@ -30,6 +30,8 @@ export default function ViewParams() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isActivityModalOpen, setIsActivityModalOpen] = useState(false)
   const [type, setType] = useState("");
+  const [isEditing, setIsEditing] = useState(false)
+  const [dataIsEditing, setDataIsEditing] = useState("")
 
   async function FetchData(){
     const response = await BaseRequest({
@@ -93,6 +95,8 @@ export default function ViewParams() {
         isActivityModalOpen={isActivityModalOpen}
         setIsActivityModalOpen={setIsActivityModalOpen}
         FetchData={FetchData}
+        isEditing={isEditing}
+        dataIsEditing={dataIsEditing}
       />
 			<section className={s.hestiaInfoWrapper}>
 				<h1>{t("viewHouseParams")}</h1>
@@ -149,6 +153,9 @@ export default function ViewParams() {
                 image={item.type === "person" ? peopleParam : item.type === "actuator" ? actuatorParam : item.type === "room" ? roomParam : activityParam}
                 id={item.id}
                 DeleteData={DeleteData}
+                setIsEditing={(status) => setIsEditing(status)}
+                setDataIsEditing={setDataIsEditing}
+                setIsActivityModalOpen={setIsActivityModalOpen}
 							/>
 						))
 					}
@@ -167,7 +174,6 @@ export default function ViewParams() {
             />
           </div>
         }
-        {/* TODO: Transform this in a component */}
         {data.length > 0 &&
         <div className={s.pagination}>
           <Button 

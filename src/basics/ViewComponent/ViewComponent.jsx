@@ -20,6 +20,9 @@ export default function ViewComponent({
     hasActions = false,
     id = "",
     DeleteData = false,
+    setIsEditing=false,
+    setDataIsEditing=false,
+    setIsActivityModalOpen=false
 }) {
     const { t } = useTranslation();
     const columns = 2;
@@ -30,6 +33,7 @@ export default function ViewComponent({
     const isColorA = (isEvenRow && col === 0) || (!isEvenRow && col === 1);
 
     const navigate = useNavigate();
+    console.log(type)
 
     return (
         <div
@@ -73,19 +77,25 @@ export default function ViewComponent({
                 )}
                 {type !== "preset" && (
                     <div className={s.buttonsDiv}>
-                        {type == "routine" && (
-                            <Button
-                                text={t("edit")}
-                                backgroundColor={"secondary"}
-                                height={36}
-                                doFunction={() =>
-                                    type == "routine"
-                                        ? navigate("/create-routines?edit=true")
-                                        : type == "preset"
-                                        ? navigate(`/create-presets?id=${id}`)
-                                        : console.log("edit")
-                                }
-                            />
+                        {(type === "routine" || type === "activityPresetParam") && (
+                        <Button
+                            text={t("edit")}
+                            backgroundColor={"secondary"}
+                            height={36}
+                            doFunction={() => {
+                            if (type === "routine") {
+                                navigate("/create-routines?edit=true");
+                            } else if (type === "preset") {
+                                navigate(`/create-presets?id=${id}`);
+                            } else if (type === "activityPresetParam") {
+                                setIsEditing(true);
+                                setDataIsEditing(id)
+                                setIsActivityModalOpen(true)
+                            } else {
+                                console.log("edit");
+                            }
+                            }}
+                        />
                         )}
                         <Button
                             text={t("delete")}
