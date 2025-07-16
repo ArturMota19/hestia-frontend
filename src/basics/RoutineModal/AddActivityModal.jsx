@@ -294,7 +294,7 @@ export default function AddActivityModal({
                     status: actuator.status || []
                 }))
             );
-            // setOtherActivities(response.data.otherActivities || []);
+            setOtherActivities(response.data.otherActivities || []);
         }
             setTimeout(() => {
                 setIsProgrammaticallySettingRoom(false); 
@@ -302,7 +302,7 @@ export default function AddActivityModal({
     }
 
     useEffect(() => {
-        if(!isEditing && presets.length == 0) return;
+        if(!isEditing || presets.length == 0) return;
         GetById()
     },[isEditing, presets])
 

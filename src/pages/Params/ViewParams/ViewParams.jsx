@@ -77,7 +77,7 @@ export default function ViewParams() {
             text={!noCreate ? t("create") : t("view")}
             backgroundColor={"secondary"}
             height={48}
-            doFunction={() => handleOpenModal(type)}
+            doFunction={() => {handleOpenModal(type)}}
           />
         </div>
       );
@@ -133,7 +133,7 @@ export default function ViewParams() {
               text={t("create")}
               backgroundColor={"secondary"}
               height={48}
-              doFunction={() => setIsActivityModalOpen(true)}
+              doFunction={() => {setIsEditing(false);setIsActivityModalOpen(true)}}
             />
             :
             <ItemParam img={peopleParam} text={t(paramType)} type={paramType} />
