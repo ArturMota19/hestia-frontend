@@ -31,24 +31,6 @@ export default function AddActivityModal({
     const [presets, setPresets] = useState([]);
     const { t } = useTranslation();
 
-    console.log(isEditing, dataIsEditing)
-
-    async function GetById(){
-        const response = await BaseRequest({
-            method: "GET",
-            url: `activitiesPresetParamRoutes/getById/${dataIsEditing}`,
-            isAuth: true,
-            setIsLoading,
-        });
-        if (response.status == 200) {
-            console.log(response)
-        }
-    }
-
-    useEffect(() => {
-        if(!isEditing) return;
-        GetById()
-    },[isEditing])
 
     async function GetPresets() {
         const response = await BaseRequest({
@@ -285,6 +267,30 @@ export default function AddActivityModal({
         setActuatorsProps([]);
         formikActuators.resetForm();
     }, [formik.values.room]);
+
+        async function GetById(){
+        const response = await BaseRequest({
+            method: "GET",
+            url: `activitiesPresetParamRoutes/getById/${dataIsEditing}`,
+            isAuth: true,
+            setIsLoading,
+        });
+        if (response.status == 200) {
+            // fill with values
+            const preset = presets.find(p => p.id === response.data.presetId);
+            formikPresets.setFieldValue("preset", preset || "");
+            formik.setFieldValue("activityPresetName", response.data.name || "");
+            formik.setFieldValue("activity", response.data.activity || "");
+            formik.setFieldValue("room", response.data.room || "");
+            setActuatorsProps(response.data.actuators || []);
+            setOtherActivities(response.data.otherActivities || []);
+        }
+    }
+
+    useEffect(() => {
+        if(!isEditing && presets.length == 0) return;
+        GetById()
+    },[isEditing, presets])
 
     return (
         <form className={s.activityForm} onSubmit={formik.handleSubmit}>
