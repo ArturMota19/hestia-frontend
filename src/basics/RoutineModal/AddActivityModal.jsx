@@ -33,6 +33,23 @@ export default function AddActivityModal({
 
     console.log(isEditing, dataIsEditing)
 
+    async function GetById(){
+        const response = await BaseRequest({
+            method: "GET",
+            url: `activitiesPresetParamRoutes/getById/${dataIsEditing}`,
+            isAuth: true,
+            setIsLoading,
+        });
+        if (response.status == 200) {
+            console.log(response)
+        }
+    }
+
+    useEffect(() => {
+        if(!isEditing) return;
+        GetById()
+    },[isEditing])
+
     async function GetPresets() {
         const response = await BaseRequest({
             method: "GET",
