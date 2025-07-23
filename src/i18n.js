@@ -86,6 +86,7 @@ const resources = {
       // View Params Page
       viewHouseParams: "Gerenciamento de Parâmetros",
       noParams: "Sem Parâmetros cadastrados para",
+      noParamsSearched: "Nenhum parâmetro encontrado na busca",
       // Create Params Page
       person: "Pessoa",
       actuator: "Atuador",
@@ -248,6 +249,7 @@ const resources = {
       // View Params Page
       viewHouseParams: "Manage Parameters",
       noParams: "No Parameters registered for",
+      noParamsSearched: "No parameters found in search",
       // Create Params Page
       person: "Person",
       actuator: "Actuator",

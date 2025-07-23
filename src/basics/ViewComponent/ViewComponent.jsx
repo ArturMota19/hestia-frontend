@@ -33,7 +33,6 @@ export default function ViewComponent({
     const isColorA = (isEvenRow && col === 0) || (!isEvenRow && col === 1);
 
     const navigate = useNavigate();
-    console.log(type)
 
     return (
         <div
