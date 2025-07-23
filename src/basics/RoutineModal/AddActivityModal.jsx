@@ -186,6 +186,13 @@ export default function AddActivityModal({
                     setIsActivityModalOpen(false);
                 }
             }else{
+                const hasSameId = data.otherActivities.some(
+                    (item) => item.otherActivity.id === data.activity.id
+                );
+                if (hasSameId) {
+                    toast.error("Uma atividade não pode ser igual a uma outra atividade. (Principal ou Secundária)");
+                    return;
+                }
                 const response = await BaseRequest({
                     method: "PUT",
                     url: `activitiesPresetParamRoutes/updateById/${dataIsEditing}`,
@@ -193,12 +200,12 @@ export default function AddActivityModal({
                     data,
                     setIsLoading,
                 });
+
                 if(response.status == 200){
                     toast.success("Parâmetro editado com sucesso.")
                     FetchData()
                     setIsActivityModalOpen(false);
                 }
-                console.log(response)
             }
 
             
