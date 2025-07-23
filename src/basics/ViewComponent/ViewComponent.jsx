@@ -97,6 +97,7 @@ export default function ViewComponent({
                             }}
                         />
                         )}
+                        {type !== "actuator" &&
                         <Button
                             text={t("delete")}
                             backgroundColor={"delete"}
@@ -107,6 +108,7 @@ export default function ViewComponent({
                                     : console.log("delete")
                             }
                         />
+                        }
                     </div>
                 )}
             </div>
