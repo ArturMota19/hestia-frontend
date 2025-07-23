@@ -45,6 +45,7 @@ export default function ViewParams() {
         isAuth: true,
         setIsLoading,
       });
+              console.log(response)
       if(response.status == 200){
         setData(response.data[paramType]);
       }
