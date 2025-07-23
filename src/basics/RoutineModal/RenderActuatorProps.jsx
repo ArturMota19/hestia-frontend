@@ -50,7 +50,7 @@ const RangeInput = React.memo(({ name, value, min, max, onChange }) => (
         className={s.field}
         min={min}
         max={max}
-        value={value === 0 ? max/2 : value}
+        value={value}
         onChange={onChange}
       />
     </label>
@@ -116,7 +116,7 @@ const RenderActuatorProps = ({formikParam}) => {
 
   const getDefaultValue = (prop) => {
     if (prop.type === "boolean") return false;
-    if (prop.type === "range") return prop.min ?? 0;
+    if (prop.type === "range") return (prop.min + prop.max) / 2; 
     if (prop.type === "enum") return prop.options?.[0] ?? "";
     return "";
   };

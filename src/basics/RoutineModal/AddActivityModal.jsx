@@ -229,7 +229,6 @@ export default function AddActivityModal({
                 return;
             }
             const isValid = CheckValidProps(values);
-
             if (isValid.error) {
                 toast.error(isValid.error);
                 return;
