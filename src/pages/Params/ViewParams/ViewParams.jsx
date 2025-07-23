@@ -5,10 +5,10 @@ import peopleParam from "../../../assets/icons/params/people-param.svg";
 import actuatorParam from "../../../assets/icons/params/actuator-param.svg";
 import roomParam from "../../../assets/icons/params/room-param.svg";
 import activityParam from "../../../assets/icons/params/activity-param.svg";
+import { IoMdSearch } from "react-icons/io";
 // Imports
 import { Helmet } from "react-helmet";
 import { BaseRequest } from "../../../services/BaseRequest";
-import * as Yup from "yup";
 import { useFormik } from "formik";
 import Field from "../../../basics/Field/Field";
 //Styles
@@ -35,20 +35,19 @@ export default function ViewParams() {
     const [type, setType] = useState("");
     const [isEditing, setIsEditing] = useState(false);
     const [dataIsEditing, setDataIsEditing] = useState("");
-    const [isSearch, setIsSearch] = useState(false)
+    const [isSearch, setIsSearch] = useState(false);
 
-    
     async function FilteredData(value) {
-      const response = await BaseRequest({
-        method: "GET",
-        url: `/${paramType}/getByFilter/${value}`,
-        isAuth: true,
-        setIsLoading,
-      });
-              console.log(response)
-      if(response.status == 200){
-        setData(response.data[paramType]);
-      }
+        const response = await BaseRequest({
+            method: "GET",
+            url: `/${paramType}/getByFilter/${value}`,
+            isAuth: true,
+            setIsLoading,
+        });
+        console.log(response);
+        if (response.status == 200) {
+            setData(response.data[paramType]);
+        }
     }
 
     const formik = useFormik({
@@ -56,8 +55,8 @@ export default function ViewParams() {
             search: "",
         },
         onSubmit: async (values) => {
-          if(values.search.length < 3) return;
-          FilteredData(values.search)
+            if (values.search.length < 3) return;
+            FilteredData(values.search);
         },
     });
 
@@ -68,24 +67,23 @@ export default function ViewParams() {
             isAuth: true,
             setIsLoading,
         });
-        if(response.status == 200){
-          setData(response.data[paramType]);
-          setItemsCount(response.data.count);
+        if (response.status == 200) {
+            setData(response.data[paramType]);
+            setItemsCount(response.data.count);
         }
-
     }
     useEffect(() => {
         FetchData();
-    }, [currentPage, paramType])
+    }, [currentPage, paramType]);
 
     useEffect(() => {
-      if(formik.values.search.length > 2){
-        setIsSearch(true)
-        return
-      }
-      FetchData();
-      setIsSearch(false)
-    }, [formik.values.search])
+        if (formik.values.search.length > 2) {
+            setIsSearch(true);
+            return;
+        }
+        FetchData();
+        setIsSearch(false);
+    }, [formik.values.search]);
 
     async function DeleteData(id) {
         const response = await BaseRequest({
@@ -207,34 +205,39 @@ export default function ViewParams() {
                         }}
                     />
                 </section>
-                <div className={s.wrapperCreateParams}>
-                    <div>
-                        {paramType == "activitiesPresetParamRoutes" ? (
-                            <Button
-                                text={t("create")}
-                                backgroundColor={"secondary"}
-                                height={48}
-                                doFunction={() => {
-                                    setIsEditing(false);
-                                    setIsActivityModalOpen(true);
-                                }}
+                {paramType !== "actuators" && (
+                    <div className={s.wrapperCreateParams}>
+                        <div className={s.wrapperInput}>
+                            <IoMdSearch size={50} color="#333333"/>
+                            <Field
+                                fieldName="search"
+                                type="text"
+                                isLogged={true}
+                                formik={formik}
+                                isSearch={true}
                             />
-                        ) : (
-                            <ItemParam
-                                img={peopleParam}
-                                text={t(paramType)}
-                                type={paramType}
-                            />
-                        )}
-                        <Field
-                          fieldName="search"
-                          type="text"
-                          isLogged={true}
-                          formik={formik}
-                          isSearch={true}
-                        />
+                        </div>
+                        <div className={s.wrapperButton}>
+                            {paramType == "activitiesPresetParamRoutes" ? (
+                                <Button
+                                    text={t("create")}
+                                    backgroundColor={"secondary"}
+                                    height={48}
+                                    doFunction={() => {
+                                        setIsEditing(false);
+                                        setIsActivityModalOpen(true);
+                                    }}
+                                />
+                            ) : (
+                                <ItemParam
+                                    img={peopleParam}
+                                    text={t(paramType)}
+                                    type={paramType}
+                                />
+                            )}
+                        </div>
                     </div>
-                </div>
+                )}
                 <section className={s.gridWrapper}>
                     {data.length > 0 &&
                         !isLoading &&
@@ -265,15 +268,13 @@ export default function ViewParams() {
                 </section>
                 {data.length <= 0 && !isLoading && (
                     <div className={s.noParamsDiv}>
-                        {isSearch ?
-                        <h4>
-                            {t("noParamsSearched")}
-                        </h4>
-                        :
-                        <h4>
-                            {t("noParams")} {t(paramType)}
-                        </h4>
-                        }
+                        {isSearch ? (
+                            <h4>{t("noParamsSearched")}</h4>
+                        ) : (
+                            <h4>
+                                {t("noParams")} {t(paramType)}
+                            </h4>
+                        )}
                     </div>
                 )}
                 {data.length <= 0 && isLoading && (
