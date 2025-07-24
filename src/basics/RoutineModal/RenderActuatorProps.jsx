@@ -116,7 +116,7 @@ const RenderActuatorProps = ({formikParam}) => {
 
   const getDefaultValue = (prop) => {
     if (prop.type === "boolean") return false;
-    if (prop.type === "range") return prop.min ?? 0;
+    if (prop.type === "range") return (prop.min + prop.max) / 2; 
     if (prop.type === "enum") return prop.options?.[0] ?? "";
     return "";
   };

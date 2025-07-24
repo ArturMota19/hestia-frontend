@@ -17,6 +17,18 @@
     justify-content: space-between
   }
 
+  .wrapperBackLanguage{
+    display: flex;
+    gap: 1rem;
+
+    button{
+      background-color: transparent;
+      cursor: pointer;
+      outline: none;
+      border: none;
+    }
+  }
+
   a{
     @include font-bold-6;
     color: var(--tertiary-color);

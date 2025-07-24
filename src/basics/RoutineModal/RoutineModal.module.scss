@@ -111,6 +111,22 @@
     width: 100%;
     gap: 16px;
     display: flex;
+    padding: 8px;
+    background-color: var(--primary-color);
+  }
+
+  .wrapperActuatorsActions{
+    display: flex;
+    gap: 1rem;
+
+    .removeActuators{
+  background-color: var(--text-field-error-color);
+  color: var(--tertiary-color);
+  transition: 1s;
+  &:hover{
+    background-color: var(--text-field-error-color-hover);
+  }
+    }
   }
 
 

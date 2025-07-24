@@ -45,7 +45,7 @@ const resources = {
       invalidEmail: "Email inválido",
       passwordMismatch: "As senhas não coincidem",
       //Home
-      createParams: "Criar Parâmetros",
+      manageParams: "Gerenciar Parâmetros",
       viewParams: "Visualizar Parâmetros",
       createPresets: "Criar Presets",
       viewPresets: "Visualizar Presets",
@@ -79,12 +79,14 @@ const resources = {
       addMoreRooms: "Adicione ao menos dois cômodos para construir um grafo",
       activityPresetName: "Atividade com Preset",
       activityPresetNamePlaceholder: "Adicione a Atividade relacionada com Preset",
+      noActuatorsRegistered: "Cômodo sem atuadores",
       // View Preset Page
       viewHousePreset: "Visualização de Presets",
       noPresets: "Sem Presets cadastrados",
       // View Params Page
-      viewHouseParams: "Visualização de Parâmetros",
+      viewHouseParams: "Gerenciamento de Parâmetros",
       noParams: "Sem Parâmetros cadastrados para",
+      noParamsSearched: "Nenhum parâmetro encontrado na busca",
       // Create Params Page
       person: "Pessoa",
       actuator: "Atuador",
@@ -100,6 +102,7 @@ const resources = {
       errorValuePlaceholder: "Digite a taxa de erro",
       invalidErrorValue: "A taxa de erro deve estar entre 0 e 100",
       color: "Cor",
+      activitiesPresetParamRoutes: "Atividade Com Preset",
       // Create Routine Page
       personsRoutines: "Pessoas e Atividades",
       selectOnePreset: "Selecione um Preset para continuar",
@@ -114,6 +117,7 @@ const resources = {
       addActivity: "Adicionar Atividade",
       actuators: "Atuadores",
       addPerson: "Adicionar Pessoa",
+      removeActuator: "Remover Atuador",
       // View Routine Page
       people: "Pessoas",
       noRoutines: "Sem Rotinas cadastradas",
@@ -206,7 +210,7 @@ const resources = {
       invalidEmail: "Invalid email",
       passwordMismatch: "Passwords do not match",
       //Home
-      createParams: "Create Parameters",
+      manageParams: "Manage Parameters",
       viewParams: "View Parameters",
       createPresets: "Create Presets",
       viewPresets: "View Presets",
@@ -238,12 +242,14 @@ const resources = {
       removeGraph: "Remove Graph",
       graph: "Graph of Rooms",
       addMoreRooms: "Add at least two rooms to build a graph",
+      noActuatorsRegistered: "Room without actuators",
       // View Preset Page
       viewHousePreset: "View Presets",
       noPresets: "No Presets registered",
       // View Params Page
-      viewHouseParams: "View Parameters",
+      viewHouseParams: "Manage Parameters",
       noParams: "No Parameters registered for",
+      noParamsSearched: "No parameters found in search",
       // Create Params Page
       person: "Person",
       actuator: "Actuator",
@@ -257,6 +263,7 @@ const resources = {
       errorValuePlaceholder: "Enter the error rate",
       invalidErrorValue: "Error rate must be between 0 and 100",
       color: "Color",
+      activitiesPresetParamRoutes: "Activity With Preset",
       // Create Routine Page
       personsRoutines: "People and Activities",
       selectOnePreset: "Select a Preset to continue",
@@ -271,6 +278,7 @@ const resources = {
       addActivity: "Add Activity",
       actuators: "Actuators",
       addPerson: "Add Person",
+      removeActuator: "Remove Actuator",
       // View Routine Page
       people: "People",
       noRoutines: "No Routines registered",

@@ -61,11 +61,18 @@ export async function BaseRequest({
         toast.error("Conflito de informações. Essas informações já existem no Banco de Dados.",{
           toastId: "serverError",
         });
+      }else if (status === 423) {
+        toast.error("Este objeto não pode ser deletado porque está sendo utilizado em outra tabela.",{
+          toastId: "serverError",
+        });
       }  else if (status === 500) {
         toast.error("Erro interno do servidor.",{
           toastId: "serverError",
         });
       } 
+        else if(error.response.data.error == "Cannot edit preset: there are routines using this preset."){
+        toast.error("Este preset não pode ser editado porque está sendo utilizado em uma rotina existente.")
+      }
       else {
         toast.error("Houve um erro. Consulte as informações enviadas e tente novamente.",{
           toastId: "genericError",

@@ -12,8 +12,35 @@ export default function Field({
   formik,
   value = "",
   isLogged = false,
+  hasStep = false,
+  isSearch = false,
 }) {
   const { t } = useTranslation();
+
+  if(isSearch){
+    return(
+      <div className={s.inputWrapper}>
+      <input
+        type={type}
+        name={fieldName}
+        onChange={(e) => {formik.handleChange(e);formik.handleSubmit()}}
+        onBlur={formik.handleBlur}
+        value={formik?.values[fieldName] || ""}
+        readOnly={readOnly}
+        placeholder={t(`${fieldName}Placeholder`)}
+        className={
+          formik.errors[fieldName] && formik.touched[fieldName]
+            ? s.fieldError
+            : s.field
+        }
+        step={hasStep ? 0.01 : undefined}
+      />
+      {formik.touched[fieldName] && formik.errors[fieldName] && (
+        <p className={s.textError}>{formik.errors[fieldName]}</p>
+      )}
+    </div>
+    )
+  }
 
   if(!formik && readOnly){
     return(
@@ -55,6 +82,7 @@ export default function Field({
             ? s.fieldError
             : s.field
         }
+        step={hasStep ? 0.01 : undefined}
       />
       {formik.touched[fieldName] && formik.errors[fieldName] && (
         <p className={s.textError}>{formik.errors[fieldName]}</p>

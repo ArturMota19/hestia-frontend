@@ -16,14 +16,14 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 
 
-export default function ModalCreateParams({ isOpen, setIsOpen, type, formik }) {
+export default function ModalCreateParams({ isOpen, setIsOpen, type, formik, FetchData }) {
   if (!isOpen) return null;
   const navigate = useNavigate();
   const { t } = useTranslation();
   const [isLoading, setIsLoading] = useState(false)
 
   switch (type) {
-    case "person":
+    case "people":
       const validationSchemaPeople = Yup.object().shape({
         nameParam: Yup.string().required(t('requiredField')),
       });
@@ -42,6 +42,7 @@ export default function ModalCreateParams({ isOpen, setIsOpen, type, formik }) {
           })
           if(response.status == 201){
             toast.success("Pessoa criada com sucesso.")
+            FetchData()
             setIsOpen(false)
           }
         },
@@ -73,7 +74,7 @@ export default function ModalCreateParams({ isOpen, setIsOpen, type, formik }) {
           </div>
         </section>
       );
-    case "room":      
+    case "rooms":      
       const validationSchemaRoom = Yup.object().shape({
         nameParam: Yup.string().required(t('requiredField')),
         capacity: Yup.number().required(t('requiredField')).positive(t('invalidCapacity')),
@@ -98,6 +99,7 @@ export default function ModalCreateParams({ isOpen, setIsOpen, type, formik }) {
           })
           if(response.status == 201){
             toast.success("Cômodo criado com sucesso.")
+            FetchData()
             setIsOpen(false)
           }
         },
@@ -135,7 +137,7 @@ export default function ModalCreateParams({ isOpen, setIsOpen, type, formik }) {
           </div>
         </section>
       );
-    case "activity":
+    case "activities":
       const validationSchemaActivity = Yup.object().shape({
         nameParam: Yup.string().required(t('requiredField')),
         errorValue: Yup.number()
@@ -167,6 +169,7 @@ export default function ModalCreateParams({ isOpen, setIsOpen, type, formik }) {
           })
           if(response.status == 201){
             toast.success("Atividade criada com sucesso.")
+            FetchData()
             setIsOpen(false)
           }
         },
@@ -192,6 +195,7 @@ export default function ModalCreateParams({ isOpen, setIsOpen, type, formik }) {
                 fieldName="errorValue"
                 formik={formikActivity}
                 isLogged={true}
+                hasStep={true}
               />
               <Field
                 type="color"
