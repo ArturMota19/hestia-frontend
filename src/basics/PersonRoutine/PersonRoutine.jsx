@@ -36,6 +36,92 @@ export default function PersonRoutine({
         setIsModalOpen(true);
     }
 
+    function CheckValidProps(values) {
+        const actuatorName = values.actuator.name;
+        const statusProps = values.status;
+        const expectedProps = actuatorStatusMap[actuatorName];
+
+        if (!expectedProps) {
+            return { error: "unknownActuator" };
+        }
+
+        for (const prop of statusProps) {
+            const expectedProp = expectedProps.find(
+                (p) => p.name === prop.name
+            );
+
+            if (!expectedProp) {
+                return { error: `unknownProp: ${prop.name}` };
+            }
+
+            const inputIntValue = parseInt(prop.value);
+
+            if (expectedProp.type === "boolean") {
+                if (typeof prop.value !== "boolean") {
+                    return {
+                        error: `invalidType: ${prop.name} should be boolean`,
+                    };
+                }
+            } else if (expectedProp.type === "range") {
+                if (
+                    inputIntValue < expectedProp.min ||
+                    inputIntValue > expectedProp.max
+                ) {
+                    return {
+                        error: `outOfRange: ${prop.name} should be between ${expectedProp.min} and ${expectedProp.max}`,
+                    };
+                }
+            } else if (expectedProp.type === "enum") {
+                if (!expectedProp.options.includes(prop.value)) {
+                    return {
+                        error: `invalidOption: ${
+                            prop.name
+                        } should be one of ${expectedProp.options.join(", ")}`,
+                    };
+                }
+            } else {
+                return { error: `unknownType: ${expectedProp.type}` };
+            }
+        }
+
+        return { valid: true };
+    }
+
+    const actuatorStatusMap = {
+        LAMPADA: [
+            { name: "switch_led", type: "boolean" },
+            { name: "bright_value_v2", type: "range", min: 0, max: 1000 },
+            { name: "temp_value_v2", type: "range", min: 0, max: 1000 },
+        ],
+        CAFETEIRA: [{ name: "switch", type: "boolean" }],
+        PLUG: [{ name: "switch_1", type: "boolean" }],
+        SOM: [
+            { name: "switch", type: "boolean" },
+            { name: "sound_volume", type: "range", min: 0, max: 100 },
+        ],
+        AR_CONDICIONADO: [
+            { name: "switch", type: "boolean" },
+            { name: "temp_set", type: "range", min: 16, max: 30 },
+            {
+                name: "mode",
+                type: "enum",
+                options: ["COLL", "HOT", "WET", "WIND", "AUTO"],
+            },
+        ],
+        TV: [
+            { name: "switch", type: "boolean" },
+            { name: "sound_volume", type: "range", min: 0, max: 100 },
+        ],
+        SENSOR_PRESENCA: [
+            { name: "presence_state", type: "boolean" },
+            {
+                name: "human_motion_state",
+                type: "enum",
+                options: ["NONE", "SMALL_MOVE", "LARGER_MOVE"],
+            },
+        ],
+    };
+
     const EachDay = ({ day }) => {
         const sortedRoutine = [...day.routine].sort(
             (a, b) => a.start - b.start
@@ -140,40 +226,40 @@ export default function PersonRoutine({
             },
             validationSchema: validationSchemaPreferences,
             onSubmit: async (values) => {
-                let finalData = {
-                    [person["peopleName"]]: {
-                        nome: person.peopleName,
-                        prioridade: values.priority,
-                        comodo_atual: "RUA",
-                        preferencia: {},
-                    },
-                };
-                actuatorsProps.forEach((item) => {
-                    const comodo = item.room.name
-                        .toLowerCase()
-                        .replace(/\s+/g, "_");
-                    const atuador = item.actuator.name.toUpperCase();
-
-                    if (!finalData[person.peopleName].preferencia[comodo]) {
-                        finalData[person.peopleName].preferencia[comodo] = {};
-                    }
-
-                    if (
-                        !finalData[person.peopleName].preferencia[comodo][
-                            atuador
-                        ]
-                    ) {
-                        finalData[person.peopleName].preferencia[comodo][
-                            atuador
-                        ] = {};
-                    }
-                    item.status.forEach((statusItem) => {
-                        finalData[person.peopleName].preferencia[comodo][
-                            atuador
-                        ][statusItem.name] = statusItem.value;
-                    });
+               try{
+                const responseRoutineId = await BaseRequest({
+                  method: "GET",
+                  url: `routines/getPeopleRoutinesByPresetId/${preset.id}`,
+                  isAuth: true,
+                  setIsLoading,
                 });
-                setPreferenceData([...preferenceData, finalData]);
+                if(responseRoutineId.status == 200){
+                  const preferences = [];
+                  actuatorsProps.forEach((item) => {
+                      preferences.push(item);
+                  });
+                    const foundPerson = responseRoutineId.data.find(
+                    (item) => item.peopleName === person.peopleName
+                    );
+                    const data = {
+                      peopleRoutinesId: foundPerson ? foundPerson.id : "",
+                      priority: values.priority,
+                      preferences: preferences,
+                    };
+                    const responseRegisterPreference = await BaseRequest({
+                      method: "POST",
+                      data,
+                      url: `peoplePriority/register`,
+                      isAuth: true,
+                      setIsLoading,
+                    });
+                    console.log(responseRegisterPreference)
+                }
+
+               }catch(e){
+
+               }
+
             },
         });
 
@@ -236,7 +322,9 @@ export default function PersonRoutine({
                     onSubmit={formikPreferences.handleSubmit}
                     className={s.formWrapperIntern}>
                     <div className={s.closeModal}>
-                        <button type="button" onClick={() => setPersonPriorityModal(false)}>
+                        <button
+                            type="button"
+                            onClick={() => setPersonPriorityModal(false)}>
                             <img src={closeIcon} alt="Close Modal" />
                         </button>
                     </div>
