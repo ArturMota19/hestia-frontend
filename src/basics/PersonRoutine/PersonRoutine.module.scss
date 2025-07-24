@@ -20,6 +20,9 @@
       width: 15%;
       font-size: 1rem;
     }
+    p{
+      @include font-regular-3
+    }
   }
 
   .incompleteDay{

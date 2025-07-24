@@ -266,6 +266,10 @@ export default function PersonRoutine({
                         setIsLoading,
                     });
                     console.log(responseRegisterPreference);
+                    if(responseRegisterPreference.status == 201){
+                      toast.success("Prioridade cadastrada com sucesso.")
+                      setPersonPriorityModal(false)
+                    }
                 } catch (e) {}
             },
         });
@@ -436,8 +440,8 @@ export default function PersonRoutine({
             <PeoplePreferences />
             <div className={s.wrapperHeaderPerson}>
                 <h3>{person.peopleName}</h3>
-                {peopleRoutinePreset &&
-                    peopleRoutinePreset?.priority == null && (
+                {(peopleRoutinePreset &&
+                    peopleRoutinePreset?.priority == null) ? (
                         <Button
                             text={t("registerPriority")}
                             backgroundColor={"primary"}
@@ -445,7 +449,10 @@ export default function PersonRoutine({
                             doFunction={() => setPersonPriorityModal(true)}
                             isLoading={isLoading}
                         />
-                    )}
+                    )
+                  :
+                  <p>{t("priority")}: {peopleRoutinePreset?.priority}</p>
+                  }
 
                 <Button
                     text={t("remove")}
