@@ -394,8 +394,6 @@ const resources = {
       howToUseStep6Desc: "After creating a preset, create activities related only to that preset. This association is necessary because it allows the use of properties belonging to that preset, such as rooms and actuators belonging to the rooms.",
       howToUseStep7: "Step 7: Creating Routines",
       howToUseStep7Desc: "After creating the preset and the activities related to that preset, go to create routines, add one or more people, and build the person's routine. Note that each routine must complete 24 hours per day."
-
-      
     },
   },
 };
