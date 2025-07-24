@@ -12,7 +12,7 @@ import Field from "../Field/Field";
 import { useTranslation } from "react-i18next";
 import s from "./PersonRoutine.module.scss";
 import Button from "../Button/Button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BaseRequest } from "../../services/BaseRequest";
 import toast from "react-hot-toast";
 import DropdownField from "../DropdownField/DropdownField";
@@ -29,6 +29,26 @@ export default function PersonRoutine({
     const { t } = useTranslation();
     const [isLoading, setIsLoading] = useState(false);
     const [personPriorityModal, setPersonPriorityModal] = useState(false);
+    const [peopleRoutinePreset, setPeopleRoutinePreset] = useState();
+
+    async function GetPeopleRoutinePreset() {
+        const responseRoutineId = await BaseRequest({
+            method: "GET",
+            url: `routines/getPeopleRoutinesByPresetId/${preset.id}`,
+            isAuth: true,
+            setIsLoading,
+        });
+
+        if (responseRoutineId.status == 200) {
+            const foundPerson = responseRoutineId.data.find(
+                (item) => item.peopleName === person.peopleName
+            );
+            setPeopleRoutinePreset(foundPerson);
+        }
+    }
+    useEffect(() => {
+        GetPeopleRoutinePreset();
+    }, []);
 
     function openModal(day) {
         setPerson(person);
@@ -226,40 +246,27 @@ export default function PersonRoutine({
             },
             validationSchema: validationSchemaPreferences,
             onSubmit: async (values) => {
-               try{
-                const responseRoutineId = await BaseRequest({
-                  method: "GET",
-                  url: `routines/getPeopleRoutinesByPresetId/${preset.id}`,
-                  isAuth: true,
-                  setIsLoading,
-                });
-                if(responseRoutineId.status == 200){
-                  const preferences = [];
-                  actuatorsProps.forEach((item) => {
-                      preferences.push(item);
-                  });
-                    const foundPerson = responseRoutineId.data.find(
-                    (item) => item.peopleName === person.peopleName
-                    );
+                try {
+                    const preferences = [];
+                    actuatorsProps.forEach((item) => {
+                        preferences.push(item);
+                    });
                     const data = {
-                      peopleRoutinesId: foundPerson ? foundPerson.id : "",
-                      priority: values.priority,
-                      preferences: preferences,
+                        peopleRoutinesId: peopleRoutinePreset
+                            ? peopleRoutinePreset.id
+                            : "",
+                        priority: values.priority,
+                        preferences: preferences,
                     };
                     const responseRegisterPreference = await BaseRequest({
-                      method: "POST",
-                      data,
-                      url: `peoplePriority/register`,
-                      isAuth: true,
-                      setIsLoading,
+                        method: "POST",
+                        data,
+                        url: `peoplePriority/register`,
+                        isAuth: true,
+                        setIsLoading,
                     });
-                    console.log(responseRegisterPreference)
-                }
-
-               }catch(e){
-
-               }
-
+                    console.log(responseRegisterPreference);
+                } catch (e) {}
             },
         });
 
@@ -429,13 +436,17 @@ export default function PersonRoutine({
             <PeoplePreferences />
             <div className={s.wrapperHeaderPerson}>
                 <h3>{person.peopleName}</h3>
-                <Button
-                    text={t("registerPriority")}
-                    backgroundColor={"primary"}
-                    height={32}
-                    doFunction={() => setPersonPriorityModal(true)}
-                    isLoading={isLoading}
-                />
+                {peopleRoutinePreset &&
+                    peopleRoutinePreset?.priority == null && (
+                        <Button
+                            text={t("registerPriority")}
+                            backgroundColor={"primary"}
+                            height={32}
+                            doFunction={() => setPersonPriorityModal(true)}
+                            isLoading={isLoading}
+                        />
+                    )}
+
                 <Button
                     text={t("remove")}
                     backgroundColor={"delete"}
