@@ -30,6 +30,10 @@ export default function PersonRoutine({
     const [isLoading, setIsLoading] = useState(false);
     const [personPriorityModal, setPersonPriorityModal] = useState(false);
     const [peopleRoutinePreset, setPeopleRoutinePreset] = useState();
+    const [shouldOverlapPriority, setShouldOverlapPriority] = useState({
+      state: false,
+      priority: 0
+    })
 
     async function GetPeopleRoutinePreset() {
         const responseRoutineId = await BaseRequest({
@@ -257,6 +261,7 @@ export default function PersonRoutine({
                             : "",
                         priority: values.priority,
                         preferences: preferences,
+                        presetId: preset.id
                     };
                     const responseRegisterPreference = await BaseRequest({
                         method: "POST",
@@ -269,6 +274,7 @@ export default function PersonRoutine({
                     if(responseRegisterPreference.status == 201){
                       toast.success("Prioridade cadastrada com sucesso.")
                       setPersonPriorityModal(false)
+                      setShouldOverlapPriority({ priority: responseRegisterPreference.data.priority, state: true })
                     }
                 } catch (e) {}
             },
@@ -440,7 +446,8 @@ export default function PersonRoutine({
             <PeoplePreferences />
             <div className={s.wrapperHeaderPerson}>
                 <h3>{person.peopleName}</h3>
-                {(peopleRoutinePreset &&
+                
+                {!shouldOverlapPriority.state ? (peopleRoutinePreset &&
                     peopleRoutinePreset?.priority == null) ? (
                         <Button
                             text={t("registerPriority")}
@@ -452,6 +459,8 @@ export default function PersonRoutine({
                     )
                   :
                   <p>{t("priority")}: {peopleRoutinePreset?.priority}</p>
+                  :
+                  <p>{t("priority")}: {shouldOverlapPriority?.priority}</p>
                   }
 
                 <Button
