@@ -45,6 +45,11 @@ export async function BaseRequest({
         localStorage.removeItem("AHtoken")
         window.location.href = "/login";
       }
+      else if (status == 400 && error.response.data.error == "There is already a routine with this preset and priority for this user."){
+        toast.error("Já existe uma pessoa com essa prioridade no seu preset.",{
+          toastId: "authError",
+        });
+      }
       else if (status === 401) {
         toast.error("Houve um problema de autorização. Consulte o suas autorizações e tente novamente.",{
           toastId: "authError",

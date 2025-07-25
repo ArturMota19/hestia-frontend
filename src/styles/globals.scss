@@ -156,3 +156,45 @@ a {
     gap: 4px;
   }
 }
+
+// Accordion styles
+.p-accordion {
+  background: var(--tertiary-color);
+  border-radius: 10px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  padding: 0.5rem 0;
+  width: 100%;
+  transition: background 0.3s;
+
+  &.p-component {
+    border: none;
+  }
+}
+
+.p-accordion-header {
+  background: var(--primary-color);
+  color: var(--tertiary-color);
+  padding: 1rem 1.5rem;
+  border-radius: 8px;
+  margin: 0.5rem 1rem;
+  cursor: pointer;
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-4);
+  transition: background 0.2s, color 0.2s;
+
+  &:hover, &.p-highlight {
+    background: var(--primary-hover-color);
+    color: var(--quaternary-color);
+  }
+}
+
+.p-accordion-content {
+  background: var(--quintenary-color);
+  color: var(--secondary-color);
+  padding: 1.25rem 2rem;
+  border-radius: 0 0 8px 8px;
+  margin: 0 1rem 1rem 1rem;
+  font-size: var(--font-size-3);
+  line-height: var(--font-line-height-3);
+  transition: background 0.2s;
+}
