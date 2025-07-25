@@ -20,7 +20,6 @@ import Field from "../../basics/Field/Field";
 export default function FinalFile() {
   const [isLoading, setIsLoading] = useState(false);
   const [presets, setPresets] = useState([]);
-  const [peopleRoutines, setPeopleRoutines] = useState([]);
   const [preferenceData, setPreferenceData] = useState([]);
 
   const { t } = useTranslation();
@@ -129,10 +128,6 @@ export default function FinalFile() {
   }
 
   function transformToSimulator(responseData) {
-    if (peopleRoutines.length - preferenceData.length != 0) {
-      toast.error("Salve todas as preferências para continuar.");
-      return;
-    }
     function checkIfHas24() {
       const data = responseData[4].days;
 
@@ -468,222 +463,40 @@ export default function FinalFile() {
     GetPresets();
   }, []);
 
-  async function GetCreatedRoutines() {
-    if (formikPresets.values.preset == "") {
-      return;
-    }
+  //   actuatorsProps.forEach((item) => {
+  //   const comodo = item.room.name.toLowerCase().replace(/\s+/g, "_");
+  //   const atuador = item.actuator.name.toUpperCase();
+
+  //   if (!finalData[person.peopleName].preferencia[comodo]) {
+  //     finalData[person.peopleName].preferencia[comodo] = {};
+  //   }
+
+  //   if (!finalData[person.peopleName].preferencia[comodo][atuador]) {
+  //     finalData[person.peopleName].preferencia[comodo][atuador] = {};
+  //   }
+  //   item.status.forEach((statusItem) => {
+  //     finalData[person.peopleName].preferencia[comodo][atuador][
+  //       statusItem.name
+  //     ] = statusItem.value;
+  //   });
+  // });
+  // setPreferenceData([...preferenceData, finalData]);
+
+  async function GetPreferencesData(){
+    if(!formikPresets.values.preset.id) return
     const response = await BaseRequest({
-      method: "GET",
-      url: `routines/getPeopleRoutinesByPresetId/${formikPresets.values.preset.id}`,
-      isAuth: true,
-      setIsLoading,
+        method: "GET",
+        url: `peoplePriority/getByPresetId/${formikPresets.values.preset.id}`,
+        isAuth: true,
+        setIsLoading,
     });
-    if (response.status == 200) {
-      setPeopleRoutines(response.data);
-    }
+    console.log(response)
   }
 
   useEffect(() => {
-    if (formikPresets.values.preset != "") {
-      GetCreatedRoutines();
-    }
-  }, [formikPresets.values.preset]);
+    GetPreferencesData()
+  }, [formikPresets.values.preset])
 
-  const PeoplePreferences = ({ person, index }) => {
-    const [actuatorsProps, setActuatorsProps] = useState([]);
-    const validationSchemaPreferences = Yup.object().shape({
-      priority: Yup.number().min(1, "Min 1").required(t("requiredField")),
-    });
-    const formikPreferences = useFormik({
-      initialValues: {
-        priority: "",
-      },
-      validationSchema: validationSchemaPreferences,
-      onSubmit: async (values) => {
-        let finalData = {
-          [person["peopleName"]]: {
-            nome: person.peopleName,
-            prioridade: values.priority,
-            comodo_atual: "RUA",
-            preferencia: {},
-          },
-        };
-        actuatorsProps.forEach((item) => {
-          const comodo = item.room.name.toLowerCase().replace(/\s+/g, "_");
-          const atuador = item.actuator.name.toUpperCase();
-
-          if (!finalData[person.peopleName].preferencia[comodo]) {
-            finalData[person.peopleName].preferencia[comodo] = {};
-          }
-
-          if (!finalData[person.peopleName].preferencia[comodo][atuador]) {
-            finalData[person.peopleName].preferencia[comodo][atuador] = {};
-          }
-          item.status.forEach((statusItem) => {
-            finalData[person.peopleName].preferencia[comodo][atuador][
-              statusItem.name
-            ] = statusItem.value;
-          });
-        });
-        setPreferenceData([...preferenceData, finalData]);
-      },
-    });
-
-    const validationSchema = Yup.object().shape({
-      room: Yup.mixed().required(t("requiredField")),
-    });
-    const formik = useFormik({
-      initialValues: {
-        room: "",
-      },
-      validationSchema,
-      onSubmit: async (values) => {},
-    });
-
-    const validationSchemaActuators = Yup.object().shape({
-      actuator: Yup.mixed().required(t("requiredField")),
-    });
-    const formikActuators = useFormik({
-      initialValues: {
-        actuator: {},
-        status: [],
-      },
-      validationSchema: validationSchemaActuators,
-      onSubmit: async (values) => {
-        if (values.status.length < 1) {
-          toast.error("Adicione ao menos uma propriedade para o atuador.");
-          return;
-        }
-        if (
-          actuatorsProps.some(
-            (a) =>
-              a.actuator.name === values.actuator.name &&
-              a.room.id === formik.values.room.id
-          )
-        ) {
-          toast.error("Este atuador já foi adicionado.");
-          return;
-        }
-        const isValid = CheckValidProps(values);
-
-        if (isValid.error) {
-          toast.error(isValid.error);
-          return;
-        }
-        let data = {
-          actuator: values.actuator,
-          status: values.status,
-          room: formik.values.room,
-        };
-        setActuatorsProps([...actuatorsProps, data]);
-        formikActuators.resetForm();
-      },
-    });
-
-    return (
-      <form
-        onSubmit={formikPreferences.handleSubmit}
-        className={s.formWrapperIntern}
-        key={index}>
-        <h3>{person.peopleName}</h3>
-        <Field
-          type="number"
-          fieldName="priority"
-          formik={formikPreferences}
-          isLogged={true}
-        />
-        {formikPresets.values.preset && (
-          <div className={s.wrapperInputs}>
-            {actuatorsProps.length > 0 && (
-              <div className={s.wrapperEachActuatorSaved}>
-                <h5>{t("savedPreferences")}</h5>
-                {actuatorsProps.map((actuator, index) => (
-                  <section
-                    className={s.internEachActuator}
-                    key={`${actuator.actuator.name}${index}`}>
-                    <Field
-                      type="text"
-                      fieldName="room"
-                      readOnly={true}
-                      isLogged={true}
-                      value={actuator.room.name}
-                    />
-                    <Field
-                      type="text"
-                      fieldName="name"
-                      readOnly={true}
-                      isLogged={true}
-                      value={actuator.actuator.name}
-                    />
-                    {actuator.status.length > 0 &&
-                      actuator.status.map((prop) => {
-                        return (
-                          <Field
-                            type="text"
-                            fieldName={prop.name}
-                            readOnly={true}
-                            isLogged={true}
-                            value={prop.value}
-                          />
-                        );
-                      })}
-                  </section>
-                ))}
-              </div>
-            )}
-            <div className={s.wrapperRoomsColor}>
-              <DropdownField
-                type="text"
-                fieldName="room"
-                formik={formik}
-                value={formik.values.room}
-                options={formikPresets.values.preset.houserooms}
-                readOnly={false}
-                isMultiSelect={false}
-              />
-              {formik.values.room && (
-                <form
-                  className={s.wrapperAddActuators}
-                  onSubmit={formikActuators.handleSubmit}>
-                  <DropdownField
-                    type="text"
-                    fieldName="actuator"
-                    formik={formikActuators}
-                    value={formikActuators.values.actuator}
-                    options={formik.values.room.roomactuators}
-                    readOnly={false}
-                    hasTranslation={true}
-                  />
-                  <RenderActuatorProps formikParam={formikActuators} />
-                </form>
-              )}
-            </div>
-          </div>
-        )}
-        <button
-          type="button"
-          className={s.addActuatorButton}
-          onClick={() => formikActuators.handleSubmit()}>
-          {t("addActuator")}
-          <IoMdAdd />
-        </button>
-        <Button
-          type="button"
-          doFunction={formikPreferences.handleSubmit}
-          text={t("saveThisPerson")}
-          backgroundColor={"secondary"}
-          height={42}
-        />
-      </form>
-    );
-  };
-
-  function CheckPersonArray(person) {
-    return !preferenceData.some((entry) => {
-      const key = Object.keys(entry)[0];
-      return key === person;
-    });
-  }
 
   return (
     <main className={s.wrapperFinalFile}>
@@ -703,34 +516,6 @@ export default function FinalFile() {
               value={formikPresets.values.preset}
               options={presets}
             />
-            <section className={s.formPreferencesWrapper}>
-              {peopleRoutines.length > 0 && (
-                <>
-                  <p className={s.textPreferences}>
-                    {t("definePreferences")}
-                    <br />
-                    {t("preferencesAdvice")}
-                  </p>
-                  {peopleRoutines.length - preferenceData.length ===
-                  0 ? null : (
-                    <h6 className={s.savePersonGenerate}>
-                      {t("savePerson")}{" "}
-                      {peopleRoutines.length - preferenceData.length} {t("personGenerateFile")}
-                    </h6>
-                  )}
-                </>
-              )}
-              {peopleRoutines.map(
-                (person, index) =>
-                  CheckPersonArray(person.peopleName) && (
-                    <PeoplePreferences
-                      person={person}
-                      index={index}
-                      key={index}
-                    />
-                  )
-              )}
-            </section>
             <Button
               type="submit"
               text={t("generateFinalFile")}
