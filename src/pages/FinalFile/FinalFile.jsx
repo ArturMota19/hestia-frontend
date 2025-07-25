@@ -463,35 +463,57 @@ export default function FinalFile() {
     GetPresets();
   }, []);
 
-  //   actuatorsProps.forEach((item) => {
-  //   const comodo = item.room.name.toLowerCase().replace(/\s+/g, "_");
-  //   const atuador = item.actuator.name.toUpperCase();
+async function GetPreferencesData() {
+  if (!formikPresets.values.preset.id) return;
 
-  //   if (!finalData[person.peopleName].preferencia[comodo]) {
-  //     finalData[person.peopleName].preferencia[comodo] = {};
-  //   }
+  const response = await BaseRequest({
+    method: "GET",
+    url: `peoplePriority/getByPresetId/${formikPresets.values.preset.id}`,
+    isAuth: true,
+    setIsLoading,
+  });
 
-  //   if (!finalData[person.peopleName].preferencia[comodo][atuador]) {
-  //     finalData[person.peopleName].preferencia[comodo][atuador] = {};
-  //   }
-  //   item.status.forEach((statusItem) => {
-  //     finalData[person.peopleName].preferencia[comodo][atuador][
-  //       statusItem.name
-  //     ] = statusItem.value;
-  //   });
-  // });
-  // setPreferenceData([...preferenceData, finalData]);
+  if (response.status === 200) {
+    const preferences = response.data.preferences;
+    const finalData = {};
 
-  async function GetPreferencesData(){
-    if(!formikPresets.values.preset.id) return
-    const response = await BaseRequest({
-        method: "GET",
-        url: `peoplePriority/getByPresetId/${formikPresets.values.preset.id}`,
-        isAuth: true,
-        setIsLoading,
-    });
-    console.log(response)
+    for (const group of preferences) {
+      const { peopleName, eachPreference } = group;
+
+      if (!finalData[peopleName]) {
+        finalData[peopleName] = { preferencia: {} };
+      }
+
+      eachPreference.forEach((pref) => {
+        const comodo = pref.roomName.toLowerCase().replace(/\s+/g, "_");
+        const atuador = pref.actuatorName.toUpperCase();
+
+        if (!finalData[peopleName].preferencia[comodo]) {
+          finalData[peopleName].preferencia[comodo] = {};
+        }
+
+        if (!finalData[peopleName].preferencia[comodo][atuador]) {
+          finalData[peopleName].preferencia[comodo][atuador] = {};
+        }
+
+        Object.entries(pref).forEach(([key, value]) => {
+          if (
+            ![
+              "id", "roomId", "roomName", "peopleRoutinesId",
+              "actuatorId", "actuatorName", "createdAt", "updatedAt"
+            ].includes(key) && value !== null
+          ) {
+            finalData[peopleName].preferencia[comodo][atuador][key] = value;
+          }
+        });
+      });
+    }
+    setPreferenceData(Object.entries(finalData).map(([name, data]) => ({
+      [name]: data
+    })));
   }
+
+}
 
   useEffect(() => {
     GetPreferencesData()
