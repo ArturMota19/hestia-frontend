@@ -127,7 +127,7 @@ The **HESTIA Interface** was developed to facilitate the **creation of test case
   ```
 4. Create the .env file in the project root folder, following the variables from .env.example:
   ```bash
-  VITE_ENV="ENV"
+  VITE_ENV="DEV"
   VITE_BACKEND_DEV="backend_url"
   ```
 5. Run the project:
