@@ -458,10 +458,10 @@ export default function FinalFile() {
                 AUTOMACAO,
             };
 
-            const blob = new Blob([JSON.stringify(finalData, null, 2)], {
-                type: "application/json",
-            });
             if (!isGenerateData) {
+                const blob = new Blob([JSON.stringify(finalData, null, 2)], {
+                    type: "application/json",
+                });
                 const url = URL.createObjectURL(blob);
                 const a = document.createElement("a");
                 a.href = url;
@@ -475,7 +475,7 @@ export default function FinalFile() {
                 URL.revokeObjectURL(url);
                 return;
             }
-            return blob;
+            return finalData;
         } catch (e) {
             toast.error(e);
         } finally {
@@ -582,13 +582,22 @@ export default function FinalFile() {
             isAuth: true,
         });
         if (response.status == 200) {
-            const blob = transformToSimulator(response.data.finalData, true);
+            const finalData = transformToSimulator(
+                response.data.finalData,
+                true
+            );
+            const data = {
+                finalData,
+                type: formikPresets.values.type,
+                days: formikPresets.values.days,
+                name: formikPresets.values.preset.name
+            };
+
+            console.log(data);
             const generateData = await BaseRequest({
                 method: "POST",
                 url: `/final-file/generateData`,
-                data: {
-                    file: blob,
-                },
+                data,
                 setIsLoading,
                 isAuth: true,
             });
