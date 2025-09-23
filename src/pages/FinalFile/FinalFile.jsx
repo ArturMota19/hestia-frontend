@@ -133,7 +133,7 @@ export default function FinalFile() {
         return { valid: true };
     }
 
-    function transformToSimulator(responseData) {
+    function transformToSimulator(responseData, isGenerateData = false) {
         function checkIfHas24() {
             const data = responseData[4].days;
 
@@ -461,17 +461,21 @@ export default function FinalFile() {
             const blob = new Blob([JSON.stringify(finalData, null, 2)], {
                 type: "application/json",
             });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement("a");
-            a.href = url;
-            let id = Date.now();
-            const presetNameWithUnderscores =
-                formikPresets.values.preset.name.replace(/\s+/g, "_");
-            a.download = `${presetNameWithUnderscores}${id}.json`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
+            if (!isGenerateData) {
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement("a");
+                a.href = url;
+                let id = Date.now();
+                const presetNameWithUnderscores =
+                    formikPresets.values.preset.name.replace(/\s+/g, "_");
+                a.download = `${presetNameWithUnderscores}${id}.json`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                return;
+            }
+            return blob;
         } catch (e) {
             toast.error(e);
         } finally {
@@ -487,7 +491,6 @@ export default function FinalFile() {
             setIsLoading,
         });
         if (response.status == 200) {
-            console.log(response.data.presetData);
             setPresets(response.data.presetData);
         }
     }
@@ -565,13 +568,31 @@ export default function FinalFile() {
     }, [formikPresets.values.preset]);
 
     async function GenerateData() {
-        console.log(formikPresets.values.type);
         if (
             !formikPresets.values.preset ||
             !formikPresets.values.days ||
             !formikPresets.values.type
         ) {
             toast.error("Preencha todos os campos para gerar dados.");
+        }
+        const response = await BaseRequest({
+            method: "GET",
+            url: `/final-file/generateFinalFile/${formikPresets.values.preset.id}`,
+            setIsLoading,
+            isAuth: true,
+        });
+        if (response.status == 200) {
+            const blob = transformToSimulator(response.data.finalData, true);
+            const generateData = await BaseRequest({
+                method: "POST",
+                url: `/final-file/generateData`,
+                data: {
+                    file: blob,
+                },
+                setIsLoading,
+                isAuth: true,
+            });
+            console.log(generateData);
         }
     }
 
