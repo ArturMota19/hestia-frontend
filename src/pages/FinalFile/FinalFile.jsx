@@ -427,7 +427,7 @@ export default function FinalFile() {
                 USUARIOS[userKey] = {
                     nome: personData.nome,
                     prioridade: personData.prioridade,
-                    comodo_atual: personData.comodo_atual,
+                    comodo_atual: "RUA",
                     preferencia: personData.preferencia,
                     rotina_semana: rotina_semana,
                 };
@@ -508,16 +508,15 @@ export default function FinalFile() {
             isAuth: true,
             setIsLoading,
         });
-
         if (response.status === 200) {
             const preferences = response.data.preferences;
-            const finalData = {};
+            const finalDataPreferences = {};
 
             for (const group of preferences) {
-                const { peopleName, eachPreference } = group;
+                const { peopleName, eachPreference, priority } = group;
 
-                if (!finalData[peopleName]) {
-                    finalData[peopleName] = { preferencia: {} };
+                if (!finalDataPreferences[peopleName]) {
+                    finalDataPreferences[peopleName] = { preferencia: {} };
                 }
 
                 eachPreference.forEach((pref) => {
@@ -526,12 +525,12 @@ export default function FinalFile() {
                         .replace(/\s+/g, "_");
                     const atuador = pref.actuatorName.toUpperCase();
 
-                    if (!finalData[peopleName].preferencia[comodo]) {
-                        finalData[peopleName].preferencia[comodo] = {};
+                    if (!finalDataPreferences[peopleName].preferencia[comodo]) {
+                        finalDataPreferences[peopleName].preferencia[comodo] = {};
                     }
 
-                    if (!finalData[peopleName].preferencia[comodo][atuador]) {
-                        finalData[peopleName].preferencia[comodo][atuador] = {};
+                    if (!finalDataPreferences[peopleName].preferencia[comodo][atuador]) {
+                        finalDataPreferences[peopleName].preferencia[comodo][atuador] = {};
                     }
 
                     Object.entries(pref).forEach(([key, value]) => {
@@ -548,15 +547,17 @@ export default function FinalFile() {
                             ].includes(key) &&
                             value !== null
                         ) {
-                            finalData[peopleName].preferencia[comodo][atuador][
+                            finalDataPreferences[peopleName].preferencia[comodo][atuador][
                                 key
                             ] = value;
+                            finalDataPreferences[peopleName].nome = peopleName
+                            finalDataPreferences[peopleName].prioridade = priority
                         }
                     });
                 });
             }
             setPreferenceData(
-                Object.entries(finalData).map(([name, data]) => ({
+                Object.entries(finalDataPreferences).map(([name, data]) => ({
                     [name]: data,
                 }))
             );
@@ -593,7 +594,6 @@ export default function FinalFile() {
                 name: formikPresets.values.preset.name
             };
 
-            console.log(data);
             const generateData = await BaseRequest({
                 method: "POST",
                 url: `/final-file/generateData`,
@@ -601,7 +601,20 @@ export default function FinalFile() {
                 setIsLoading,
                 isAuth: true,
             });
-            console.log(generateData);
+            if (generateData && generateData.data && typeof generateData.data === "string") {
+                const csvContent = generateData.data;
+                const blob = new Blob([csvContent], { type: "text/csv" });
+                const url = window.URL.createObjectURL(blob);
+
+                const a = document.createElement("a");
+                a.href = url;
+                a.download = `${formikPresets.values.preset.name}_simulacao_${Date.now()}.csv`;
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+
+                window.URL.revokeObjectURL(url);
+            }
         }
     }
 
