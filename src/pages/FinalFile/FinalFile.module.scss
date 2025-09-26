@@ -11,6 +11,32 @@
     justify-content: center;
     background-color: var(--tertiary-color);
 
+    .wrapperButtonFiles{
+        width: 100%;
+        display: flex;
+        gap: 1rem;
+    }
+
+    .generateData{
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        padding: 1rem;
+        background-color: var(--primary-color);
+        p{
+            @include font-regular-3;
+            color: var(--tertiary-color);
+        }
+        label{
+            color: var(--tertiary-color);
+        }
+        .wrapperInternFields{
+            width: 100%;
+            display: flex;
+            gap: 1rem;
+        }
+    }
+
     .errorNoGraph{
         @include font-regular-4;
         text-align: center;
