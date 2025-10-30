@@ -58,7 +58,7 @@ A **Interface HESTIA** foi desenvolvida com o objetivo de facilitar a **criaçã
   ```
 4. Crie a .env na pasta raiz do projeto, seguindo as variáveis do .env.example:
   ```bash
-  VITE_ENV="ENV"
+  VITE_ENV="DEV"
   VITE_BACKEND_DEV="backend_url"
   ```
 5. Execute o projeto:
