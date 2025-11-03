@@ -270,7 +270,6 @@ export default function PersonRoutine({
                         isAuth: true,
                         setIsLoading,
                     });
-                    console.log(responseRegisterPreference);
                     if(responseRegisterPreference.status == 201){
                       toast.success("Prioridade cadastrada com sucesso.")
                       setPersonPriorityModal(false)
@@ -346,6 +345,7 @@ export default function PersonRoutine({
                         </button>
                     </div>
                     <h3>{person.peopleName}</h3>
+                    <p className={s.preferencesSubtitle}>{t("preferencesInfos")}</p>
                     <Field
                         type="number"
                         fieldName="priority"
@@ -353,6 +353,7 @@ export default function PersonRoutine({
                         isLogged={true}
                     />
                     <div className={s.wrapperInputs}>
+                        <p className={s.preferencesSubtitle}>{t("roomsPreferences")}</p>
                         {actuatorsProps.length > 0 && (
                             <div className={s.wrapperEachActuatorSaved}>
                                 <h5>{t("savedPreferences")}</h5>

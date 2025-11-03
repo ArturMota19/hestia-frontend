@@ -12,6 +12,10 @@
     @include font-medium-4;
   }
 
+  .preferencesSubtitle{
+    @include font-medium-2;
+  }
+
   .wrapperHeaderPerson{
     display: flex;
     justify-content: space-between;

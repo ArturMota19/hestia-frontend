@@ -149,6 +149,9 @@ const resources = {
       deleteActivities: "Clique com o botão direito para deletar atividades adicionadas.",
       activityPresetParam: "Atividade com Preset",
       addActuator: "Adicionar Atuador",
+      registerPriority: "Registrar Prioridade",
+      preferencesInfos: "A preferência é definida com 1 sendo a maior prioridade.",
+      roomsPreferences: "Adicione preferências de cômodos e atuadores. Não é obrigatório definir essas preferências.",
       // Devices
       AR_CONDICIONADO: "Ar Condicionado",
       LAMPADA: "Lâmpada",
@@ -348,6 +351,9 @@ const resources = {
       addActuator: "Add Actuator",
       activityPresetName: "Activity with Preset",
       activityPresetNamePlaceholder: "Add the Activity related to the Preset",
+      registerPriority: "Register Priority",
+      preferencesInfos: "The preference is defined with 1 being the highest priority.",
+      roomsPreferences: "Add room and actuator preferences. Defining these preferences is not mandatory.",
       // Devices
       AR_CONDICIONADO: "Air Conditioner",
       LAMPADA: "Light Bulb",
