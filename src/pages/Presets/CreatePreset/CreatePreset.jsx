@@ -252,7 +252,8 @@ export default function CreatePreset() {
                         className={s.wrapperForm}
                         onSubmit={formikRooms.handleSubmit}>
                         <h2>{t("rooms")}</h2>
-                        {rooms &&
+                        <section className={rooms.length > 0 && s.wrapperListRooms}>
+                            {rooms &&
                             rooms.length > 0 &&
                             rooms.map((room, index) => (
                                 <div
@@ -290,6 +291,7 @@ export default function CreatePreset() {
                                     />
                                 </div>
                             ))}
+                        </section>
                         <div className={s.wrapperThreeInputs}>
                             <DropdownField
                                 type="text"
@@ -329,7 +331,12 @@ export default function CreatePreset() {
                                 height={32}
                                 doFunction={() => {
                                     if (rooms.length > 0) {
+                                        if (graph.some((connection) => connection.room1.id === rooms[rooms.length - 1].roomName.id || connection.room2.id === rooms[rooms.length - 1].roomName.id)) {
+                                            toast.error("Não é possível remover o cômodo, pois ele está associado a um grafo.");
+                                            return;
+                                        }
                                         setRooms(rooms.slice(0, -1));
+                                        setGraphOptions(graphOptions.filter((option) => option.id !== rooms[rooms.length - 1].roomName.id));
                                     }
                                 }}
                             />
@@ -340,7 +347,8 @@ export default function CreatePreset() {
                             className={s.wrapperForm}
                             onSubmit={formikGraph.handleSubmit}>
                             <h2>{t("graph")}</h2>
-                            {graph &&
+                            <section className={graph.length > 0 && s.wrapperListRooms}>
+                                {graph &&
                                 graph.length > 0 &&
                                 graph.map((graph, index) => (
                                     <div
@@ -369,6 +377,7 @@ export default function CreatePreset() {
                                         />
                                     </div>
                                 ))}
+                            </section>
                             <div className={s.wrapperThreeInputs}>
                                 <DropdownField
                                     type="text"
