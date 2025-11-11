@@ -11,6 +11,10 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  .errorInfo{
+    @include font-regular-2;
+    text-align: center;
+  }
 
   .internModal{
     background-color: var(--tertiary-color);

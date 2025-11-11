@@ -197,6 +197,7 @@ export default function ModalCreateParams({ isOpen, setIsOpen, type, formik, Fet
                 isLogged={true}
                 hasStep={true}
               />
+              <p className={s.errorInfo}>ℹ️ {t("errorRateInfo")}</p>
               <Field
                 type="color"
                 fieldName="color"
