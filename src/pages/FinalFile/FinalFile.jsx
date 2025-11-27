@@ -320,7 +320,7 @@ export default function FinalFile() {
                                     Math.floor(Math.random() * (200 - 50 + 1)) +
                                     50,
                                 taxa_erro: otherAct.probability,
-                                local_atividade: "",
+                                local_atividade: roomFormattedName,
                                 atividades_associadas: {},
                                 lista_atuadores_atividade: {},
                             };

@@ -1,5 +1,5 @@
 <div align="center">
-	<h1>HESTIA Interface</h1>
+	<h1>HESTIA 2.0</h1>
 	<h2>🖥️ Front-End da aplicação HESTIA</h2>
 </div>
 
@@ -14,7 +14,7 @@
 
 ## 🏠 Sobre o Projeto
 
-A **Interface HESTIA** foi desenvolvida com o objetivo de facilitar a **criação de casos de teste** para o sistema original HESTIA. Devido ao grande volume de dados envolvidos, esse processo tornou-se desafiador. A interface visa **simplificar e agilizar** essa etapa, permitindo a geração de exemplos representativos de maneira mais eficiente e acessível.
+O **HESTIA 2.0** foi desenvolvida com o objetivo de facilitar a **criação de casos de teste** para o sistema original HESTIA. Devido ao grande volume de dados envolvidos, esse processo tornou-se desafiador. A interface visa **simplificar e agilizar** essa etapa, permitindo a geração de exemplos representativos de maneira mais eficiente e acessível.
 
 - 🎯 **Problema Resolvido:** Dificuldade e complexidade na criação manual de testes.
 - 👥 **Público-alvo:** Usuários e pesquisadores que utilizam o sistema original HESTIA.
@@ -83,7 +83,7 @@ A **Interface HESTIA** foi desenvolvida com o objetivo de facilitar a **criaçã
 
 ## 🏠 About the Project
 
-The **HESTIA Interface** was developed to facilitate the **creation of test cases** for the original HESTIA system. Due to the large volume of data involved, this process became challenging. The interface aims to **simplify and speed up** this step, allowing the generation of representative examples more efficiently and accessibly.
+The **HESTIA 2.0** was developed to facilitate the **creation of test cases** for the original HESTIA system. Due to the large volume of data involved, this process became challenging. The interface aims to **simplify and speed up** this step, allowing the generation of representative examples more efficiently and accessibly.
 
 - 🎯 **Problem Solved:** Difficulty and complexity in manually creating tests.
 - 👥 **Target Audience:** Users and researchers who use the original HESTIA system.
